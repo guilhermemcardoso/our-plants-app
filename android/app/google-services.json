@@ -1,0 +1,54 @@
+{
+  "project_info": {
+    "project_number": "769182683775",
+    "project_id": "our-plants",
+    "storage_bucket": "our-plants.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:769182683775:android:0d61ec1430d873ded4e54a",
+        "android_client_info": {
+          "package_name": "com.ourplantsapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "769182683775-rk4dc2grl1k1834ilnoeachg1votv4ml.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.ourplantsapp",
+            "certificate_hash": "9f294dfebc4d5122e72edf4057e8d21e21b8da69"
+          }
+        },
+        {
+          "client_id": "769182683775-mh4alivk9m1vfu9m4dnq6qq5qnuam50i.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD7GJNVIFiVCl6CCGgqUZ5HJ6u1DnvVB4I"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "769182683775-mh4alivk9m1vfu9m4dnq6qq5qnuam50i.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "769182683775-raglu1lj4ffs6nrarb3iro2idepnh2j2.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "br.com.nossasplantas"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
