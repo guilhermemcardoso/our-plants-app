@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import MapboxGL from '@rnmapbox/maps';
-import { initializeMap } from '~/utils/Mapbox';
+import { initializeMap } from '~/shared/utils/map';
 
 const Map = () => {
   const [coordinates] = useState([-47.87857, -21.969408]);

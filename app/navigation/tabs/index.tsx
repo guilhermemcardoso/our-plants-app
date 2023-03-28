@@ -1,6 +1,6 @@
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { Favorites, Map, Profile, Settings } from '~/presentation/screens';
+import { Favorites, Map, Profile, Settings } from '~/domains';
 import { TabBar } from './components';
 import { Tabs } from './constants';
 
