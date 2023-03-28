@@ -1,15 +1,30 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { SafeAreaView, StatusBar, View, Image, Button } from 'react-native';
-import SplashScreen from 'react-native-splash-screen';
+import { Api } from '~/services/api';
 
 import TextField from '~/shared/components/text-input';
+import { useAuthStore } from '~/store/auth-store';
 
 const SignIn = () => {
-  useEffect(() => {
-    SplashScreen.hide();
-  });
+  const currentUser = useAuthStore((state) => state.currentUser);
+  const accessToken = useAuthStore((state) => state.accessToken);
+  const refreshToken = useAuthStore((state) => state.refreshToken);
 
-  const onPress = async () => {};
+  const setCurrentUser = useAuthStore((state) => state.setCurrentUser);
+  const setAccessToken = useAuthStore((state) => state.setAccessToken);
+  const setRefreshToken = useAuthStore((state) => state.setRefreshToken);
+
+  console.log('currentUser', currentUser);
+  console.log('accessToken', accessToken);
+  console.log('refreshToken', refreshToken);
+
+  const onPress = async () => {
+    setCurrentUser('current user test');
+    setAccessToken('access token test');
+    setRefreshToken('refresh token test');
+
+    await Api({ method: 'get', url: '/ping' });
+  };
 
   return (
     <SafeAreaView>
