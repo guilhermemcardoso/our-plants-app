@@ -27,6 +27,7 @@ function TabBar({ state, navigation }: BottomTabBarProps) {
 
         return (
           <TabItem
+            key={route.name}
             onPress={onPress}
             focused={isFocused}
             label={label}

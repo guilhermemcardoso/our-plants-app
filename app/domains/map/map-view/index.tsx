@@ -1,11 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { StyleSheet, View } from 'react-native';
 import MapboxGL from '@rnmapbox/maps';
-import { initializeMap } from '~/shared/utils/map';
+import { initializeMap } from '~/services/map';
 
 const Map = () => {
-  const [coordinates] = useState([-47.87857, -21.969408]);
-
   useEffect(() => {
     initializeMap();
   }, []);
@@ -13,7 +11,7 @@ const Map = () => {
   return (
     <View style={styles.container}>
       <MapboxGL.MapView style={styles.map} styleURL={MapboxGL.StyleURL.Street}>
-        <MapboxGL.Camera zoomLevel={4} centerCoordinate={coordinates} />
+        <MapboxGL.Camera followZoomLevel={12} followUserLocation />
       </MapboxGL.MapView>
     </View>
   );

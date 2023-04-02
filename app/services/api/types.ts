@@ -6,5 +6,4 @@ export type ApiType = {
   url: string;
   headers?: RawAxiosRequestHeaders;
   data?: unknown;
-  pathData?: string;
 };

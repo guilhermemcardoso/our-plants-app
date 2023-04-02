@@ -3,7 +3,7 @@ import MapboxGL from '@rnmapbox/maps';
 import { MAPBOX_API_KEY } from '@env';
 
 export function initializeMap() {
-  MapboxGL.setWellKnownTileServer(getMapTile());
+  MapboxGL.setWellKnownTileServer('mapbox');
   MapboxGL.setAccessToken(MAPBOX_API_KEY);
   MapboxGL.setTelemetryEnabled(false);
 }

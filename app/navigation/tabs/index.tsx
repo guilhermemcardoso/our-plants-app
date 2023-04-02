@@ -1,6 +1,9 @@
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { Favorites, Map, Profile, Settings } from '~/domains';
+import { FavoriteList } from '~/domains/favorites';
+import { MapView } from '~/domains/map';
+import { UserProfile } from '~/domains/profile';
+import { SettingsList } from '~/domains/settings';
 import { TabBar } from './components';
 import { Tabs } from './constants';
 
@@ -15,10 +18,10 @@ const Home = () => {
         tabBarShowLabel: false,
       }}
     >
-      <Tab.Screen name={Tabs.MAP} component={Map} />
-      <Tab.Screen name={Tabs.FAVORITES} component={Favorites} />
-      <Tab.Screen name={Tabs.PROFILE} component={Profile} />
-      <Tab.Screen name={Tabs.SETTINGS} component={Settings} />
+      <Tab.Screen name={Tabs.MAP} component={MapView} />
+      <Tab.Screen name={Tabs.FAVORITES} component={FavoriteList} />
+      <Tab.Screen name={Tabs.PROFILE} component={UserProfile} />
+      <Tab.Screen name={Tabs.SETTINGS} component={SettingsList} />
     </Tab.Navigator>
   );
 };

@@ -1,0 +1,5 @@
+export enum EncryptedKeys {
+  CURRENT_USER = 'CURRENT_USER',
+  ACCESS_TOKEN = 'ACCESS_TOKEN',
+  REFRESH_TOKEN = 'REFRESH_TOKEN',
+}
