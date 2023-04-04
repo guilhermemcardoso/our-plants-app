@@ -22,7 +22,7 @@ export default function MarkerViewIos({
       onPress={handlePress}
       title="title"
       description="description"
-      coordinate={{ longitude: latitude, latitude: longitude }}
+      coordinate={{ latitude, longitude }}
     >
       <Image source={icon} style={styles.markerIcon} />
     </Marker>

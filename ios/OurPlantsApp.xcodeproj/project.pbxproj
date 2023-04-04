@@ -18,6 +18,7 @@
 		79E8627D28BA986D00468AD2 /* Ionicons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 79E8626D28BA986D00468AD2 /* Ionicons.ttf */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 		D78B933BAA8C9EAA1DA9A6EB /* libPods-OurPlantsApp.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BDF584EFEF0F13E6CD618C49 /* libPods-OurPlantsApp.a */; };
+		AE91B7B4274649FEB31BF16F /* Inter.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 2B6B46ECEC8442388954A636 /* Inter.ttf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -50,6 +51,7 @@
 		E00BD64DBE44CDD2C9984CC4 /* libPods-OurPlantsApp-OurPlantsAppTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-OurPlantsApp-OurPlantsAppTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		F050E99DDD57BC3D9BE1964D /* Pods-OurPlantsApp-OurPlantsAppTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OurPlantsApp-OurPlantsAppTests.debug.xcconfig"; path = "Target Support Files/Pods-OurPlantsApp-OurPlantsAppTests/Pods-OurPlantsApp-OurPlantsAppTests.debug.xcconfig"; sourceTree = "<group>"; };
+		2B6B46ECEC8442388954A636 /* Inter.ttf */ = {isa = PBXFileReference; name = "Inter.ttf"; path = "../app/assets/fonts/Inter.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -141,6 +143,7 @@
 				83CBBA001A601CBA00E9B192 /* Products */,
 				2D16E6871FA4F8E400B85C8A /* Frameworks */,
 				BBD78D7AC51CEA395F1C20DB /* Pods */,
+				CFA17A2B511D4DFBA699709B /* Resources */,
 			);
 			indentWidth = 2;
 			sourceTree = "<group>";
@@ -166,6 +169,15 @@
 			);
 			path = Pods;
 			sourceTree = "<group>";
+		};
+		CFA17A2B511D4DFBA699709B /* Resources */ = {
+			isa = "PBXGroup";
+			children = (
+				2B6B46ECEC8442388954A636 /* Inter.ttf */,
+			);
+			name = Resources;
+			sourceTree = "<group>";
+			path = "";
 		};
 /* End PBXGroup section */
 
@@ -275,6 +287,7 @@
 				81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				79741D3F28418FDD00E7A692 /* GoogleService-Info.plist in Resources */,
+				AE91B7B4274649FEB31BF16F /* Inter.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

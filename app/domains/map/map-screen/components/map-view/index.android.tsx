@@ -9,10 +9,14 @@ import { MapProps } from './types';
 MapboxGL.setWellKnownTileServer(Platform.OS === 'ios' ? 'mapbox' : 'Mapbox');
 MapboxGL.setAccessToken(MAPBOX_API_KEY);
 
-export default function MapViewAndroid({ children }: MapProps) {
+export default function MapViewAndroid({
+  children,
+  latitude,
+  longitude,
+}: MapProps) {
   return (
     <MapView style={styles.mapContainer} styleURL={StyleURL.Street}>
-      <Camera zoomLevel={15} centerCoordinate={[-47.892363, -21.950384]} />
+      <Camera zoomLevel={15} centerCoordinate={[longitude, latitude]} />
       {children}
     </MapView>
   );

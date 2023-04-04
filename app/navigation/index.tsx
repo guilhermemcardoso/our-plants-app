@@ -1,4 +1,4 @@
-import React, { useLayoutEffect } from 'react';
+import React, { useLayoutEffect, useMemo } from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { Signed, Unsigned } from './stacks';
 import { NavigationContainer } from '@react-navigation/native';
@@ -13,7 +13,9 @@ const Router = () => {
   const currentUser = useAuthStore((state) => state.currentUser);
   const accessToken = useAuthStore((state) => state.accessToken);
   const refreshToken = useAuthStore((state) => state.refreshToken);
-  const isSignedIn = currentUser && accessToken && refreshToken;
+  const isSignedIn = useMemo(() => {
+    return currentUser && accessToken && refreshToken;
+  }, [currentUser, accessToken, refreshToken]);
 
   useLayoutEffect(() => {
     checkCurrentUser();

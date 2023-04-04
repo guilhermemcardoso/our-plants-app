@@ -16,7 +16,7 @@ export default function MarkerViewAndroid({
   };
 
   return (
-    <MarkerView key={id} coordinate={[latitude, longitude]} allowOverlap>
+    <MarkerView key={id} coordinate={[longitude, latitude]} allowOverlap>
       <Pressable onPress={handlePress}>
         <Image source={icon} style={styles.markerIcon} />
       </Pressable>

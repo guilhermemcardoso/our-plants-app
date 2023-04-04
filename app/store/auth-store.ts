@@ -58,5 +58,12 @@ export const useAuthStore = create<AuthState>((set) => ({
     await deleteKey(EncryptedKeys.CURRENT_USER);
     await deleteKey(EncryptedKeys.ACCESS_TOKEN);
     await deleteKey(EncryptedKeys.REFRESH_TOKEN);
+
+    set((state) => ({
+      ...state,
+      currentUser: null,
+      accessToken: null,
+      refreshToken: null,
+    }));
   },
 }));

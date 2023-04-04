@@ -10,10 +10,10 @@ import {
 const Map = () => {
   return (
     <View style={styles.container}>
-      <MapView>
+      <MapView latitude={-21.950384} longitude={-47.892363}>
         <MarkerView
-          latitude={-47.892363}
-          longitude={-21.950384}
+          latitude={-21.950384}
+          longitude={-47.892363}
           id="id-1"
           icon={getPlantIconBySpecie(formatSpecieIconName('default'))}
           onPress={() => console.log('Clicou aqui')}
