@@ -1,17 +1,23 @@
-import React, { useEffect } from 'react';
-import { StyleSheet, View } from 'react-native';
+import React, { useRef, useState } from 'react';
+import { Platform, StyleSheet, View } from 'react-native';
 import MapboxGL from '@rnmapbox/maps';
-import { initializeMap } from '~/services/map';
+import { MAPBOX_API_KEY } from '@env';
+
+MapboxGL.setWellKnownTileServer(Platform.OS === 'ios' ? 'mapbox' : 'Mapbox');
+MapboxGL.setAccessToken(MAPBOX_API_KEY);
 
 const Map = () => {
-  useEffect(() => {
-    initializeMap();
-  }, []);
-
   return (
     <View style={styles.container}>
       <MapboxGL.MapView style={styles.map} styleURL={MapboxGL.StyleURL.Street}>
-        <MapboxGL.Camera followZoomLevel={12} followUserLocation />
+        {/* <MapboxGL.Camera
+          zoomLevel={12}
+          centerCoordinate={[-47.892363, -21.950384]}
+        /> */}
+        <MapboxGL.Camera
+          zoomLevel={12}
+          centerCoordinate={[-47.892363, -21.950384]}
+        />
       </MapboxGL.MapView>
     </View>
   );
