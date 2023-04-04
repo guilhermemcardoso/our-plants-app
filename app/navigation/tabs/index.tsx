@@ -1,7 +1,7 @@
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { FavoriteList } from '~/domains/favorites';
-import { MapView } from '~/domains/map';
+import { MapScreen } from '~/domains/map';
 import { UserProfile } from '~/domains/profile';
 import { SettingsList } from '~/domains/settings';
 import { TabBar } from './components';
@@ -18,7 +18,7 @@ const Home = () => {
         tabBarShowLabel: false,
       }}
     >
-      <Tab.Screen name={Tabs.MAP} component={MapView} />
+      <Tab.Screen name={Tabs.MAP} component={MapScreen} />
       <Tab.Screen name={Tabs.FAVORITES} component={FavoriteList} />
       <Tab.Screen name={Tabs.PROFILE} component={UserProfile} />
       <Tab.Screen name={Tabs.SETTINGS} component={SettingsList} />

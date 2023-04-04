@@ -12,7 +12,6 @@ export async function setKey(key: EncryptedKeys, value: string) {
 export async function getKey(key: EncryptedKeys) {
   try {
     const value = await EncryptedStorage.getItem(key);
-    console.log('getKey', getKey);
     return value;
   } catch (error) {
     console.log('[EncryptedStorage] - getKey Error: ', error);

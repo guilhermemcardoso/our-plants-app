@@ -1,1 +1,1 @@
-export { default as MapView } from './map-view';
+export { default as MapScreen } from './map-screen';
