@@ -1,9 +1,9 @@
 import React from 'react';
 import { Button, SafeAreaView } from 'react-native';
-import { useAuthStore } from '~/store/auth-store';
+import { useSignOut } from '~/hooks/use-sign-out';
 
 const Settings = () => {
-  const signOut = useAuthStore((state) => state.signOut);
+  const { signOut } = useSignOut();
 
   const handleSignOut = () => {
     signOut();

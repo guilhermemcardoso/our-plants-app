@@ -9,29 +9,27 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     marginBottom: 20,
+    flexDirection: 'row',
   },
-
   logo: {
-    width: 100,
-    height: 100,
+    width: 40,
+    height: 40,
+    marginRight: 10,
   },
-
+  subtitle: {
+    marginTop: 20,
+    textAlign: 'center',
+  },
   title: {
     marginTop: 20,
   },
   textField: {
     marginTop: 10,
   },
-  signInButton: {
+  forgotPasswordButton: {
     marginTop: 36,
   },
-  forgotPasswordContainer: {
-    alignSelf: 'flex-end',
-  },
-  signUpContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    alignSelf: 'center',
+  goBackContainer: {
     paddingTop: 10,
     paddingBottom: 10,
   },

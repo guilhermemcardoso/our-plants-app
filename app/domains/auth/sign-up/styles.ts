@@ -9,26 +9,32 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     marginBottom: 20,
+    flexDirection: 'row',
   },
 
   logo: {
-    width: 100,
-    height: 100,
+    width: 40,
+    height: 40,
+    marginRight: 10,
   },
 
   title: {
     marginTop: 20,
   },
+  subtitle: {
+    marginTop: 20,
+    textAlign: 'center',
+  },
   textField: {
     marginTop: 10,
   },
-  signInButton: {
+  signUpButton: {
     marginTop: 36,
   },
   forgotPasswordContainer: {
     alignSelf: 'flex-end',
   },
-  signUpContainer: {
+  signInContainer: {
     flexDirection: 'row',
     alignItems: 'center',
     alignSelf: 'center',

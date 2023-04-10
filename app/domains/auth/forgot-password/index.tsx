@@ -3,7 +3,7 @@ import { View, Image, Platform } from 'react-native';
 import TextField from '~/shared/components/text-input';
 import { styles } from './styles';
 import {
-  SignInValidationErrors,
+  ForgotPasswordValidationErrors,
   getErrorByField,
   validate,
 } from './validations';
@@ -12,57 +12,60 @@ import Container from '~/shared/components/container';
 import Text from '~/shared/components/text';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { UnsignedStackParamList } from '~/navigation/stacks/unsigned';
-import { SignInData } from '../types';
-import { useSignIn } from '~/hooks/use-sign-in';
+import { ForgotPasswordData } from '../types';
+import { useForgotPassword } from '~/hooks/use-forgot-password';
 import Alert from '~/shared/components/alert';
 import { KeyboardAvoidingView } from 'native-base';
 
-type Props = NativeStackScreenProps<UnsignedStackParamList, 'SignIn'>;
+type Props = NativeStackScreenProps<UnsignedStackParamList, 'ForgotPassword'>;
 
-const SignIn = ({ navigation }: Props) => {
+const ForgotPassword = ({ navigation }: Props) => {
   const [showAlert, setShowAlert] = useState(false);
-  const { isLoading, responseStatus, signIn } = useSignIn();
+  const { isLoading, responseStatus, forgotPassword } = useForgotPassword();
 
-  const [signInData, setSignInData] = useState<SignInData>({
+  const [forgotPasswordData, setForgotPasswordData] =
+    useState<ForgotPasswordData>({
+      email: '',
+    });
+  const [errors, setErrors] = useState<ForgotPasswordValidationErrors>({
     email: '',
-    password: '',
-  });
-  const [errors, setErrors] = useState<SignInValidationErrors>({
-    email: '',
-    password: '',
   });
   const [enableSubmit, setEnableSubmit] = useState(true);
 
   const onSubmitPress = () => {
-    const validation = validate(signInData);
+    const validation = validate(forgotPasswordData);
     if (!validation.success) {
-      const errorsByField: SignInValidationErrors = { email: '', password: '' };
+      const errorsByField: ForgotPasswordValidationErrors = {
+        email: '',
+      };
       Object.keys(errorsByField).forEach((field) => {
         const error = getErrorByField(
           validation.error,
-          field as keyof SignInValidationErrors
+          field as keyof ForgotPasswordValidationErrors
         );
         setEnableSubmit(false);
-        errorsByField[field as keyof SignInValidationErrors] = error;
+        errorsByField[field as keyof ForgotPasswordValidationErrors] = error;
       });
       setErrors(errorsByField);
       return;
     }
-    signIn(signInData);
+    forgotPassword(forgotPasswordData);
+  };
+
+  const onCloseAlert = () => {
+    setShowAlert(false);
   };
 
   const handleOnEmailChange = (text: string) => {
-    const newSignInData: SignInData = { ...signInData, email: text };
-    setSignInData(newSignInData);
+    const newForgotPasswordData: ForgotPasswordData = {
+      ...forgotPasswordData,
+      email: text,
+    };
+    setForgotPasswordData(newForgotPasswordData);
   };
 
-  const handleOnPasswordChange = (text: string) => {
-    const newSignInData: SignInData = { ...signInData, password: text };
-    setSignInData(newSignInData);
-  };
-
-  const validateField = (field: keyof SignInValidationErrors) => {
-    const validation = validate(signInData);
+  const validateField = (field: keyof ForgotPasswordValidationErrors) => {
+    const validation = validate(forgotPasswordData);
     if (!validation.success) {
       const error = getErrorByField(validation.error, field);
       setEnableSubmit(false);
@@ -70,26 +73,15 @@ const SignIn = ({ navigation }: Props) => {
       return;
     }
     setEnableSubmit(true);
-    setErrors({ email: '', password: '' });
+    setErrors({ email: '' });
   };
 
   const handleOnEmailBlur = () => {
     validateField('email');
   };
-  const handleOnPasswordBlur = () => {
-    validateField('password');
-  };
 
-  const onForgotPasswordPress = () => {
-    navigation.navigate('ForgotPassword');
-  };
-
-  const onCreateAccountPress = () => {
-    navigation.navigate('SignUp');
-  };
-
-  const onCloseAlert = () => {
-    setShowAlert(false);
+  const onGoBackPress = () => {
+    navigation.goBack();
   };
 
   useEffect(() => {
@@ -111,6 +103,9 @@ const SignIn = ({ navigation }: Props) => {
             Nossas Plantas
           </Text>
         </View>
+        <Text size="subtitle" style={styles.subtitle}>
+          Esqueci minha senha
+        </Text>
         <KeyboardAvoidingView
           behavior={Platform.OS === 'ios' ? 'padding' : undefined}
           keyboardVerticalOffset={Platform.OS === 'ios' ? 64 : 0}
@@ -120,28 +115,12 @@ const SignIn = ({ navigation }: Props) => {
             onChangeText={handleOnEmailChange}
             onBlur={handleOnEmailBlur}
             entryType="email"
-            value={signInData.email}
+            value={forgotPasswordData.email}
             placeholder="Email"
             error={errors.email}
           />
-          <TextField
-            style={styles.textField}
-            onChangeText={handleOnPasswordChange}
-            onBlur={handleOnPasswordBlur}
-            value={signInData.password}
-            entryType="password"
-            placeholder="Senha"
-            error={errors.password}
-          />
-          <View style={styles.forgotPasswordContainer}>
-            <Button
-              onPress={onForgotPasswordPress}
-              variant={'link'}
-              title="Esqueci minha senha"
-            />
-          </View>
           <Button
-            style={styles.signInButton}
+            style={styles.forgotPasswordButton}
             disabled={!enableSubmit}
             onPress={onSubmitPress}
             isLoading={isLoading}
@@ -149,22 +128,17 @@ const SignIn = ({ navigation }: Props) => {
           />
         </KeyboardAvoidingView>
       </View>
-      <View style={styles.signUpContainer}>
-        <Text>Ainda não possui conta?</Text>
-        <Button
-          onPress={onCreateAccountPress}
-          variant={'link'}
-          title="Cadastre-se aqui"
-        />
+      <View style={styles.goBackContainer}>
+        <Button onPress={onGoBackPress} variant={'outline'} title="Voltar" />
       </View>
       <Alert
         show={showAlert}
         status="error"
-        title="Usuário e/ou senha incorretos"
+        title="Algo deu errado"
         onClose={onCloseAlert}
       />
     </Container>
   );
 };
 
-export default SignIn;
+export default ForgotPassword;
