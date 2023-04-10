@@ -1,10 +1,10 @@
 import axios, { AxiosError, RawAxiosRequestHeaders } from 'axios';
 
 import { ApiType } from './types';
-import { getKey, setKey } from '../secure-store';
+import { getKey, setKey } from '../secure-storage';
 
 import { API_URL } from '@env';
-import { EncryptedKeys } from '../secure-store/constants';
+import { EncryptedKeys } from '../secure-storage/constants';
 
 export const instance = axios.create({
   baseURL: API_URL,
