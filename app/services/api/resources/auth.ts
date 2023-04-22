@@ -1,5 +1,6 @@
 import {
   ForgotPasswordData,
+  ResendEmailConfirmationData,
   SignInData,
   SignUpData,
 } from '~/domains/auth/types';
@@ -25,5 +26,14 @@ export async function forgotPassword(forgotPasswordData: ForgotPasswordData) {
   return await Api({
     method: 'get',
     url: `auth/forgot-password?email=${forgotPasswordData.email}`,
+  });
+}
+
+export async function resendEmailConfirmation(
+  resendEmailConfirmationData: ResendEmailConfirmationData
+) {
+  return await Api({
+    method: 'get',
+    url: `auth/resend-email-confirmation?email=${resendEmailConfirmationData.email}`,
   });
 }
