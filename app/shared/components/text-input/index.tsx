@@ -120,7 +120,7 @@ export default function TextInput({
           keyboardType={getKeyboardType()}
           autoCapitalize={getAutoCapitalize()}
           pr={entryType === 'password' ? '16' : null}
-          secureTextEntry={!showContent}
+          secureTextEntry={showContent}
           p={3}
           {...props}
           flex={'1'}
