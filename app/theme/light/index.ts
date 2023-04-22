@@ -3,6 +3,7 @@ import { extendTheme } from 'native-base';
 export const lightPalette = {
   alert: {
     error: '#fca5a5',
+    success: '#bbf7d0',
   },
   container: {
     darker: 'rgba(0,0,0,0.5)',

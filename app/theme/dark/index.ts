@@ -3,6 +3,7 @@ import { extendTheme } from 'native-base';
 export const darkPalette = {
   alert: {
     error: '#a03232',
+    success: '#15803d',
   },
   container: {
     darker: 'rgba(0,0,0,0.5)',
