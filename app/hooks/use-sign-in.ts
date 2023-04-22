@@ -8,7 +8,10 @@ import { EncryptedKeys } from '~/services/secure-storage/constants';
 import { useAuthStore } from '~/store/auth-store';
 
 export function useSignIn() {
-  const [responseStatus, setResponseStatus] = useState<number>();
+  const [onResponse, setOnResponse] = useState<{
+    data: any;
+    status: number | undefined;
+  }>({ data: undefined, status: undefined });
   const setCurrentUser = useAuthStore((state) => state.setCurrentUser);
   const setAccessToken = useAuthStore((state) => state.setAccessToken);
   const setRefreshToken = useAuthStore((state) => state.setRefreshToken);
@@ -25,7 +28,7 @@ export function useSignIn() {
     }
 
     const { response, status } = signInResponse;
-    setResponseStatus(status);
+    setOnResponse({ status, data: response.data });
     if (
       response.data &&
       response.data.user &&
@@ -47,5 +50,5 @@ export function useSignIn() {
     mutate({ email, password });
   };
 
-  return { isLoading, signIn, responseStatus };
+  return { isLoading, signIn, onResponse };
 }

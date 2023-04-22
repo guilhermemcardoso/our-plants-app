@@ -3,15 +3,13 @@ import { useEffect, useState } from 'react';
 import { SignUpData } from '~/domains/auth/types';
 
 import { signUp as signUpMutation } from '~/services/api/resources/auth';
-import { setKey } from '~/services/secure-storage';
-import { EncryptedKeys } from '~/services/secure-storage/constants';
-import { useAuthStore } from '~/store/auth-store';
 
 export function useSignUp() {
-  const [responseStatus, setResponseStatus] = useState<number>();
-  const setCurrentUser = useAuthStore((state) => state.setCurrentUser);
-  const setAccessToken = useAuthStore((state) => state.setAccessToken);
-  const setRefreshToken = useAuthStore((state) => state.setRefreshToken);
+  const [onResponse, setOnResponse] = useState<{
+    data: any;
+    status: number | undefined;
+  }>({ data: undefined, status: undefined });
+
   const {
     mutate,
     isLoading,
@@ -25,23 +23,8 @@ export function useSignUp() {
     }
 
     const { response, status } = signUpResponse;
-    setResponseStatus(status);
-    if (
-      response.data &&
-      response.data.user &&
-      response.data.access_token &&
-      response.data.refresh_token
-    ) {
-      const { user, access_token, refresh_token } = response.data;
-      setKey(EncryptedKeys.CURRENT_USER, JSON.stringify(user));
-      setKey(EncryptedKeys.ACCESS_TOKEN, access_token);
-      setKey(EncryptedKeys.REFRESH_TOKEN, refresh_token);
-
-      setCurrentUser(user);
-      setAccessToken(access_token);
-      setRefreshToken(refresh_token);
-    }
-  }, [signUpResponse, setCurrentUser, setAccessToken, setRefreshToken]);
+    setOnResponse({ status, data: response.data });
+  }, [signUpResponse]);
 
   const signUp = async ({
     email,
@@ -53,5 +36,5 @@ export function useSignUp() {
     mutate({ email, password, repassword, name, lastname });
   };
 
-  return { isLoading, signUp, responseStatus };
+  return { isLoading, signUp, onResponse };
 }
