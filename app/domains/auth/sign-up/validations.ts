@@ -1,10 +1,23 @@
 import { ZodError, z } from 'zod';
 import { SignUpData } from '../types';
+import { passwordRegex } from '~/shared/constants/regex';
 
 export const SignUpSchema = z.object({
   email: z.string().email('Email inválido'),
-  password: z.string().min(8, 'A senha precisa ter no mínimo 8 caracteres'),
-  repassword: z.string().min(8, 'A senha precisa ter no mínimo 8 caracteres'),
+  password: z
+    .string()
+    .min(8, 'A senha precisa ter no mínimo 8 caracteres.')
+    .regex(
+      passwordRegex,
+      'A senha precisa ter no mínimo uma letra maiúscula, uma letra minúscula e um número.'
+    ),
+  repassword: z
+    .string()
+    .min(8, 'A senha precisa ter no mínimo 8 caracteres.')
+    .regex(
+      passwordRegex,
+      'A senha precisa ter no mínimo uma letra maiúscula, uma letra minúscula e um número.'
+    ),
   name: z
     .string()
     .min(2, 'O nome precisa ter no mínimo 2 caracteres')

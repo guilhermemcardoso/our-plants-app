@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { View, Image, Platform } from 'react-native';
 import TextField from '~/shared/components/text-input';
 import { styles } from './styles';
@@ -21,17 +21,16 @@ type Props = NativeStackScreenProps<UnsignedStackParamList, 'SignIn'>;
 
 const SignIn = ({ navigation }: Props) => {
   const [showAlert, setShowAlert] = useState(false);
-  const { isLoading, responseStatus, signIn } = useSignIn();
+  const { isLoading, onResponse, signIn } = useSignIn();
 
   const [signInData, setSignInData] = useState<SignInData>({
-    email: '',
-    password: '',
+    email: 'wgbjrlxozlchbkldwr@bbitq.com',
+    password: 'Senha123',
   });
   const [errors, setErrors] = useState<SignInValidationErrors>({
     email: '',
     password: '',
   });
-  const [enableSubmit, setEnableSubmit] = useState(true);
 
   const onSubmitPress = () => {
     const validation = validate(signInData);
@@ -42,7 +41,6 @@ const SignIn = ({ navigation }: Props) => {
           validation.error,
           field as keyof SignInValidationErrors
         );
-        setEnableSubmit(false);
         errorsByField[field as keyof SignInValidationErrors] = error;
       });
       setErrors(errorsByField);
@@ -65,11 +63,9 @@ const SignIn = ({ navigation }: Props) => {
     const validation = validate(signInData);
     if (!validation.success) {
       const error = getErrorByField(validation.error, field);
-      setEnableSubmit(false);
       setErrors({ ...errors, [field]: error });
       return;
     }
-    setEnableSubmit(true);
     setErrors({ email: '', password: '' });
   };
 
@@ -92,11 +88,19 @@ const SignIn = ({ navigation }: Props) => {
     setShowAlert(false);
   };
 
+  const goToConfirmation = useCallback(() => {
+    navigation.navigate('EmailConfirmation', { email: signInData.email });
+  }, [navigation, signInData]);
+
   useEffect(() => {
-    if (responseStatus === 400) {
+    if ([400, 401].includes(onResponse.status || 0)) {
       setShowAlert(true);
     }
-  }, [responseStatus]);
+
+    if (onResponse.status === 423) {
+      goToConfirmation();
+    }
+  }, [onResponse, goToConfirmation]);
 
   return (
     <Container>
@@ -142,7 +146,6 @@ const SignIn = ({ navigation }: Props) => {
           </View>
           <Button
             style={styles.signInButton}
-            disabled={!enableSubmit}
             onPress={onSubmitPress}
             isLoading={isLoading}
             title="ENTRAR"

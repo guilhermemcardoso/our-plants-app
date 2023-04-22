@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { View, Image, Platform } from 'react-native';
 import TextField from '~/shared/components/text-input';
 import { styles } from './styles';
@@ -21,14 +21,15 @@ type Props = NativeStackScreenProps<UnsignedStackParamList, 'SignUp'>;
 
 const SignUp = ({ navigation }: Props) => {
   const [showAlert, setShowAlert] = useState(false);
-  const { isLoading, responseStatus, signUp } = useSignUp();
+  const [alertMessage, setAlertMessage] = useState('');
+  const { isLoading, onResponse, signUp } = useSignUp();
 
   const [signUpData, setSignUpData] = useState<SignUpData>({
-    email: '',
-    password: '',
-    repassword: '',
-    name: '',
-    lastname: '',
+    email: 'wgbjrlxozlchbkldwr@bbitq.com',
+    password: 'Senha123',
+    repassword: 'Senha123',
+    name: 'Teste',
+    lastname: 'Junior',
   });
   const [errors, setErrors] = useState<SignUpValidationErrors>({
     email: '',
@@ -37,10 +38,28 @@ const SignUp = ({ navigation }: Props) => {
     name: '',
     lastname: '',
   });
-  const [enableSubmit, setEnableSubmit] = useState(false);
 
   const onSubmitPress = async () => {
-    await signUp(signUpData);
+    const validation = validate(signUpData);
+    if (!validation.success) {
+      const errorsByField: SignUpValidationErrors = {
+        name: '',
+        lastname: '',
+        email: '',
+        password: '',
+        repassword: '',
+      };
+      Object.keys(errorsByField).forEach((field) => {
+        const error = getErrorByField(
+          validation.error,
+          field as keyof SignUpValidationErrors
+        );
+        errorsByField[field as keyof SignUpValidationErrors] = error;
+      });
+      setErrors(errorsByField);
+      return;
+    }
+    signUp(signUpData);
   };
 
   const handleOnChange = (text: string, field: string) => {
@@ -51,26 +70,24 @@ const SignUp = ({ navigation }: Props) => {
   const checkMatchingPassword = () => {
     if (signUpData.password !== signUpData.repassword) {
       const error = 'Confirmação de senha diferente da senha';
-      setEnableSubmit(false);
       setErrors({ ...errors, repassword: error });
       return;
     }
+
+    setErrors({ ...errors, repassword: '' });
   };
 
   const validateField = (field: keyof SignUpValidationErrors) => {
     if (field === 'repassword' && signUpData.repassword.length > 0) {
       checkMatchingPassword();
-      return;
     }
 
     const validation = validate(signUpData);
     if (!validation.success) {
       const error = getErrorByField(validation.error, field);
-      setEnableSubmit(false);
       setErrors({ ...errors, [field]: error });
       return;
     }
-    setEnableSubmit(true);
     setErrors({
       email: '',
       password: '',
@@ -84,7 +101,7 @@ const SignUp = ({ navigation }: Props) => {
     validateField(field as keyof SignUpValidationErrors);
   };
 
-  const onSignInPress = () => {
+  const onSignUpPress = () => {
     navigation.goBack();
   };
 
@@ -92,11 +109,25 @@ const SignUp = ({ navigation }: Props) => {
     setShowAlert(false);
   };
 
+  const goToConfirmation = useCallback(() => {
+    navigation.navigate('EmailConfirmation', { email: signUpData.email });
+  }, [navigation, signUpData]);
+
   useEffect(() => {
-    if (responseStatus === 400) {
+    if (onResponse.status === 400) {
+      setAlertMessage('Algo deu errado.');
       setShowAlert(true);
     }
-  }, [responseStatus]);
+
+    if (onResponse.status === 409) {
+      setAlertMessage('Email já cadastrado.');
+      setShowAlert(true);
+    }
+
+    if (onResponse.status === 201) {
+      goToConfirmation();
+    }
+  }, [onResponse, goToConfirmation]);
 
   return (
     <Container>
@@ -111,13 +142,13 @@ const SignUp = ({ navigation }: Props) => {
             Nossas Plantas
           </Text>
         </View>
-        <Text size="subtitle" style={styles.subtitle}>
-          Cadastro de usuário
-        </Text>
         <KeyboardAvoidingView
           behavior={Platform.OS === 'ios' ? 'padding' : undefined}
           keyboardVerticalOffset={Platform.OS === 'ios' ? 40 : 0}
         >
+          <Text size="subtitle" style={styles.subtitle}>
+            Cadastro de usuário
+          </Text>
           <TextField
             style={styles.textField}
             onChangeText={(text) => handleOnChange(text, 'name')}
@@ -165,21 +196,20 @@ const SignUp = ({ navigation }: Props) => {
           />
           <Button
             style={styles.signUpButton}
-            disabled={!enableSubmit}
             onPress={onSubmitPress}
             isLoading={isLoading}
             title="CADASTRAR"
           />
         </KeyboardAvoidingView>
       </View>
-      <View style={styles.signInContainer}>
+      <View style={styles.signUpContainer}>
         <Text>Já possui conta?</Text>
-        <Button onPress={onSignInPress} variant={'link'} title="Acesse aqui" />
+        <Button onPress={onSignUpPress} variant={'link'} title="Acesse aqui" />
       </View>
       <Alert
         show={showAlert}
         status="error"
-        title="Algo deu errado"
+        title={alertMessage}
         onClose={onCloseAlert}
       />
     </Container>

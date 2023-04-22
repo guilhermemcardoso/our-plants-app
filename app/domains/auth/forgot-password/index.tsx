@@ -129,7 +129,7 @@ const ForgotPassword = ({ navigation }: Props) => {
         </KeyboardAvoidingView>
       </View>
       <View style={styles.goBackContainer}>
-        <Button onPress={onGoBackPress} variant={'outline'} title="Voltar" />
+        <Button onPress={onGoBackPress} variant={'outline'} title="VOLTAR" />
       </View>
       <Alert
         show={showAlert}

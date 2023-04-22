@@ -25,16 +25,19 @@ export const styles = StyleSheet.create({
     marginTop: 20,
     textAlign: 'center',
   },
-  textField: {
+  message: {
+    marginTop: 20,
+    textAlign: 'center',
+  },
+  note: {
+    marginTop: 10,
+    marginBottom: 36,
+    textAlign: 'center',
+  },
+  resendButton: {
     marginTop: 10,
   },
-  signUpButton: {
-    marginTop: 36,
-  },
-  signUpContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    alignSelf: 'center',
+  goBackContainer: {
     paddingTop: 10,
     paddingBottom: 10,
   },
