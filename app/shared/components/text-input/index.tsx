@@ -14,15 +14,13 @@ import styles from './styles';
 type Props = IInputProps & {
   label?: string;
   error?: string;
-  entryType?: 'text' | 'number' | 'email' | 'password' | 'search';
-  onSearch?: () => void;
+  entryType?: 'text' | 'number' | 'email' | 'password';
 };
 
 export default function TextInput({
   label,
   error,
   entryType = 'text',
-  onSearch,
   style,
   ...props
 }: Props) {
@@ -52,10 +50,6 @@ export default function TextInput({
   };
 
   const getRightComponent = () => {
-    if (['text', 'number', 'email'].includes(entryType)) {
-      return null;
-    }
-
     if (entryType === 'password') {
       return (
         <IconButton
@@ -64,11 +58,7 @@ export default function TextInput({
           _focus={{
             borderWidth: 0,
           }}
-          style={{
-            position: 'absolute',
-            right: 4,
-            backgroundColor: 'transparent',
-          }}
+          style={styles.iconButton}
           icon={
             <Icon
               name={!showContent ? 'ios-eye-outline' : 'ios-eye-off-outline'}
@@ -80,23 +70,7 @@ export default function TextInput({
       );
     }
 
-    return (
-      <IconButton
-        onPress={onSearch}
-        variant="unstyled"
-        _focus={{
-          borderWidth: 0,
-        }}
-        style={styles.iconButton}
-        icon={
-          <Icon
-            name={!showContent ? 'ios-eye-outline' : 'ios-eye-off-outline'}
-            size={20}
-            color={theme.colors.font.primary}
-          />
-        }
-      />
-    );
+    return null;
   };
 
   return (
@@ -120,7 +94,7 @@ export default function TextInput({
           keyboardType={getKeyboardType()}
           autoCapitalize={getAutoCapitalize()}
           pr={entryType === 'password' ? '16' : null}
-          secureTextEntry={showContent}
+          secureTextEntry={entryType === 'password' ? !showContent : false}
           p={3}
           {...props}
           flex={'1'}
@@ -130,6 +104,7 @@ export default function TextInput({
       <FormControl.ErrorMessage
         leftIcon={
           <Icon
+            style={styles.iconError}
             name={'ios-alert-circle-outline'}
             size={16}
             color={theme.colors.font.error}

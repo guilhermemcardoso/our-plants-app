@@ -3,9 +3,10 @@ import { StyleSheet } from 'react-native';
 const styles = StyleSheet.create({
   iconButton: {
     position: 'absolute',
-    left: 0,
+    right: 4,
     backgroundColor: 'transparent',
   },
+  iconError: { alignSelf: 'flex-start' },
 });
 
 export default styles;
