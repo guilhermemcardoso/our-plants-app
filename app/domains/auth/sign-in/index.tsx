@@ -24,8 +24,8 @@ const SignIn = ({ navigation }: Props) => {
   const { isLoading, onResponse, signIn } = useSignIn();
 
   const [signInData, setSignInData] = useState<SignInData>({
-    email: 'wgbjrlxozlchbkldwr@bbitq.com',
-    password: 'Senha123',
+    email: '',
+    password: '',
   });
   const [errors, setErrors] = useState<SignInValidationErrors>({
     email: '',
@@ -96,6 +96,7 @@ const SignIn = ({ navigation }: Props) => {
     if ([400, 401].includes(onResponse.status || 0)) {
       setShowAlert(true);
     }
+    //504
 
     if (onResponse.status === 423) {
       goToConfirmation();

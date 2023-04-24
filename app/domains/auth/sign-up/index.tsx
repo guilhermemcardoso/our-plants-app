@@ -25,11 +25,11 @@ const SignUp = ({ navigation }: Props) => {
   const { isLoading, onResponse, signUp } = useSignUp();
 
   const [signUpData, setSignUpData] = useState<SignUpData>({
-    email: 'wgbjrlxozlchbkldwr@bbitq.com',
-    password: 'Senha123',
-    repassword: 'Senha123',
-    name: 'Teste',
-    lastname: 'Junior',
+    email: '',
+    password: '',
+    repassword: '',
+    name: '',
+    lastname: '',
   });
   const [errors, setErrors] = useState<SignUpValidationErrors>({
     email: '',

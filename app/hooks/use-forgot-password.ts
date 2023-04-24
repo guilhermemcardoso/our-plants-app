@@ -3,32 +3,32 @@ import { useEffect, useState } from 'react';
 import { ForgotPasswordData } from '~/domains/auth/types';
 
 import { forgotPassword as forgotPasswordMutation } from '~/services/api/resources/auth';
-import { useAuthStore } from '~/store/auth-store';
 
 export function useForgotPassword() {
-  const [responseStatus, setResponseStatus] = useState<number>();
-  const setCurrentUser = useAuthStore((state) => state.setCurrentUser);
-  const setAccessToken = useAuthStore((state) => state.setAccessToken);
-  const setRefreshToken = useAuthStore((state) => state.setRefreshToken);
+  const [onResponse, setOnResponse] = useState<{
+    data: any;
+    status: number | undefined;
+  }>({ data: undefined, status: undefined });
+
   const {
     mutate,
     isLoading,
-    data: forgotPasswordResponse,
+    data: resendResponse,
   } = useMutation({
     mutationFn: forgotPasswordMutation,
   });
   useEffect(() => {
-    if (!forgotPasswordResponse) {
+    if (!resendResponse) {
       return;
     }
 
-    const { status } = forgotPasswordResponse;
-    setResponseStatus(status);
-  }, [forgotPasswordResponse, setCurrentUser, setAccessToken, setRefreshToken]);
+    const { response, status } = resendResponse;
+    setOnResponse({ status, data: response.data });
+  }, [resendResponse]);
 
   const forgotPassword = async ({ email }: ForgotPasswordData) => {
     mutate({ email });
   };
 
-  return { isLoading, forgotPassword, responseStatus };
+  return { isLoading, forgotPassword, onResponse };
 }

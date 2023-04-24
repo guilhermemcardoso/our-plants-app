@@ -21,7 +21,9 @@ type Props = NativeStackScreenProps<UnsignedStackParamList, 'ForgotPassword'>;
 
 const ForgotPassword = ({ navigation }: Props) => {
   const [showAlert, setShowAlert] = useState(false);
-  const { isLoading, responseStatus, forgotPassword } = useForgotPassword();
+  const [alertStatus, setAlertStatus] = useState('error');
+  const [alertMessage, setAlertMessage] = useState('');
+  const { isLoading, onResponse, forgotPassword } = useForgotPassword();
 
   const [forgotPasswordData, setForgotPasswordData] =
     useState<ForgotPasswordData>({
@@ -85,10 +87,28 @@ const ForgotPassword = ({ navigation }: Props) => {
   };
 
   useEffect(() => {
-    if (responseStatus === 400) {
+    if (onResponse.status === 423) {
+      setAlertMessage(
+        'Não foi possível enviar um novo link. É necessário esperar 2 minutos antes de solicitar um novo link.'
+      );
+      setAlertStatus('error');
       setShowAlert(true);
     }
-  }, [responseStatus]);
+
+    if ([400, 500].includes(onResponse.status || 0)) {
+      setAlertMessage('Algo deu errado.');
+      setAlertStatus('error');
+      setShowAlert(true);
+    }
+
+    if (onResponse.status === 200) {
+      setAlertMessage(
+        'Um novo link foi enviado para seu email. Por favor, verifique sua caixa de entrada.'
+      );
+      setAlertStatus('success');
+      setShowAlert(true);
+    }
+  }, [onResponse]);
 
   return (
     <Container>
@@ -133,8 +153,8 @@ const ForgotPassword = ({ navigation }: Props) => {
       </View>
       <Alert
         show={showAlert}
-        status="error"
-        title="Algo deu errado"
+        status={alertStatus}
+        title={alertMessage}
         onClose={onCloseAlert}
       />
     </Container>
