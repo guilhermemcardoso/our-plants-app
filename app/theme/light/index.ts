@@ -5,20 +5,6 @@ export const lightPalette = {
     error: '#fca5a5',
     success: '#bbf7d0',
   },
-  container: {
-    darker: 'rgba(0,0,0,0.5)',
-    dark: '#c5c5c5',
-    default: '#dee4e7',
-    light: 'rgba(255,255,255,0.3)',
-    lighter: 'rgba(255,255,255,0.3)',
-  },
-  font: {
-    disabled: '#b5b5b5',
-    error: '#bf0000',
-    interactive: '#0071bc',
-    primary: '#2c2c2c',
-    secondary: '#757575',
-  },
   button: {
     text: {
       primary: '#ffffff',
@@ -26,7 +12,25 @@ export const lightPalette = {
     },
     background: {
       primary: '#588157',
+      warning: '#a03232',
     },
+  },
+  divider: {
+    primary: 'rgba(0,0,0,0.1)',
+  },
+  container: {
+    darker: 'rgba(0,0,0,0.5)',
+    dark: '#c5c5c5',
+    default: '#dee4e7',
+    light: 'rgba(255,255,255,0.8)',
+    lighter: 'rgba(255,255,255,1)',
+  },
+  font: {
+    disabled: '#b5b5b5',
+    error: '#bf0000',
+    interactive: '#0071bc',
+    primary: '#2c2c2c',
+    secondary: '#757575',
   },
   primary: {
     dark: '#3a5a40',

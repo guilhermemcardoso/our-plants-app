@@ -6,9 +6,10 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import Router from '~/navigation';
 import { useSettingsStore } from './store/settings-store';
 import { themes } from './theme';
+import { useSettings } from './hooks/use-settings';
 
 const App = () => {
-  const loadSettings = useSettingsStore((state) => state.loadSettings);
+  const { loadSettings } = useSettings();
   useEffect(() => {
     loadSettings();
     SplashScreen.hide();

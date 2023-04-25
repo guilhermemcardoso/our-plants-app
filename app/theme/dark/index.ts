@@ -5,13 +5,6 @@ export const darkPalette = {
     error: '#a03232',
     success: '#15803d',
   },
-  container: {
-    darker: 'rgba(0,0,0,0.5)',
-    dark: 'rgba(0,0,0,0.25)',
-    default: '#282a36',
-    light: 'rgba(255,255,255,0.05)',
-    lighter: 'rgba(255,255,255,0.3)',
-  },
   button: {
     text: {
       primary: '#ffffff',
@@ -19,7 +12,18 @@ export const darkPalette = {
     },
     background: {
       primary: '#588157',
+      warning: '#a03232',
     },
+  },
+  container: {
+    darker: 'rgba(0,0,0,0.5)',
+    dark: 'rgba(0,0,0,0.25)',
+    default: '#282a36',
+    light: 'rgba(255,255,255,0.05)',
+    lighter: 'rgba(255,255,255,0.3)',
+  },
+  divider: {
+    primary: 'rgba(255,255,255,0.15)',
   },
   font: {
     disabled: '#bfbfbf',

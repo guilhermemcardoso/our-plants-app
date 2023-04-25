@@ -3,11 +3,15 @@ import { IButtonProps, Button as NativeButton } from 'native-base';
 
 type Props = IButtonProps & {
   title: string;
+  warning?: boolean;
 };
 
-export default function Button({ title, variant, ...rest }: Props) {
+export default function Button({ title, variant, warning, ...rest }: Props) {
   const getBackgroundColor = () => {
     if (variant === 'solid' || !variant) {
+      if (warning) {
+        return 'button.background.warning';
+      }
       return 'button.background.primary';
     }
 
@@ -37,7 +41,7 @@ export default function Button({ title, variant, ...rest }: Props) {
   return (
     <NativeButton
       variant={variant}
-      borderColor={'primary.pure'}
+      borderColor={warning ? 'button.background.warning' : 'primary.pure'}
       bgColor={getBackgroundColor()}
       _text={{ color: getTextColor(), textDecorationLine: getTextDecoration() }}
       _spinner={{ color: getTextColor() }}
