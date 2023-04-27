@@ -19,8 +19,8 @@ export const darkPalette = {
     darker: 'rgba(0,0,0,0.5)',
     dark: 'rgba(0,0,0,0.25)',
     default: '#282a36',
-    light: 'rgba(255,255,255,0.05)',
-    lighter: 'rgba(255,255,255,0.3)',
+    light: '#353F4D',
+    lighter: '#4C5A6E',
   },
   divider: {
     primary: 'rgba(255,255,255,0.15)',

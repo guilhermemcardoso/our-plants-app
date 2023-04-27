@@ -1,23 +1,21 @@
 import { StyleSheet } from 'react-native';
-import palette from '~/theme/palette';
 
 export const styles = StyleSheet.create({
   tabBar: {
     flexDirection: 'row',
     position: 'absolute',
-    bottom: 25,
-    right: 20,
-    left: 20,
-    backgroundColor: palette.tabBarBackground,
-    borderRadius: 15,
-    height: 90,
+    bottom: 24,
+    right: 16,
+    left: 16,
+    borderRadius: 16,
+    paddingVertical: 16,
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
       height: 10,
     },
     shadowOpacity: 0.25,
-    shadowRadius: 3.5,
+    shadowRadius: 4,
     elevation: 2,
     alignItems: 'center',
     justifyContent: 'space-evenly',

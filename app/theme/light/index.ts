@@ -20,9 +20,9 @@ export const lightPalette = {
   },
   container: {
     darker: 'rgba(0,0,0,0.5)',
-    dark: '#c5c5c5',
+    dark: '#B0B5B8',
     default: '#dee4e7',
-    light: 'rgba(255,255,255,0.8)',
+    light: '#F0F3F3',
     lighter: 'rgba(255,255,255,1)',
   },
   font: {
