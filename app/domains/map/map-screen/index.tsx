@@ -1,36 +1,34 @@
 import React from 'react';
-import { StyleSheet, View } from 'react-native';
 import MapView from './components/map-view';
 import MarkerView from './components/marker-view';
 import {
   formatSpecieIconName,
   getPlantIconBySpecie,
 } from '~/shared/utils/icon';
+import { Container } from '~/shared/components';
+import { View } from 'native-base';
+import styles from './styles';
 
 const Map = () => {
   return (
-    <View style={styles.container}>
-      <MapView latitude={-21.950384} longitude={-47.892363}>
-        <MarkerView
+    <Container>
+      <View style={styles.mapContainer}>
+        <MapView
+          style={styles.map}
           latitude={-21.950384}
           longitude={-47.892363}
-          id="id-1"
-          icon={getPlantIconBySpecie(formatSpecieIconName('default'))}
-          onPress={() => console.log('Clicou aqui')}
-        />
-      </MapView>
-    </View>
+        >
+          <MarkerView
+            latitude={-21.950384}
+            longitude={-47.892363}
+            id="id-1"
+            icon={getPlantIconBySpecie(formatSpecieIconName('default'))}
+            onPress={() => console.log('Clicou aqui')}
+          />
+        </MapView>
+      </View>
+    </Container>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    backgroundColor: 'tomato',
-    flex: 1,
-  },
-  map: {
-    flex: 1,
-  },
-});
 
 export default Map;

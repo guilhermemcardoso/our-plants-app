@@ -7,10 +7,11 @@ export default function MapViewIos({
   children,
   latitude,
   longitude,
+  style,
 }: MapProps) {
   return (
     <MapView
-      style={styles.mapContainer}
+      style={[styles.mapContainer, style]}
       initialRegion={{
         latitude,
         longitude,

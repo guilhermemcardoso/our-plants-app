@@ -13,9 +13,10 @@ export default function MapViewAndroid({
   children,
   latitude,
   longitude,
+  style,
 }: MapProps) {
   return (
-    <MapView style={styles.mapContainer} styleURL={StyleURL.Street}>
+    <MapView style={[styles.mapContainer, style]} styleURL={StyleURL.Street}>
       <Camera zoomLevel={15} centerCoordinate={[longitude, latitude]} />
       {children}
     </MapView>
