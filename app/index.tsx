@@ -7,9 +7,12 @@ import Router from '~/navigation';
 import { useSettingsStore } from './store/settings-store';
 import { themes } from './theme';
 import { useSettings } from './hooks/use-settings';
+import { Loading } from './shared/components';
+import { useLoading } from './hooks/use-loading';
 
 const App = () => {
   const { loadSettings } = useSettings();
+
   useEffect(() => {
     loadSettings();
     SplashScreen.hide();
@@ -20,7 +23,9 @@ const App = () => {
 
 const AppWrapper = () => {
   const theme = useSettingsStore((state) => state.theme);
+  const { isLoading } = useLoading();
   const queryClient = new QueryClient();
+
   return (
     <NativeBaseProvider theme={themes[theme]}>
       <QueryClientProvider client={queryClient}>
@@ -29,6 +34,7 @@ const AppWrapper = () => {
           barStyle={theme === 'dark' ? 'light-content' : 'dark-content'}
           backgroundColor="transparent"
         />
+        <Loading show={isLoading} />
         <App />
       </QueryClientProvider>
     </NativeBaseProvider>
