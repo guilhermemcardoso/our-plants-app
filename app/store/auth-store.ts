@@ -1,10 +1,11 @@
 import { create } from 'zustand';
+import { User } from '~/shared/types';
 
 interface AuthState {
-  currentUser: any;
+  currentUser: User | null;
   accessToken: string | null;
   refreshToken: string | null;
-  setCurrentUser: (currentUser: any) => void;
+  setCurrentUser: (currentUser: User | null) => void;
   setAccessToken: (accessToken: string | null) => void;
   setRefreshToken: (refreshToken: string | null) => void;
 }

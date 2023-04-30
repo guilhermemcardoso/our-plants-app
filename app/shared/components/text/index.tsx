@@ -5,7 +5,13 @@ import { styles } from './styles';
 
 type Props = TextProps & {
   size?: 'title' | 'subtitle' | 'body' | 'helper';
-  variant?: 'primary' | 'secondary' | 'error' | 'interactive' | 'disabled';
+  variant?:
+    | 'primary'
+    | 'secondary'
+    | 'error'
+    | 'interactive'
+    | 'disabled'
+    | 'progress';
 };
 
 export default function Text({

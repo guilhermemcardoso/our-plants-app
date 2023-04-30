@@ -14,6 +14,7 @@ export const darkPalette = {
       primary: '#588157',
       warning: '#a03232',
     },
+    hover: 'rgba(255,255,255,0.15)',
   },
   container: {
     darker: 'rgba(0,0,0,0.5)',
@@ -28,16 +29,26 @@ export const darkPalette = {
   font: {
     disabled: '#bfbfbf',
     error: '#FF454F',
-    interactive: '#0071bc',
+    link: '#0071bc',
+    interactive: '#649463',
     primary: '#ffffff',
     secondary: '#A1ACB3',
+    progress: '#2c2c2c',
+  },
+  loading: {
+    background: 'rgba(0,0,0,0.75)',
+    text: '#FFF',
   },
   primary: {
     dark: '#3a5a40',
     darker: '#344e41',
     light: '#a3b18a',
     lighter: '#dad7cd',
-    pure: '#588157',
+    pure: '#649463',
+  },
+  progress: {
+    background: 'rgba(255,255,255,0.75)',
+    track: '#649463',
   },
 };
 

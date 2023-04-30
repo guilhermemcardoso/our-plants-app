@@ -34,7 +34,6 @@ export function useSettings() {
   };
 
   const setNotificationEnabled = async (value: boolean) => {
-    console.log('AQUI', value);
     setNotificationEnabledState(value);
     setKey(StorageKeys.NOTIFICATIONS_ENABLED, JSON.stringify(value));
   };
