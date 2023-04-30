@@ -1,9 +1,9 @@
 import React, { useCallback, useMemo, useState } from 'react';
 import { ListRenderItem } from 'react-native';
-import { FlatList, Switch } from 'native-base';
+import { FlatList, Switch, View } from 'native-base';
 import { useSignOut } from '~/hooks/use-sign-out';
-import { Container, ConfirmationModal } from '~/shared/components';
-import { SettingsItem } from './components';
+import { Container, ConfirmationModal, InfoModal } from '~/shared/components';
+import { AboutDescription, SettingsItem } from './components';
 import styles from './styles';
 import Header from '~/shared/components/header';
 import { useSettings } from '~/hooks/use-settings';
@@ -12,7 +12,8 @@ import { Theme } from '~/types/theme';
 interface Item {
   title: string;
   value?: boolean;
-  setValue: (value: boolean) => void;
+  setValue?: (value: boolean) => void;
+  onPress?: () => void;
 }
 
 const Settings = () => {
@@ -27,6 +28,7 @@ const Settings = () => {
   } = useSettings();
 
   const [showSignOutModal, setShowSignOutModal] = useState(false);
+  const [showAboutModal, setShowAboutModal] = useState(false);
 
   const onSetTheme = useCallback(
     (value: boolean) => {
@@ -39,6 +41,14 @@ const Settings = () => {
     },
     [setTheme]
   );
+
+  const onOpenAboutModal = useCallback(() => {
+    setShowAboutModal(true);
+  }, []);
+
+  const handleSignOut = useCallback(() => {
+    setShowSignOutModal(true);
+  }, []);
 
   const settings: Item[] = useMemo(() => {
     return [
@@ -57,6 +67,14 @@ const Settings = () => {
         value: soundEnabled,
         setValue: setSoundEnabled,
       },
+      {
+        title: 'Sobre',
+        onPress: onOpenAboutModal,
+      },
+      {
+        title: 'Sair',
+        onPress: handleSignOut,
+      },
     ];
   }, [
     notificationEnabled,
@@ -65,10 +83,12 @@ const Settings = () => {
     onSetTheme,
     setNotificationEnabled,
     setSoundEnabled,
+    onOpenAboutModal,
+    handleSignOut,
   ]);
 
-  const handleSignOut = () => {
-    setShowSignOutModal(true);
+  const onCloseAboutModal = () => {
+    setShowAboutModal(false);
   };
 
   const onCancelSignOut = () => {
@@ -81,16 +101,25 @@ const Settings = () => {
   };
 
   const onRenderItem: ListRenderItem<Item> = ({ item }: { item: Item }) => {
-    return (
-      <SettingsItem
-        title={item.title}
-        RightComponent={
+    const getRightComponent = () => {
+      if (item.value !== undefined) {
+        return (
           <Switch
             onTrackColor="primary.pure"
             value={item.value}
             onToggle={item.setValue}
           />
-        }
+        );
+      }
+    };
+
+    console.log('ITEM', item);
+    return (
+      <SettingsItem
+        onPress={item.onPress}
+        title={item.title}
+        pressable={!item.value}
+        RightComponent={getRightComponent()}
       />
     );
   };
@@ -98,23 +127,26 @@ const Settings = () => {
   return (
     <Container>
       <Header title="Configurações" />
-      <FlatList
-        style={styles.list}
-        renderItem={onRenderItem}
-        data={settings}
-        ListFooterComponent={
-          <SettingsItem title="Sair" onPress={handleSignOut} pressable />
-        }
-      />
+      <View bgColor="container.dark" style={styles.listContainer}>
+        <FlatList renderItem={onRenderItem} data={settings} />
+      </View>
       <ConfirmationModal
         open={showSignOutModal}
-        noLabel="Cancelar"
-        yesLabel="Sair"
+        noLabel="CANCELAR"
+        yesLabel="SAIR"
         title="Sair"
         description="Tem certeza que você deseja sair do aplicativo?"
         onNo={onCancelSignOut}
         onYes={onConfirmSignOut}
       />
+      <InfoModal
+        open={showAboutModal}
+        buttonLabel="ENTENDI"
+        title="Sobre"
+        onPress={onCloseAboutModal}
+      >
+        <AboutDescription />
+      </InfoModal>
     </Container>
   );
 };
