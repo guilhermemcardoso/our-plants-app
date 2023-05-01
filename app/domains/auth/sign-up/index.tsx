@@ -14,7 +14,7 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { UnsignedStackParamList } from '~/navigation/stacks/signed-out';
 import { SignUpData } from '../types';
 import { useSignUp } from '~/hooks/use-sign-up';
-import { KeyboardAvoidingView } from 'native-base';
+import { KeyboardAvoidingView, ScrollView } from 'native-base';
 import Alert from '~/shared/components/alert';
 
 type Props = NativeStackScreenProps<UnsignedStackParamList, 'SignUp'>;
@@ -131,87 +131,93 @@ const SignUp = ({ navigation }: Props) => {
 
   return (
     <Container>
-      <View style={styles.mainContainer}>
-        <View style={styles.logoContainer}>
-          <Image
-            resizeMode="contain"
-            style={styles.logo}
-            source={require('~/assets/images/logo.png')}
-          />
-          <Text size="title" style={styles.title}>
-            Nossas Plantas
-          </Text>
+      <ScrollView contentContainerStyle={styles.scrollContainer}>
+        <View style={styles.mainContainer}>
+          <View style={styles.logoContainer}>
+            <Image
+              resizeMode="contain"
+              style={styles.logo}
+              source={require('~/assets/images/logo.png')}
+            />
+            <Text size="title" style={styles.title}>
+              Nossas Plantas
+            </Text>
+          </View>
+          <KeyboardAvoidingView
+            behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+            keyboardVerticalOffset={Platform.OS === 'ios' ? 40 : 0}
+          >
+            <Text size="subtitle" style={styles.subtitle}>
+              Cadastro de usuário
+            </Text>
+            <TextField
+              style={styles.textField}
+              onChangeText={(text) => handleOnChange(text, 'name')}
+              onBlur={() => handleOnBlur('name')}
+              value={signUpData.name}
+              entryType="text"
+              placeholder="Nome"
+              error={errors.name}
+            />
+            <TextField
+              style={styles.textField}
+              onChangeText={(text) => handleOnChange(text, 'lastname')}
+              onBlur={() => handleOnBlur('lastname')}
+              value={signUpData.lastname}
+              entryType="text"
+              placeholder="Sobrenome"
+              error={errors.lastname}
+            />
+            <TextField
+              style={styles.textField}
+              onChangeText={(text) => handleOnChange(text, 'email')}
+              onBlur={() => handleOnBlur('email')}
+              entryType="email"
+              value={signUpData.email}
+              placeholder="Email"
+              error={errors.email}
+            />
+            <TextField
+              style={styles.textField}
+              onChangeText={(text) => handleOnChange(text, 'password')}
+              onBlur={() => handleOnBlur('password')}
+              value={signUpData.password}
+              entryType="password"
+              placeholder="Senha"
+              error={errors.password}
+            />
+            <TextField
+              style={styles.textField}
+              onChangeText={(text) => handleOnChange(text, 'repassword')}
+              onBlur={() => handleOnBlur('repassword')}
+              value={signUpData.repassword}
+              entryType="password"
+              placeholder="Confirmar senha"
+              error={errors.repassword}
+            />
+            <Button
+              style={styles.signUpButton}
+              onPress={onSubmitPress}
+              isLoading={isLoading}
+              title="CADASTRAR"
+            />
+          </KeyboardAvoidingView>
         </View>
-        <KeyboardAvoidingView
-          behavior={Platform.OS === 'ios' ? 'padding' : undefined}
-          keyboardVerticalOffset={Platform.OS === 'ios' ? 40 : 0}
-        >
-          <Text size="subtitle" style={styles.subtitle}>
-            Cadastro de usuário
-          </Text>
-          <TextField
-            style={styles.textField}
-            onChangeText={(text) => handleOnChange(text, 'name')}
-            onBlur={() => handleOnBlur('name')}
-            value={signUpData.name}
-            entryType="text"
-            placeholder="Nome"
-            error={errors.name}
-          />
-          <TextField
-            style={styles.textField}
-            onChangeText={(text) => handleOnChange(text, 'lastname')}
-            onBlur={() => handleOnBlur('lastname')}
-            value={signUpData.lastname}
-            entryType="text"
-            placeholder="Sobrenome"
-            error={errors.lastname}
-          />
-          <TextField
-            style={styles.textField}
-            onChangeText={(text) => handleOnChange(text, 'email')}
-            onBlur={() => handleOnBlur('email')}
-            entryType="email"
-            value={signUpData.email}
-            placeholder="Email"
-            error={errors.email}
-          />
-          <TextField
-            style={styles.textField}
-            onChangeText={(text) => handleOnChange(text, 'password')}
-            onBlur={() => handleOnBlur('password')}
-            value={signUpData.password}
-            entryType="password"
-            placeholder="Senha"
-            error={errors.password}
-          />
-          <TextField
-            style={styles.textField}
-            onChangeText={(text) => handleOnChange(text, 'repassword')}
-            onBlur={() => handleOnBlur('repassword')}
-            value={signUpData.repassword}
-            entryType="password"
-            placeholder="Confirmar senha"
-            error={errors.repassword}
-          />
+        <View style={styles.signInContainer}>
+          <Text>Já possui conta?</Text>
           <Button
-            style={styles.signUpButton}
-            onPress={onSubmitPress}
-            isLoading={isLoading}
-            title="CADASTRAR"
+            onPress={onSignUpPress}
+            variant={'link'}
+            title="Acesse aqui"
           />
-        </KeyboardAvoidingView>
-      </View>
-      <View style={styles.signUpContainer}>
-        <Text>Já possui conta?</Text>
-        <Button onPress={onSignUpPress} variant={'link'} title="Acesse aqui" />
-      </View>
-      <Alert
-        show={showAlert}
-        status="error"
-        title={alertMessage}
-        onClose={onCloseAlert}
-      />
+        </View>
+        <Alert
+          show={showAlert}
+          status="error"
+          title={alertMessage}
+          onClose={onCloseAlert}
+        />
+      </ScrollView>
     </Container>
   );
 };

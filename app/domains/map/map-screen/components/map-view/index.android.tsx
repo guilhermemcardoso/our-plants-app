@@ -1,9 +1,9 @@
 import React from 'react';
 import { Camera, MapView, StyleURL } from '@rnmapbox/maps';
 import { styles } from './styles';
+import { Platform } from 'react-native';
 import MapboxGL from '@rnmapbox/maps';
 import { MAPBOX_API_KEY } from '@env';
-import { Platform } from 'react-native';
 import { MapProps } from './types';
 
 MapboxGL.setWellKnownTileServer(Platform.OS === 'ios' ? 'mapbox' : 'Mapbox');

@@ -15,7 +15,7 @@ import { UnsignedStackParamList } from '~/navigation/stacks/signed-out';
 import { SignInData } from '../types';
 import { useSignIn } from '~/hooks/use-sign-in';
 import Alert from '~/shared/components/alert';
-import { KeyboardAvoidingView } from 'native-base';
+import { KeyboardAvoidingView, ScrollView } from 'native-base';
 
 type Props = NativeStackScreenProps<UnsignedStackParamList, 'SignIn'>;
 
@@ -105,68 +105,70 @@ const SignIn = ({ navigation }: Props) => {
 
   return (
     <Container>
-      <View style={styles.mainContainer}>
-        <View style={styles.logoContainer}>
-          <Image
-            resizeMode="contain"
-            style={styles.logo}
-            source={require('~/assets/images/logo.png')}
-          />
-          <Text size="title" style={styles.title}>
-            Nossas Plantas
-          </Text>
-        </View>
-        <KeyboardAvoidingView
-          behavior={Platform.OS === 'ios' ? 'padding' : undefined}
-          keyboardVerticalOffset={Platform.OS === 'ios' ? 64 : 0}
-        >
-          <TextField
-            style={styles.textField}
-            onChangeText={handleOnEmailChange}
-            onBlur={handleOnEmailBlur}
-            entryType="email"
-            value={signInData.email}
-            placeholder="Email"
-            error={errors.email}
-          />
-          <TextField
-            style={styles.textField}
-            onChangeText={handleOnPasswordChange}
-            onBlur={handleOnPasswordBlur}
-            value={signInData.password}
-            entryType="password"
-            placeholder="Senha"
-            error={errors.password}
-          />
-          <View style={styles.forgotPasswordContainer}>
-            <Button
-              onPress={onForgotPasswordPress}
-              variant={'link'}
-              title="Esqueci minha senha"
+      <ScrollView contentContainerStyle={styles.scrollContainer}>
+        <View style={styles.mainContainer}>
+          <View style={styles.logoContainer}>
+            <Image
+              resizeMode="contain"
+              style={styles.logo}
+              source={require('~/assets/images/logo.png')}
             />
+            <Text size="title" style={styles.title}>
+              Nossas Plantas
+            </Text>
           </View>
+          <KeyboardAvoidingView
+            behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+            keyboardVerticalOffset={Platform.OS === 'ios' ? 64 : 0}
+          >
+            <TextField
+              style={styles.textField}
+              onChangeText={handleOnEmailChange}
+              onBlur={handleOnEmailBlur}
+              entryType="email"
+              value={signInData.email}
+              placeholder="Email"
+              error={errors.email}
+            />
+            <TextField
+              style={styles.textField}
+              onChangeText={handleOnPasswordChange}
+              onBlur={handleOnPasswordBlur}
+              value={signInData.password}
+              entryType="password"
+              placeholder="Senha"
+              error={errors.password}
+            />
+            <View style={styles.forgotPasswordContainer}>
+              <Button
+                onPress={onForgotPasswordPress}
+                variant={'link'}
+                title="Esqueci minha senha"
+              />
+            </View>
+            <Button
+              style={styles.signInButton}
+              onPress={onSubmitPress}
+              isLoading={isLoading}
+              title="ENTRAR"
+            />
+          </KeyboardAvoidingView>
+        </View>
+        <View style={styles.signUpContainer}>
+          <Text>Ainda não possui conta?</Text>
           <Button
-            style={styles.signInButton}
-            onPress={onSubmitPress}
-            isLoading={isLoading}
-            title="ENTRAR"
+            onPress={onCreateAccountPress}
+            variant={'link'}
+            title="Cadastre-se aqui"
           />
-        </KeyboardAvoidingView>
-      </View>
-      <View style={styles.signUpContainer}>
-        <Text>Ainda não possui conta?</Text>
-        <Button
-          onPress={onCreateAccountPress}
-          variant={'link'}
-          title="Cadastre-se aqui"
+        </View>
+        <Alert
+          show={showAlert}
+          status="error"
+          title="Usuário e/ou senha incorretos"
+          onClose={onCloseAlert}
         />
-      </View>
-      <Alert
-        show={showAlert}
-        status="error"
-        title="Usuário e/ou senha incorretos"
-        onClose={onCloseAlert}
-      />
+      </ScrollView>
     </Container>
   );
 };
