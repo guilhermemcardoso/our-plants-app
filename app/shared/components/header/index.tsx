@@ -13,9 +13,10 @@ export default function Header({
   title,
   RightComponent,
   LeftComponent,
+  ...rest
 }: Props) {
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={styles.container} {...rest}>
       {LeftComponent}
       <Text style={styles.title} size="title">
         {title}

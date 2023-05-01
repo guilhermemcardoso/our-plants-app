@@ -7,3 +7,11 @@ export async function getCurrentUser() {
     hasToken: true,
   });
 }
+
+export async function removeProfileImage() {
+  return await Api({
+    method: 'delete',
+    url: 'user/me/profile-image',
+    hasToken: true,
+  });
+}

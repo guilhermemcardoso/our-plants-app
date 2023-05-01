@@ -1,8 +1,9 @@
 import { HStack, ScrollView, VStack, View } from 'native-base';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import {
   Avatar,
   Button,
+  ConfirmationModal,
   Container,
   Header,
   IconButton,
@@ -15,6 +16,8 @@ import { useAuthStore } from '~/store/auth-store';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { SignedInStackParamList } from '~/navigation/stacks/signed-in';
 import { Routes } from '~/navigation/routes';
+import { useRemoveProfileImage } from '~/hooks/use-remove-profile-image';
+import { useLoading } from '~/hooks/use-loading';
 
 type Props = NativeStackScreenProps<
   SignedInStackParamList,
@@ -22,8 +25,17 @@ type Props = NativeStackScreenProps<
 >;
 
 const EditProfile = ({ navigation }: Props) => {
+  const { isLoading: isRemoveProfileImageLoading, removeProfileImage } =
+    useRemoveProfileImage();
+  const { setLoading } = useLoading();
   const [selectedStateOrProvince, setSelectedStateOrProvince] = useState('');
+  const [showRemoveImageModal, setShowRemoveImageModal] = useState(false);
+
   const currentUser = useAuthStore((state) => state.currentUser);
+
+  const isLoading = useMemo(() => {
+    return isRemoveProfileImageLoading;
+  }, [isRemoveProfileImageLoading]);
 
   const handleBackPress = () => {
     navigation.goBack();
@@ -34,9 +46,27 @@ const EditProfile = ({ navigation }: Props) => {
     setSelectedStateOrProvince(selected);
   };
 
+  const handleRemoveImagePress = () => {
+    setShowRemoveImageModal(true);
+  };
+
+  const onCancelRemoveImage = () => {
+    setShowRemoveImageModal(false);
+  };
+
+  const onConfirmRemoveImage = () => {
+    setShowRemoveImageModal(false);
+    removeProfileImage();
+    setLoading(true);
+  };
+
+  useEffect(() => {
+    setLoading(isLoading);
+  }, [isLoading, setLoading]);
+
   useEffect(() => {
     setSelectedStateOrProvince(currentUser?.address.state_or_province || '');
-  }, [currentUser]);
+  }, [currentUser?.address.state_or_province]);
 
   return (
     <Container safe={false}>
@@ -56,10 +86,11 @@ const EditProfile = ({ navigation }: Props) => {
           <VStack flex={1} ml={8}>
             <Button title="ALTERAR FOTO" onPress={() => {}} />
             <Button
-              style={styles.removePictureButton}
+              style={styles.removeImageButton}
               variant="outline"
               title="REMOVER FOTO"
-              onPress={() => {}}
+              isDisabled={!currentUser?.profile_image}
+              onPress={handleRemoveImagePress}
             />
           </VStack>
         </View>
@@ -129,6 +160,15 @@ const EditProfile = ({ navigation }: Props) => {
           title="EDITAR PERFIL"
         />
       </ScrollView>
+      <ConfirmationModal
+        open={showRemoveImageModal}
+        title="Remover foto"
+        description="Tem certeza de que deseja remover sua foto de perfil?"
+        noLabel="CANCELAR"
+        yesLabel="REMOVER"
+        onNo={onCancelRemoveImage}
+        onYes={onConfirmRemoveImage}
+      />
     </Container>
   );
 };

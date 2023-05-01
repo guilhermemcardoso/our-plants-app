@@ -8,7 +8,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     padding: 16,
   },
-  removePictureButton: {
+  removeImageButton: {
     marginTop: 8,
   },
   infoContainer: {
@@ -18,6 +18,7 @@ const styles = StyleSheet.create({
   sectionLabel: {
     marginBottom: 10,
     textAlign: 'center',
+    fontWeight: 'bold',
   },
   mappedCount: {
     marginTop: 8,
