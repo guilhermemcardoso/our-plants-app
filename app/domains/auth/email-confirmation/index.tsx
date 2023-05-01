@@ -5,7 +5,7 @@ import Button from '~/shared/components/button';
 import Container from '~/shared/components/container';
 import Text from '~/shared/components/text';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { UnsignedStackParamList } from '~/navigation/stacks/unsigned';
+import { UnsignedStackParamList } from '~/navigation/stacks/signed-out';
 import { useResendEmailConfirmation } from '~/hooks/use-resend-email-confirmation';
 import Alert from '~/shared/components/alert';
 import { CommonActions } from '@react-navigation/native';

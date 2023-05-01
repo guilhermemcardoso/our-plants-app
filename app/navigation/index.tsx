@@ -1,12 +1,8 @@
 import React, { useLayoutEffect, useMemo } from 'react';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { Signed, Unsigned } from './stacks';
 import { NavigationContainer } from '@react-navigation/native';
 import { useAuthStore } from '~/store/auth-store';
 import { useCheckCurrentUser } from '~/hooks/use-check-current-user';
-
-const Stack = createNativeStackNavigator();
-const screenOptions = { headerShown: false };
 
 const Router = () => {
   const { checkCurrentUser } = useCheckCurrentUser();
@@ -21,11 +17,11 @@ const Router = () => {
     checkCurrentUser();
   }, [checkCurrentUser]);
 
+  const Route = isSignedIn ? Signed : Unsigned;
+
   return (
     <NavigationContainer>
-      <Stack.Navigator screenOptions={screenOptions}>
-        {isSignedIn ? Signed : Unsigned}
-      </Stack.Navigator>
+      <Route />
     </NavigationContainer>
   );
 };

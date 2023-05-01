@@ -15,12 +15,14 @@ type Props = IInputProps & {
   label?: string;
   error?: string;
   entryType?: 'text' | 'number' | 'email' | 'password';
+  RightComponent?: React.ReactNode;
 };
 
 export default function TextInput({
   label,
   error,
   entryType = 'text',
+  RightComponent,
   style,
   ...props
 }: Props) {
@@ -50,6 +52,10 @@ export default function TextInput({
   };
 
   const getRightComponent = () => {
+    if (RightComponent) {
+      return RightComponent;
+    }
+
     if (entryType === 'password') {
       return (
         <IconButton

@@ -9,5 +9,6 @@ export { default as IconButton } from './icon-button';
 export { InfoModal } from './modal';
 export { default as Loading } from './loading';
 export { default as ProgressBar } from './progress-bar';
+export { default as Selector } from './selector';
 export { default as Text } from './text';
 export { default as TextInput } from './text-input';

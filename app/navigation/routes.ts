@@ -1,6 +1,8 @@
-export enum Tabs {
+export enum Routes {
+  HOME = 'HOME',
   MAP = 'MAP',
   FAVORITES = 'FAVORITES',
   USER_PROFILE = 'USER_PROFILE',
   SETTINGS = 'SETTINGS',
+  EDIT_PROFILE = 'EDIT_PROFILE',
 }

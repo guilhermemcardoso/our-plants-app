@@ -83,6 +83,7 @@ export async function Api({ method, url, data, hasToken, headers }: ApiType) {
     if (error instanceof AxiosError) {
       return { response: error.response?.data, status: error.response?.status };
     }
+
     return { response: JSON.stringify(error), status: 500 };
   }
 }

@@ -1,6 +1,5 @@
-import { View } from 'native-base';
 import React, { ReactNode } from 'react';
-import { ViewProps } from 'react-native';
+import { SafeAreaView, ViewProps } from 'react-native';
 import Text from '~/shared/components/text';
 import styles from './styles';
 
@@ -16,12 +15,12 @@ export default function Header({
   LeftComponent,
 }: Props) {
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       {LeftComponent}
       <Text style={styles.title} size="title">
         {title}
       </Text>
       {RightComponent}
-    </View>
+    </SafeAreaView>
   );
 }

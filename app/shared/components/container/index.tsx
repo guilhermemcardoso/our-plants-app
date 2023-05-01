@@ -3,7 +3,16 @@ import { View } from 'native-base';
 import { SafeAreaView, ViewProps } from 'react-native';
 import { styles } from './styles';
 
-export default function Container({ children, style, ...rest }: ViewProps) {
+type Props = ViewProps & {
+  safe?: boolean;
+};
+
+export default function Container({
+  children,
+  style,
+  safe = true,
+  ...rest
+}: Props) {
   const customStyle = useMemo(() => {
     if (style) {
       return [styles.default, style];
@@ -14,7 +23,11 @@ export default function Container({ children, style, ...rest }: ViewProps) {
 
   return (
     <View bgColor={'container.default'} style={customStyle} {...rest}>
-      <SafeAreaView style={styles.safeContainer}>{children}</SafeAreaView>
+      {safe ? (
+        <SafeAreaView style={styles.safeContainer}>{children}</SafeAreaView>
+      ) : (
+        <View style={styles.safeContainer}>{children}</View>
+      )}
     </View>
   );
 }

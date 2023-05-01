@@ -19,13 +19,15 @@ const Stack = createNativeStackNavigator<UnsignedStackParamList>();
 
 const screenOptions = { headerShown: false };
 
-const Unsigned = (
-  <Stack.Group screenOptions={screenOptions}>
-    <Stack.Screen name="SignIn" component={SignIn} />
-    <Stack.Screen name="SignUp" component={SignUp} />
-    <Stack.Screen name="ForgotPassword" component={ForgotPassword} />
-    <Stack.Screen name="EmailConfirmation" component={EmailConfirmation} />
-  </Stack.Group>
-);
+const Unsigned = () => {
+  return (
+    <Stack.Navigator screenOptions={screenOptions}>
+      <Stack.Screen name="SignIn" component={SignIn} />
+      <Stack.Screen name="SignUp" component={SignUp} />
+      <Stack.Screen name="ForgotPassword" component={ForgotPassword} />
+      <Stack.Screen name="EmailConfirmation" component={EmailConfirmation} />
+    </Stack.Navigator>
+  );
+};
 
 export default Unsigned;

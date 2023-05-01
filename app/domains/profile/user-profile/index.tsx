@@ -15,14 +15,24 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import { useAuthStore } from '~/store/auth-store';
 import { useGetCurrentUser } from '~/hooks/use-get-current-user';
 import { useLoading } from '~/hooks/use-loading';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { SignedInStackParamList } from '~/navigation/stacks/signed-in';
+import { Routes } from '~/navigation/routes';
 
-const Profile = () => {
+type Props = NativeStackScreenProps<
+  SignedInStackParamList,
+  Routes.USER_PROFILE
+>;
+
+const UserProfile = ({ navigation }: Props) => {
   const theme = useTheme();
   const currentUser = useAuthStore((state) => state.currentUser);
   const { setLoading } = useLoading();
   const { getCurrentUser, isLoading } = useGetCurrentUser();
 
-  const handleEditProfile = () => {};
+  const handleEditProfile = () => {
+    navigation.navigate(Routes.EDIT_PROFILE);
+  };
   const handleGetCurrentUser = () => {
     getCurrentUser();
   };
@@ -66,10 +76,29 @@ const Profile = () => {
             <Text style={styles.fieldLabel} variant="secondary">
               Endereço:
             </Text>
-            <Text>Rua Mauro Dias Correia, 470</Text>
-            <Text>Residencial Samambaia</Text>
-            <Text>CEP: 13.565-565</Text>
-            <Text>São Carlos - SP</Text>
+            {(currentUser?.address.street_name ||
+              currentUser?.address.house_number) && (
+              <Text>{`${
+                currentUser?.address.street_name
+                  ? `${currentUser?.address.street_name}, `
+                  : ''
+              }${currentUser?.address.house_number || ''}`}</Text>
+            )}
+            {currentUser?.address.neighbourhood && (
+              <Text>{`${currentUser?.address.neighbourhood}`}</Text>
+            )}
+            {currentUser?.address.zip_code && (
+              <Text>CEP: {currentUser?.address.zip_code}</Text>
+            )}
+            {(currentUser?.address.city ||
+              currentUser?.address.state_or_province) && (
+              <Text>{`${currentUser.address.city || ''}${
+                currentUser.address.city &&
+                currentUser.address.state_or_province
+                  ? ' - '
+                  : ''
+              }${currentUser.address.state_or_province || ''}`}</Text>
+            )}
           </>
         )}
       </View>
@@ -81,7 +110,11 @@ const Profile = () => {
       <Header
         title="Perfil de Usuário"
         RightComponent={
-          <IconButton iconName="ios-refresh" onPress={handleGetCurrentUser} />
+          <IconButton
+            size={26}
+            iconName="ios-refresh"
+            onPress={handleGetCurrentUser}
+          />
         }
       />
       <View bgColor="container.dark" style={styles.topContainer}>
@@ -130,4 +163,4 @@ const Profile = () => {
   );
 };
 
-export default Profile;
+export default UserProfile;

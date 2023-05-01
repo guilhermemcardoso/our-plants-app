@@ -113,7 +113,6 @@ const Settings = () => {
       }
     };
 
-    console.log('ITEM', item);
     return (
       <SettingsItem
         onPress={item.onPress}
