@@ -54,6 +54,43 @@ const UserProfile = ({ navigation }: Props) => {
     );
   }, [currentUser]);
 
+  const checkField = (field: string | undefined) => {
+    return !!(field && field.length > 0);
+  };
+
+  const renderAddress = () => {
+    return (
+      <>
+        <Text style={styles.fieldLabel} variant="secondary">
+          Endereço:
+        </Text>
+        {(checkField(currentUser?.address?.street_name) ||
+          checkField(currentUser?.address?.house_number)) && (
+          <Text>{`${
+            currentUser?.address?.street_name
+              ? `${currentUser?.address?.street_name}, `
+              : ''
+          }${currentUser?.address?.house_number || ''}`}</Text>
+        )}
+        {checkField(currentUser?.address?.neighbourhood) && (
+          <Text>{`${currentUser?.address?.neighbourhood}`}</Text>
+        )}
+        {checkField(currentUser?.address?.zip_code) && (
+          <Text>CEP: {currentUser?.address?.zip_code}</Text>
+        )}
+        {(checkField(currentUser?.address?.city) ||
+          checkField(currentUser?.address?.state_or_province)) && (
+          <Text>{`${currentUser?.address?.city || ''}${
+            currentUser?.address?.city &&
+            currentUser?.address?.state_or_province
+              ? ' - '
+              : ''
+          }${currentUser?.address?.state_or_province || ''}`}</Text>
+        )}
+      </>
+    );
+  };
+
   const renderDetails = () => {
     if (!currentUser?.bio && !showAddress) {
       return null;
@@ -71,36 +108,7 @@ const UserProfile = ({ navigation }: Props) => {
             <Divider style={styles.divider} bgColor="divider.primary" />
           </>
         )}
-        {showAddress && (
-          <>
-            <Text style={styles.fieldLabel} variant="secondary">
-              Endereço:
-            </Text>
-            {(currentUser?.address.street_name ||
-              currentUser?.address.house_number) && (
-              <Text>{`${
-                currentUser?.address.street_name
-                  ? `${currentUser?.address.street_name}, `
-                  : ''
-              }${currentUser?.address.house_number || ''}`}</Text>
-            )}
-            {currentUser?.address.neighbourhood && (
-              <Text>{`${currentUser?.address.neighbourhood}`}</Text>
-            )}
-            {currentUser?.address.zip_code && (
-              <Text>CEP: {currentUser?.address.zip_code}</Text>
-            )}
-            {(currentUser?.address.city ||
-              currentUser?.address.state_or_province) && (
-              <Text>{`${currentUser.address.city || ''}${
-                currentUser.address.city &&
-                currentUser.address.state_or_province
-                  ? ' - '
-                  : ''
-              }${currentUser.address.state_or_province || ''}`}</Text>
-            )}
-          </>
-        )}
+        {showAddress && renderAddress()}
       </View>
     );
   };

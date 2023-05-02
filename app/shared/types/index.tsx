@@ -1,9 +1,19 @@
+export interface Address {
+  street_name?: string;
+  neighbourhood?: string;
+  zip_code?: string;
+  house_number?: string;
+  city?: string;
+  state_or_province?: string;
+  country?: string;
+}
+
 export interface User {
   _id: string;
   name: string;
   lastname: string;
   email: string;
-  bio: string;
+  bio?: string;
   score: {
     xp: number;
     level: number;
@@ -12,15 +22,7 @@ export interface User {
   completed_profile: boolean;
   updated_at: string;
   created_at: string;
-  profile_image: string | undefined;
-  mapped_plants: number;
-  address: {
-    street_name: string;
-    neighbourhood: string;
-    zip_code: string;
-    house_number: string;
-    city: string;
-    state_or_province: string;
-    country: string;
-  };
+  profile_image?: string | undefined;
+  mapped_plants?: number;
+  address?: Address;
 }

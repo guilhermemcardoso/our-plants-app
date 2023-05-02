@@ -1,6 +1,7 @@
 import { HStack, ScrollView, VStack, View } from 'native-base';
 import React, { useEffect, useMemo, useState } from 'react';
 import {
+  Alert,
   Avatar,
   Button,
   ConfirmationModal,
@@ -18,6 +19,15 @@ import { SignedInStackParamList } from '~/navigation/stacks/signed-in';
 import { Routes } from '~/navigation/routes';
 import { useRemoveProfileImage } from '~/hooks/use-remove-profile-image';
 import { useLoading } from '~/hooks/use-loading';
+import { Masks, formatWithMask } from 'react-native-mask-input';
+import { Address, User } from '~/shared/types';
+import { brazillianStates } from '~/shared/constants/brazillian_states';
+import {
+  EditProfileValidationErrors,
+  getErrorByField,
+  validate,
+} from './validations';
+import { useUpdateUserProfile } from '~/hooks/use-update-user-profile';
 
 type Props = NativeStackScreenProps<
   SignedInStackParamList,
@@ -25,25 +35,72 @@ type Props = NativeStackScreenProps<
 >;
 
 const EditProfile = ({ navigation }: Props) => {
+  const currentUser = useAuthStore((state) => state.currentUser);
   const { isLoading: isRemoveProfileImageLoading, removeProfileImage } =
     useRemoveProfileImage();
+  const {
+    isLoading: isUpdateUserProfileLoading,
+    updateUserProfile,
+    onResponse: onUpdateUserProfileResponse,
+  } = useUpdateUserProfile();
   const { setLoading } = useLoading();
-  const [selectedStateOrProvince, setSelectedStateOrProvince] = useState('');
   const [showRemoveImageModal, setShowRemoveImageModal] = useState(false);
-
-  const currentUser = useAuthStore((state) => state.currentUser);
+  const [showAlert, setShowAlert] = useState(false);
+  const [alertType, setAlertType] = useState<'error' | 'success'>('error');
+  const [alertMessage, setAlertMessage] = useState('');
+  const [errors, setErrors] = useState<EditProfileValidationErrors>({
+    _id: '',
+    email: '',
+    name: '',
+    lastname: '',
+  });
+  const [userData, setUserData] = useState<User | null>(currentUser);
 
   const isLoading = useMemo(() => {
-    return isRemoveProfileImageLoading;
-  }, [isRemoveProfileImageLoading]);
+    return isRemoveProfileImageLoading || isUpdateUserProfileLoading;
+  }, [isRemoveProfileImageLoading, isUpdateUserProfileLoading]);
 
   const handleBackPress = () => {
     navigation.goBack();
   };
-  const handleEditProfile = () => {};
+  const handleEditProfile = () => {
+    if (!userData) {
+      return;
+    }
+
+    const validation = validate(userData);
+    if (!validation.success) {
+      const errorsByField: EditProfileValidationErrors = {
+        _id: '',
+        email: '',
+        name: '',
+        lastname: '',
+      };
+      Object.keys(errorsByField).forEach((field) => {
+        const error = getErrorByField(
+          validation.error,
+          field as keyof EditProfileValidationErrors
+        );
+        errorsByField[field as keyof EditProfileValidationErrors] = error;
+      });
+      setErrors(errorsByField);
+      return;
+    }
+    updateUserProfile(userData);
+  };
 
   const handleSelectStateOrProvince = (selected: string) => {
-    setSelectedStateOrProvince(selected);
+    if (!userData) {
+      return;
+    }
+    const newUserData = { ...userData };
+
+    newUserData.address = {
+      ...newUserData.address,
+      state_or_province: selected,
+    };
+
+    setUserData(newUserData);
   };
 
   const handleRemoveImagePress = () => {
@@ -65,8 +122,59 @@ const EditProfile = ({ navigation }: Props) => {
   }, [isLoading, setLoading]);
 
   useEffect(() => {
-    setSelectedStateOrProvince(currentUser?.address.state_or_province || '');
-  }, [currentUser?.address.state_or_province]);
+    if (onUpdateUserProfileResponse.status === 400) {
+      setAlertMessage('Algo deu errado.');
+      setAlertType('error');
+      setShowAlert(true);
+    }
+
+    if (onUpdateUserProfileResponse.status === 200) {
+      setAlertMessage('Perfil atualizado com sucesso.');
+      setAlertType('success');
+      setShowAlert(true);
+    }
+  }, [onUpdateUserProfileResponse]);
+
+  const handleChangeAddressValue = ({
+    field,
+    value,
+  }: {
+    field: keyof Address;
+    value: string;
+  }) => {
+    if (!userData) {
+      return;
+    }
+    const newUserData = { ...userData };
+
+    newUserData.address = {
+      ...newUserData.address,
+      [field]: value,
+    };
+
+    setUserData(newUserData);
+  };
+
+  const handleChangeUserValue = ({
+    field,
+    value,
+  }: {
+    field: 'bio' | 'name' | 'lastname';
+    value: string;
+  }) => {
+    if (!userData) {
+      return;
+    }
+    const newUserData = { ...userData };
+
+    newUserData[field] = value;
+
+    setUserData(newUserData);
+  };
+
+  const onCloseAlert = () => {
+    setShowAlert(false);
+  };
 
   return (
     <Container safe={false}>
@@ -82,14 +190,14 @@ const EditProfile = ({ navigation }: Props) => {
           }
         />
         <View bgColor="container.dark" style={styles.topContainer}>
-          <Avatar level={25} avatarUrl={currentUser?.profile_image} />
+          <Avatar level={25} avatarUrl={userData?.profile_image} />
           <VStack flex={1} ml={8}>
             <Button title="ALTERAR FOTO" onPress={() => {}} />
             <Button
               style={styles.removeImageButton}
               variant="outline"
               title="REMOVER FOTO"
-              isDisabled={!currentUser?.profile_image}
+              isDisabled={!userData?.profile_image}
               onPress={handleRemoveImagePress}
             />
           </VStack>
@@ -99,58 +207,111 @@ const EditProfile = ({ navigation }: Props) => {
         </View>
         <View bgColor="container.dark" style={styles.profileContainer}>
           <Text style={styles.sectionLabel}>Informações pessoais</Text>
+          <TextInput label="Email" value={userData?.email} isDisabled={true} />
           <TextInput
-            label="Email"
-            value={currentUser?.email}
-            isDisabled={true}
+            onChangeText={(text) =>
+              handleChangeUserValue({ field: 'name', value: text })
+            }
+            label="Nome"
+            value={userData?.name}
+            error={errors.name}
           />
-          <TextInput label="Nome" value={currentUser?.name} />
-          <TextInput label="Sobrenome" value={currentUser?.lastname} />
-          <TextInput label="Bio" value={currentUser?.bio} />
+          <TextInput
+            onChangeText={(text) =>
+              handleChangeUserValue({ field: 'lastname', value: text })
+            }
+            label="Sobrenome"
+            value={userData?.lastname}
+            error={errors.lastname}
+          />
+          <TextInput
+            onChangeText={(text) =>
+              handleChangeUserValue({ field: 'bio', value: text })
+            }
+            label="Bio"
+            value={userData?.bio}
+          />
         </View>
         <View bgColor="container.dark" style={styles.profileContainer}>
           <Text style={styles.sectionLabel}>Endereço</Text>
           <HStack>
             <TextInput
+              onChangeText={(text) =>
+                handleChangeAddressValue({
+                  field: 'street_name',
+                  value: text,
+                })
+              }
               style={styles.leftInput}
               label="Rua"
-              value={currentUser?.address.street_name}
+              value={userData?.address?.street_name}
             />
             <TextInput
+              onChangeText={(text) =>
+                handleChangeAddressValue({
+                  field: 'house_number',
+                  value: text,
+                })
+              }
               style={styles.rightInput}
               label="Número"
-              value={currentUser?.address.house_number}
+              value={userData?.address?.house_number}
             />
           </HStack>
           <TextInput
+            onChangeText={(text) =>
+              handleChangeAddressValue({
+                field: 'neighbourhood',
+                value: text,
+              })
+            }
             label="Bairro"
-            value={currentUser?.address.neighbourhood}
+            value={userData?.address?.neighbourhood}
           />
           <HStack alignItems="center">
             <TextInput
+              onChangeText={(text) =>
+                handleChangeAddressValue({
+                  field: 'city',
+                  value: text,
+                })
+              }
               style={styles.leftInput}
               label="Cidade"
-              value={currentUser?.address.city}
+              value={userData?.address?.city}
             />
             <Selector
               label="Estado"
               style={styles.rightInput}
-              value={selectedStateOrProvince}
-              options={['SP', 'RJ', 'BA', 'MG']}
+              value={userData?.address?.state_or_province || ''}
+              options={brazillianStates}
               onSelect={handleSelectStateOrProvince}
             />
           </HStack>
           <HStack>
             <TextInput
+              onChangeText={(text) =>
+                handleChangeAddressValue({
+                  field: 'zip_code',
+                  value: text,
+                })
+              }
               style={styles.leftInput}
               label="CEP"
-              value={currentUser?.address.zip_code}
+              value={
+                userData?.address?.zip_code
+                  ? formatWithMask({
+                      text: userData?.address?.zip_code,
+                      mask: Masks.ZIP_CODE,
+                    }).masked
+                  : ''
+              }
             />
             <TextInput
               style={styles.rightInput}
               isDisabled
               label="País"
-              value={currentUser?.address.country}
+              value={userData?.address?.country}
             />
           </HStack>
         </View>
@@ -168,6 +329,12 @@ const EditProfile = ({ navigation }: Props) => {
         yesLabel="REMOVER"
         onNo={onCancelRemoveImage}
         onYes={onConfirmRemoveImage}
+      />
+      <Alert
+        show={showAlert}
+        status={alertType}
+        title={alertMessage}
+        onClose={onCloseAlert}
       />
     </Container>
   );

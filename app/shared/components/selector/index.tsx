@@ -32,7 +32,7 @@ export default function Selector({
           p={3}
           flex={'1'}
           color="font.primary"
-          backgroundColor={theme.colors.container.default}
+          backgroundColor={theme.colors.container.light}
           borderColor="container.dark"
           fontFamily={'body'}
           selectedValue={value}

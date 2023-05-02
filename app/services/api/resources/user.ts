@@ -1,4 +1,5 @@
 import { Api } from '~/services/api';
+import { User } from '~/shared/types';
 
 export async function getCurrentUser() {
   return await Api({
@@ -13,5 +14,14 @@ export async function removeProfileImage() {
     method: 'delete',
     url: 'user/me/profile-image',
     hasToken: true,
+  });
+}
+
+export async function updateUserProfile(updateUserProfileData: User) {
+  return await Api({
+    method: 'patch',
+    url: 'user/me',
+    hasToken: true,
+    data: updateUserProfileData,
   });
 }
