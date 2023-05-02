@@ -39,7 +39,6 @@ export default function Selector({
           onValueChange={onSelect}
           placeholderTextColor={theme.colors.font.secondary}
           placeholder="UF"
-          tintColor={theme.colors.font.primary}
           _actionSheetContent={{
             backgroundColor: theme.colors.container.light,
           }}

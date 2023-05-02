@@ -12,7 +12,7 @@ export interface User {
   completed_profile: boolean;
   updated_at: string;
   created_at: string;
-  profile_image: string;
+  profile_image: string | undefined;
   mapped_plants: number;
   address: {
     street_name: string;
