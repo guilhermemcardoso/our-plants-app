@@ -28,12 +28,12 @@ export function useRemoveProfileImage() {
     }
 
     const { response, status } = removeProfileImageResponse;
-    setOnResponse({ status, data: response.data });
     if (!done.current && response.data && currentUser) {
       done.current = true;
       const updatedCurrentUser = { ...currentUser, profile_image: undefined };
       setCurrentUser(updatedCurrentUser);
       setKey(EncryptedKeys.CURRENT_USER, JSON.stringify(updatedCurrentUser));
+      setOnResponse({ status: status || 500, data: response.data });
     }
   }, [removeProfileImageResponse, setCurrentUser, currentUser]);
 

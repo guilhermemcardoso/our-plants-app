@@ -6,6 +6,7 @@ export { ConfirmationModal } from './modal';
 export { default as Container } from './container';
 export { default as Header } from './header';
 export { default as IconButton } from './icon-button';
+export { default as ImagePicker } from './image-picker';
 export { InfoModal } from './modal';
 export { default as Loading } from './loading';
 export { default as ProgressBar } from './progress-bar';

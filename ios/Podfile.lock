@@ -12,6 +12,9 @@ PODS:
     - ReactCommon/turbomodule/core (= 0.68.2)
   - Firebase/CoreOnly (8.15.0):
     - FirebaseCore (= 8.15.0)
+  - Firebase/Storage (8.15.0):
+    - Firebase/CoreOnly
+    - FirebaseStorage (~> 8.15.0)
   - FirebaseCore (8.15.0):
     - FirebaseCoreDiagnostics (~> 8.0)
     - GoogleUtilities/Environment (~> 7.7)
@@ -21,6 +24,9 @@ PODS:
     - GoogleUtilities/Environment (~> 7.7)
     - GoogleUtilities/Logger (~> 7.7)
     - nanopb (~> 2.30908.0)
+  - FirebaseStorage (8.15.0):
+    - FirebaseCore (~> 8.0)
+    - GTMSessionFetcher/Core (~> 1.5)
   - Flipper (0.125.0):
     - Flipper-Folly (~> 2.6)
     - Flipper-RSocket (~> 1.4)
@@ -84,14 +90,15 @@ PODS:
     - FlipperKit/FlipperKitNetworkPlugin
   - fmt (6.2.1)
   - glog (0.3.5)
-  - GoogleDataTransport (9.1.4):
+  - GoogleDataTransport (9.2.2):
     - GoogleUtilities/Environment (~> 7.7)
     - nanopb (< 2.30910.0, >= 2.30908.0)
     - PromisesObjC (< 3.0, >= 1.2)
-  - GoogleUtilities/Environment (7.7.0):
+  - GoogleUtilities/Environment (7.11.1):
     - PromisesObjC (< 3.0, >= 1.2)
-  - GoogleUtilities/Logger (7.7.0):
+  - GoogleUtilities/Logger (7.11.1):
     - GoogleUtilities/Environment
+  - GTMSessionFetcher/Core (1.7.2)
   - libevent (2.1.12)
   - nanopb (2.30908.0):
     - nanopb/decode (= 2.30908.0)
@@ -103,7 +110,7 @@ PODS:
     - RNPermissions
   - Permission-LocationWhenInUse (3.6.1):
     - RNPermissions
-  - PromisesObjC (2.1.0)
+  - PromisesObjC (2.2.0)
   - RCT-Folly (2021.06.28.00-v2):
     - boost
     - DoubleConversion
@@ -313,6 +320,10 @@ PODS:
     - glog
   - react-native-encrypted-storage (4.0.3):
     - React-Core
+  - react-native-get-random-values (1.8.0):
+    - React-Core
+  - react-native-image-picker (5.3.1):
+    - React-Core
   - react-native-maps (1.4.0):
     - React-Core
   - react-native-safe-area-context (3.3.2):
@@ -389,6 +400,10 @@ PODS:
   - RNFBApp (14.11.0):
     - Firebase/CoreOnly (= 8.15.0)
     - React-Core
+  - RNFBStorage (14.11.0):
+    - Firebase/Storage (= 8.15.0)
+    - React-Core
+    - RNFBApp
   - RNGestureHandler (2.6.0):
     - React-Core
   - rnmapbox-maps (10.0.0-rc.8):
@@ -483,6 +498,8 @@ DEPENDENCIES:
   - React-jsinspector (from `../node_modules/react-native/ReactCommon/jsinspector`)
   - React-logger (from `../node_modules/react-native/ReactCommon/logger`)
   - react-native-encrypted-storage (from `../node_modules/react-native-encrypted-storage`)
+  - react-native-get-random-values (from `../node_modules/react-native-get-random-values`)
+  - react-native-image-picker (from `../node_modules/react-native-image-picker`)
   - react-native-maps (from `../node_modules/react-native-maps`)
   - react-native-safe-area-context (from `../node_modules/react-native-safe-area-context`)
   - react-native-splash-screen (from `../node_modules/react-native-splash-screen`)
@@ -500,6 +517,7 @@ DEPENDENCIES:
   - ReactCommon/turbomodule/core (from `../node_modules/react-native/ReactCommon`)
   - "RNCAsyncStorage (from `../node_modules/@react-native-async-storage/async-storage`)"
   - "RNFBApp (from `../node_modules/@react-native-firebase/app`)"
+  - "RNFBStorage (from `../node_modules/@react-native-firebase/storage`)"
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
   - "rnmapbox-maps (from `../node_modules/@rnmapbox/maps`)"
   - RNPermissions (from `../node_modules/react-native-permissions`)
@@ -514,6 +532,7 @@ SPEC REPOS:
     - Firebase
     - FirebaseCore
     - FirebaseCoreDiagnostics
+    - FirebaseStorage
     - Flipper
     - Flipper-Boost-iOSX
     - Flipper-DoubleConversion
@@ -526,6 +545,7 @@ SPEC REPOS:
     - fmt
     - GoogleDataTransport
     - GoogleUtilities
+    - GTMSessionFetcher
     - libevent
     - nanopb
     - OpenSSL-Universal
@@ -576,6 +596,10 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/logger"
   react-native-encrypted-storage:
     :path: "../node_modules/react-native-encrypted-storage"
+  react-native-get-random-values:
+    :path: "../node_modules/react-native-get-random-values"
+  react-native-image-picker:
+    :path: "../node_modules/react-native-image-picker"
   react-native-maps:
     :path: "../node_modules/react-native-maps"
   react-native-safe-area-context:
@@ -610,6 +634,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/@react-native-async-storage/async-storage"
   RNFBApp:
     :path: "../node_modules/@react-native-firebase/app"
+  RNFBStorage:
+    :path: "../node_modules/@react-native-firebase/storage"
   RNGestureHandler:
     :path: "../node_modules/react-native-gesture-handler"
   rnmapbox-maps:
@@ -634,6 +660,7 @@ SPEC CHECKSUMS:
   Firebase: 5f8193dff4b5b7c5d5ef72ae54bb76c08e2b841d
   FirebaseCore: 5743c5785c074a794d35f2fff7ecc254a91e08b1
   FirebaseCoreDiagnostics: 92e07a649aeb66352b319d43bdd2ee3942af84cb
+  FirebaseStorage: 8019af461599b2c3bc61c6a5dbdfa3d2de66a4d9
   Flipper: 26fc4b7382499f1281eb8cb921e5c3ad6de91fe0
   Flipper-Boost-iOSX: fd1e2b8cbef7e662a122412d7ac5f5bea715403c
   Flipper-DoubleConversion: 3d3d04a078d4f3a1b6c6916587f159dc11f232c4
@@ -645,14 +672,15 @@ SPEC CHECKSUMS:
   FlipperKit: cbdee19bdd4e7f05472a66ce290f1b729ba3cb86
   fmt: ff9d55029c625d3757ed641535fd4a75fedc7ce9
   glog: 476ee3e89abb49e07f822b48323c51c57124b572
-  GoogleDataTransport: 5fffe35792f8b96ec8d6775f5eccd83c998d5a3b
-  GoogleUtilities: e0913149f6b0625b553d70dae12b49fc62914fd1
+  GoogleDataTransport: 8378d1fa8ac49753ea6ce70d65a7cb70ce5f66e6
+  GoogleUtilities: 9aa0ad5a7bc171f8bae016300bfcfa3fb8425749
+  GTMSessionFetcher: 5595ec75acf5be50814f81e9189490412bad82ba
   libevent: 4049cae6c81cdb3654a443be001fb9bdceff7913
   nanopb: a0ba3315591a9ae0a16a309ee504766e90db0c96
   OpenSSL-Universal: ebc357f1e6bc71fa463ccb2fe676756aff50e88c
   Permission-LocationAccuracy: 76df17de5c6b8bc2eee34e61ee92cdd7a864c73d
   Permission-LocationWhenInUse: 3ba99e45c852763f730eabecec2870c2382b7bd4
-  PromisesObjC: 99b6f43f9e1044bd87a95a60beff28c2c44ddb72
+  PromisesObjC: 09985d6d70fbe7878040aa746d78236e6946d2ef
   RCT-Folly: 4d8508a426467c48885f1151029bc15fa5d7b3b8
   RCTRequired: 3e917ea5377751094f38145fdece525aa90545a0
   RCTTypeSafety: c43c072a4bd60feb49a9570b0517892b4305c45e
@@ -667,6 +695,8 @@ SPEC CHECKSUMS:
   React-jsinspector: c5989c77cb89ae6a69561095a61cce56a44ae8e8
   React-logger: a0833912d93b36b791b7a521672d8ee89107aff1
   react-native-encrypted-storage: db300a3f2f0aba1e818417c1c0a6be549038deb7
+  react-native-get-random-values: a6ea6a8a65dc93e96e24a11105b1a9c8cfe1d72a
+  react-native-image-picker: ec9b713e248760bfa0f879f0715391de4651a7cb
   react-native-maps: 7135a33610202745d08fdf151ce6b0d01952a99c
   react-native-safe-area-context: 584dc04881deb49474363f3be89e4ca0e854c057
   react-native-splash-screen: 4312f786b13a81b5169ef346d76d33bc0c6dc457
@@ -684,6 +714,7 @@ SPEC CHECKSUMS:
   ReactCommon: 095366164a276d91ea704ce53cb03825c487a3f2
   RNCAsyncStorage: 0c357f3156fcb16c8589ede67cc036330b6698ca
   RNFBApp: b1b5a80a676a07dea17e778bda7c1e8b69b2f5ec
+  RNFBStorage: b96c566326d070860a9470858c6cf54d825b666b
   RNGestureHandler: 920eb17f5b1e15dae6e5ed1904045f8f90e0b11e
   rnmapbox-maps: 818c20dd4811b4838bce3880a57b46c35c544f3d
   RNPermissions: dcdb7b99796bbeda6975a6e79ad519c41b251b1c

@@ -25,3 +25,14 @@ export async function updateUserProfile(updateUserProfileData: User) {
     data: updateUserProfileData,
   });
 }
+
+export async function updateProfileImage(imageUrl: string) {
+  return await Api({
+    method: 'patch',
+    url: 'user/me/profile-image',
+    hasToken: true,
+    data: {
+      profile_image: imageUrl,
+    },
+  });
+}

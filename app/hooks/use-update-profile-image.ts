@@ -1,13 +1,14 @@
 import { useMutation } from '@tanstack/react-query';
 import { useEffect, useRef, useState } from 'react';
-
-import { updateUserProfile as updateUserProfileMutation } from '~/services/api/resources/user';
+import storage from '@react-native-firebase/storage';
+import { updateProfileImage as updateProfileImageMutation } from '~/services/api/resources/user';
 import { setKey } from '~/services/secure-storage';
 import { EncryptedKeys } from '~/services/secure-storage/constants';
-import { User } from '~/shared/types';
 import { useAuthStore } from '~/store/auth-store';
+import 'react-native-get-random-values';
+import { v4 as uuid } from 'uuid';
 
-export function useUpdateUserProfile() {
+export function useUpdateProfileImage() {
   const [onResponse, setOnResponse] = useState<{
     data: any;
     status: number | undefined;
@@ -19,16 +20,16 @@ export function useUpdateUserProfile() {
   const {
     mutate,
     isLoading,
-    data: updateUserProfileResponse,
+    data: updateProfileImageResponse,
   } = useMutation({
-    mutationFn: updateUserProfileMutation,
+    mutationFn: updateProfileImageMutation,
   });
   useEffect(() => {
-    if (!updateUserProfileResponse) {
+    if (!updateProfileImageResponse) {
       return;
     }
 
-    const { response, status } = updateUserProfileResponse;
+    const { response, status } = updateProfileImageResponse;
     if (!done.current && response.data && currentUser) {
       done.current = true;
       const updatedCurrentUser = {
@@ -40,12 +41,24 @@ export function useUpdateUserProfile() {
       setKey(EncryptedKeys.CURRENT_USER, JSON.stringify(updatedCurrentUser));
       setOnResponse({ status: status || 500, data: response.data });
     }
-  }, [updateUserProfileResponse, setCurrentUser, currentUser]);
+  }, [updateProfileImageResponse, setCurrentUser, currentUser]);
 
-  const updateUserProfile = async (userData: User) => {
-    mutate(userData);
-    done.current = false;
+  const updateProfileImage = async (imageUri: string) => {
+    try {
+      const imageId = uuid();
+      const reference = storage().ref(imageId);
+
+      await reference.putFile(imageUri);
+      const url = await storage().ref(imageId).getDownloadURL();
+      mutate(url);
+      done.current = false;
+    } catch (error) {
+      console.log(
+        '[useUpdateProfileImage] - update profile image error',
+        error
+      );
+    }
   };
 
-  return { isLoading, updateUserProfile, onResponse };
+  return { isLoading, updateProfileImage, onResponse };
 }

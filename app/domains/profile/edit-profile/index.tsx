@@ -1,5 +1,7 @@
-import { HStack, ScrollView, VStack, View } from 'native-base';
 import React, { useEffect, useMemo, useState } from 'react';
+import { HStack, ScrollView, VStack, View } from 'native-base';
+import { Masks, formatWithMask } from 'react-native-mask-input';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import {
   Alert,
   Avatar,
@@ -8,26 +10,27 @@ import {
   Container,
   Header,
   IconButton,
+  ImagePicker,
   Selector,
   Text,
   TextInput,
 } from '~/shared/components';
-import styles from './styles';
-import { useAuthStore } from '~/store/auth-store';
-import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { Asset } from 'react-native-image-picker';
+import { useLoading } from '~/hooks/use-loading';
+import { useRemoveProfileImage } from '~/hooks/use-remove-profile-image';
+import { useUpdateUserProfile } from '~/hooks/use-update-user-profile';
+import { useUpdateProfileImage } from '~/hooks/use-update-profile-image';
 import { SignedInStackParamList } from '~/navigation/stacks/signed-in';
 import { Routes } from '~/navigation/routes';
-import { useRemoveProfileImage } from '~/hooks/use-remove-profile-image';
-import { useLoading } from '~/hooks/use-loading';
-import { Masks, formatWithMask } from 'react-native-mask-input';
-import { Address, User } from '~/shared/types';
 import { brazillianStates } from '~/shared/constants/brazillian_states';
+import { Address, User } from '~/shared/types';
+import { useAuthStore } from '~/store/auth-store';
 import {
   EditProfileValidationErrors,
   getErrorByField,
   validate,
 } from './validations';
-import { useUpdateUserProfile } from '~/hooks/use-update-user-profile';
+import styles from './styles';
 
 type Props = NativeStackScreenProps<
   SignedInStackParamList,
@@ -36,8 +39,16 @@ type Props = NativeStackScreenProps<
 
 const EditProfile = ({ navigation }: Props) => {
   const currentUser = useAuthStore((state) => state.currentUser);
-  const { isLoading: isRemoveProfileImageLoading, removeProfileImage } =
-    useRemoveProfileImage();
+  const {
+    isLoading: isUpdateProfileImageLoading,
+    updateProfileImage,
+    onResponse: onUpdateProfileImageResponse,
+  } = useUpdateProfileImage();
+  const {
+    isLoading: isRemoveProfileImageLoading,
+    removeProfileImage,
+    onResponse: onRemoveProfileImageResponse,
+  } = useRemoveProfileImage();
   const {
     isLoading: isUpdateUserProfileLoading,
     updateUserProfile,
@@ -45,6 +56,9 @@ const EditProfile = ({ navigation }: Props) => {
   } = useUpdateUserProfile();
   const { setLoading } = useLoading();
   const [showRemoveImageModal, setShowRemoveImageModal] = useState(false);
+  const [showConfirmImageSelectedModal, setShowConfirmImageSelectedModal] =
+    useState(false);
+  const [showImagePicker, setShowImagePicker] = useState(false);
   const [showAlert, setShowAlert] = useState(false);
   const [alertType, setAlertType] = useState<'error' | 'success'>('error');
   const [alertMessage, setAlertMessage] = useState('');
@@ -54,11 +68,20 @@ const EditProfile = ({ navigation }: Props) => {
     name: '',
     lastname: '',
   });
-  const [userData, setUserData] = useState<User | null>(currentUser);
+  const [userData, setUserData] = useState<User | null>();
+  const [selectedImage, setSelectedImage] = useState<Asset | null>(null);
 
   const isLoading = useMemo(() => {
-    return isRemoveProfileImageLoading || isUpdateUserProfileLoading;
-  }, [isRemoveProfileImageLoading, isUpdateUserProfileLoading]);
+    return (
+      isRemoveProfileImageLoading ||
+      isUpdateUserProfileLoading ||
+      isUpdateProfileImageLoading
+    );
+  }, [
+    isRemoveProfileImageLoading,
+    isUpdateUserProfileLoading,
+    isUpdateProfileImageLoading,
+  ]);
 
   const handleBackPress = () => {
     navigation.goBack();
@@ -103,6 +126,10 @@ const EditProfile = ({ navigation }: Props) => {
     setUserData(newUserData);
   };
 
+  const handleUpdateImagePress = async () => {
+    setShowImagePicker(true);
+  };
+
   const handleRemoveImagePress = () => {
     setShowRemoveImageModal(true);
   };
@@ -116,24 +143,6 @@ const EditProfile = ({ navigation }: Props) => {
     removeProfileImage();
     setLoading(true);
   };
-
-  useEffect(() => {
-    setLoading(isLoading);
-  }, [isLoading, setLoading]);
-
-  useEffect(() => {
-    if (onUpdateUserProfileResponse.status === 400) {
-      setAlertMessage('Algo deu errado.');
-      setAlertType('error');
-      setShowAlert(true);
-    }
-
-    if (onUpdateUserProfileResponse.status === 200) {
-      setAlertMessage('Perfil atualizado com sucesso.');
-      setAlertType('success');
-      setShowAlert(true);
-    }
-  }, [onUpdateUserProfileResponse]);
 
   const handleChangeAddressValue = ({
     field,
@@ -176,6 +185,79 @@ const EditProfile = ({ navigation }: Props) => {
     setShowAlert(false);
   };
 
+  const handleCancelImagePicker = () => {
+    setShowImagePicker(false);
+  };
+
+  const handleImageSelected = (images: Asset[]) => {
+    setShowImagePicker(false);
+    if (images.length === 0) {
+      return;
+    }
+
+    setShowConfirmImageSelectedModal(true);
+    setSelectedImage(images[0]);
+  };
+
+  const onCancelUpdateImage = () => {
+    setShowConfirmImageSelectedModal(false);
+  };
+
+  const onConfirmUpdateImage = async () => {
+    setShowConfirmImageSelectedModal(false);
+    if (selectedImage && selectedImage.uri) {
+      await updateProfileImage(selectedImage.uri);
+      if (!userData) {
+        return;
+      }
+      const newUserData = { ...userData };
+      if (currentUser && currentUser?.profile_image) {
+        newUserData.profile_image = currentUser?.profile_image;
+        setUserData(userData);
+      }
+    }
+  };
+
+  const handleImagePickerError = (error: string) => {
+    setShowImagePicker(false);
+    setAlertMessage(error);
+    setShowAlert(true);
+  };
+
+  useEffect(() => {
+    setLoading(isLoading);
+  }, [isLoading, setLoading]);
+
+  useEffect(() => {
+    setUserData(currentUser);
+  }, [currentUser]);
+
+  useEffect(() => {
+    if (
+      onUpdateUserProfileResponse.status === 400 ||
+      onRemoveProfileImageResponse.status === 400 ||
+      onUpdateProfileImageResponse.status === 400
+    ) {
+      setAlertMessage('Algo deu errado.');
+      setAlertType('error');
+      setShowAlert(true);
+    }
+
+    if (
+      onUpdateUserProfileResponse.status === 200 ||
+      onRemoveProfileImageResponse.status === 200 ||
+      onUpdateProfileImageResponse.status === 200
+    ) {
+      setAlertMessage('Perfil atualizado com sucesso.');
+      setAlertType('success');
+      setShowAlert(true);
+    }
+  }, [
+    onUpdateUserProfileResponse,
+    onRemoveProfileImageResponse,
+    onUpdateProfileImageResponse,
+  ]);
+
   return (
     <Container safe={false}>
       <ScrollView>
@@ -192,7 +274,7 @@ const EditProfile = ({ navigation }: Props) => {
         <View bgColor="container.dark" style={styles.topContainer}>
           <Avatar level={25} avatarUrl={userData?.profile_image} />
           <VStack flex={1} ml={8}>
-            <Button title="ALTERAR FOTO" onPress={() => {}} />
+            <Button title="ALTERAR FOTO" onPress={handleUpdateImagePress} />
             <Button
               style={styles.removeImageButton}
               variant="outline"
@@ -330,11 +412,27 @@ const EditProfile = ({ navigation }: Props) => {
         onNo={onCancelRemoveImage}
         onYes={onConfirmRemoveImage}
       />
+      <ConfirmationModal
+        open={showConfirmImageSelectedModal}
+        title="Confirma foto"
+        description="Tem certeza de que deseja enviar a foto selecionada?"
+        noLabel="CANCELAR"
+        yesLabel="ENVIAR"
+        onNo={onCancelUpdateImage}
+        onYes={onConfirmUpdateImage}
+        yesButtonWarning={false}
+      />
       <Alert
         show={showAlert}
         status={alertType}
         title={alertMessage}
         onClose={onCloseAlert}
+      />
+      <ImagePicker
+        open={showImagePicker}
+        onCancel={handleCancelImagePicker}
+        onImageSelected={handleImageSelected}
+        onError={handleImagePickerError}
       />
     </Container>
   );

@@ -12,6 +12,7 @@ type Props = InterfaceModalProps & {
   yesLabel: string;
   onNo: () => void;
   onYes: () => void;
+  yesButtonWarning?: boolean;
 };
 
 const ConfirmationModal = ({
@@ -20,6 +21,7 @@ const ConfirmationModal = ({
   description,
   noLabel,
   yesLabel,
+  yesButtonWarning = true,
   onNo,
   onYes,
 }: Props) => {
@@ -42,7 +44,7 @@ const ConfirmationModal = ({
               onPress={onNo}
             />
             <Button
-              warning
+              warning={yesButtonWarning}
               style={styles.button}
               title={yesLabel}
               onPress={onYes}

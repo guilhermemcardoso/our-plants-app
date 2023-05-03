@@ -1,4 +1,4 @@
-import { IconButton, useTheme } from 'native-base';
+import { IconButton as NativeIconButton, useTheme } from 'native-base';
 import Icon from 'react-native-vector-icons/Ionicons';
 import React from 'react';
 import { ViewProps } from 'react-native';
@@ -8,7 +8,7 @@ type Props = ViewProps & {
   iconName?: string;
   size?: number;
 };
-const Alert = ({
+const IconButton = ({
   size = 20,
   iconName = 'ios-pencil-sharp',
   onPress,
@@ -17,7 +17,7 @@ const Alert = ({
   const theme = useTheme();
 
   return (
-    <IconButton
+    <NativeIconButton
       style={style}
       onPress={onPress}
       icon={
@@ -34,4 +34,4 @@ const Alert = ({
   );
 };
 
-export default Alert;
+export default IconButton;
