@@ -31,6 +31,9 @@ import {
   validate,
 } from './validations';
 import styles from './styles';
+import { ChangePasswordData } from '~/shared/components/modal/change-password/types';
+import { ChangePasswordModal } from '~/shared/components/modal';
+import { useChangePassword } from '~/hooks/use-change-password';
 
 type Props = NativeStackScreenProps<
   SignedInStackParamList,
@@ -39,6 +42,11 @@ type Props = NativeStackScreenProps<
 
 const EditProfile = ({ navigation }: Props) => {
   const currentUser = useAuthStore((state) => state.currentUser);
+  const {
+    isLoading: isChangePasswordLoading,
+    changePassword,
+    onResponse: onChangePasswordResponse,
+  } = useChangePassword();
   const {
     isLoading: isUpdateProfileImageLoading,
     updateProfileImage,
@@ -55,6 +63,7 @@ const EditProfile = ({ navigation }: Props) => {
     onResponse: onUpdateUserProfileResponse,
   } = useUpdateUserProfile();
   const { setLoading } = useLoading();
+  const [showChangePasswordModal, setShowChangePasswordModal] = useState(false);
   const [showRemoveImageModal, setShowRemoveImageModal] = useState(false);
   const [showConfirmImageSelectedModal, setShowConfirmImageSelectedModal] =
     useState(false);
@@ -75,12 +84,14 @@ const EditProfile = ({ navigation }: Props) => {
     return (
       isRemoveProfileImageLoading ||
       isUpdateUserProfileLoading ||
-      isUpdateProfileImageLoading
+      isUpdateProfileImageLoading ||
+      isChangePasswordLoading
     );
   }, [
     isRemoveProfileImageLoading,
     isUpdateUserProfileLoading,
     isUpdateProfileImageLoading,
+    isChangePasswordLoading,
   ]);
 
   const handleBackPress = () => {
@@ -224,6 +235,19 @@ const EditProfile = ({ navigation }: Props) => {
     setShowAlert(true);
   };
 
+  const onChangePasswordPress = () => {
+    setShowChangePasswordModal(true);
+  };
+
+  const onCancelChangePassword = () => {
+    setShowChangePasswordModal(false);
+  };
+
+  const onConfirmChangePassword = (data: ChangePasswordData) => {
+    setShowChangePasswordModal(false);
+    changePassword(data.current, data.password);
+  };
+
   useEffect(() => {
     setLoading(isLoading);
   }, [isLoading, setLoading]);
@@ -236,7 +260,8 @@ const EditProfile = ({ navigation }: Props) => {
     if (
       onUpdateUserProfileResponse.status === 400 ||
       onRemoveProfileImageResponse.status === 400 ||
-      onUpdateProfileImageResponse.status === 400
+      onUpdateProfileImageResponse.status === 400 ||
+      onChangePasswordResponse.status === 400
     ) {
       setAlertMessage('Algo deu errado.');
       setAlertType('error');
@@ -246,7 +271,8 @@ const EditProfile = ({ navigation }: Props) => {
     if (
       onUpdateUserProfileResponse.status === 200 ||
       onRemoveProfileImageResponse.status === 200 ||
-      onUpdateProfileImageResponse.status === 200
+      onUpdateProfileImageResponse.status === 200 ||
+      onChangePasswordResponse.status === 200
     ) {
       setAlertMessage('Perfil atualizado com sucesso.');
       setAlertType('success');
@@ -256,6 +282,7 @@ const EditProfile = ({ navigation }: Props) => {
     onUpdateUserProfileResponse,
     onRemoveProfileImageResponse,
     onUpdateProfileImageResponse,
+    onChangePasswordResponse,
   ]);
 
   return (
@@ -285,7 +312,7 @@ const EditProfile = ({ navigation }: Props) => {
           </VStack>
         </View>
         <View bgColor="container.dark" style={styles.profileContainer}>
-          <Button title="TROCAR SENHA" />
+          <Button title="TROCAR SENHA" onPress={onChangePasswordPress} />
         </View>
         <View bgColor="container.dark" style={styles.profileContainer}>
           <Text style={styles.sectionLabel}>Informações pessoais</Text>
@@ -420,6 +447,14 @@ const EditProfile = ({ navigation }: Props) => {
         yesLabel="ENVIAR"
         onNo={onCancelUpdateImage}
         onYes={onConfirmUpdateImage}
+        yesButtonWarning={false}
+      />
+      <ChangePasswordModal
+        open={showChangePasswordModal}
+        noLabel="CANCELAR"
+        yesLabel="TROCAR"
+        onNo={onCancelChangePassword}
+        onYes={onConfirmChangePassword}
         yesButtonWarning={false}
       />
       <Alert

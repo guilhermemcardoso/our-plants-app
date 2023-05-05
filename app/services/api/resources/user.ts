@@ -36,3 +36,21 @@ export async function updateProfileImage(imageUrl: string) {
     },
   });
 }
+
+export async function changePassword({
+  oldPassword,
+  newPassword,
+}: {
+  oldPassword: string;
+  newPassword: string;
+}) {
+  return await Api({
+    method: 'patch',
+    url: 'user/me/change-password',
+    hasToken: true,
+    data: {
+      old_password: oldPassword,
+      new_password: newPassword,
+    },
+  });
+}

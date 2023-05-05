@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { View, Image, Platform } from 'react-native';
-import TextField from '~/shared/components/text-input';
+import { TextInput, Text } from '~/shared/components';
 import { styles } from './styles';
 import {
   SignUpValidationErrors,
@@ -9,7 +9,6 @@ import {
 } from './validations';
 import Button from '~/shared/components/button';
 import Container from '~/shared/components/container';
-import Text from '~/shared/components/text';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { UnsignedStackParamList } from '~/navigation/stacks/signed-out';
 import { SignUpData } from '../types';
@@ -150,7 +149,7 @@ const SignUp = ({ navigation }: Props) => {
             <Text size="subtitle" style={styles.subtitle}>
               Cadastro de usuário
             </Text>
-            <TextField
+            <TextInput
               style={styles.textField}
               onChangeText={(text) => handleOnChange(text, 'name')}
               onBlur={() => handleOnBlur('name')}
@@ -159,7 +158,7 @@ const SignUp = ({ navigation }: Props) => {
               placeholder="Nome"
               error={errors.name}
             />
-            <TextField
+            <TextInput
               style={styles.textField}
               onChangeText={(text) => handleOnChange(text, 'lastname')}
               onBlur={() => handleOnBlur('lastname')}
@@ -168,7 +167,7 @@ const SignUp = ({ navigation }: Props) => {
               placeholder="Sobrenome"
               error={errors.lastname}
             />
-            <TextField
+            <TextInput
               style={styles.textField}
               onChangeText={(text) => handleOnChange(text, 'email')}
               onBlur={() => handleOnBlur('email')}
@@ -177,7 +176,7 @@ const SignUp = ({ navigation }: Props) => {
               placeholder="Email"
               error={errors.email}
             />
-            <TextField
+            <TextInput
               style={styles.textField}
               onChangeText={(text) => handleOnChange(text, 'password')}
               onBlur={() => handleOnBlur('password')}
@@ -186,7 +185,7 @@ const SignUp = ({ navigation }: Props) => {
               placeholder="Senha"
               error={errors.password}
             />
-            <TextField
+            <TextInput
               style={styles.textField}
               onChangeText={(text) => handleOnChange(text, 'repassword')}
               onBlur={() => handleOnBlur('repassword')}
