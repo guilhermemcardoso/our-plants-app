@@ -4,7 +4,7 @@ export function getIconName(focused: boolean, tabName: string) {
   switch (tabName) {
     case Tabs.FAVORITES:
       return focused ? 'ios-heart-sharp' : 'ios-heart-outline';
-    case Tabs.PROFILE:
+    case Tabs.USER_PROFILE:
       return focused ? 'ios-person-circle' : 'ios-person-circle-outline';
     case Tabs.SETTINGS:
       return focused ? 'ios-settings' : 'ios-settings-outline';
