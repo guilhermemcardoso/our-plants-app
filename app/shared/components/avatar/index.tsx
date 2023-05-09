@@ -7,21 +7,34 @@ import styles from './styles';
 type Props = ViewProps & {
   level?: number;
   avatarUrl: string | undefined;
+  type?: 'plant' | 'user';
+  size?: 'xl' | 'lg' | 'md' | 'sm' | 'xs';
 };
 
-const Avatar = ({ level, avatarUrl, ...rest }: Props) => {
+const defaultImages = {
+  user: require('~/assets/images/default_profile.png'),
+  plant: require('~/assets/images/default_plant.png'),
+};
+
+const Avatar = ({
+  level,
+  avatarUrl,
+  type = 'user',
+  size = 'xl',
+  ...rest
+}: Props) => {
   return (
     <Box {...rest}>
       <NativeAvatar
         style={styles.avatar}
         bg="container.light"
-        size="xl"
+        size={size}
         source={
           avatarUrl
             ? {
                 uri: avatarUrl,
               }
-            : require('~/assets/images/default_profile.png')
+            : defaultImages[type]
         }
       />
       {level && (
