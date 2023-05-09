@@ -26,3 +26,43 @@ export interface User {
   mapped_plants?: number;
   address?: Address;
 }
+
+export interface Specie {
+  _id: string;
+  popular_name: string;
+  scientific_name: string;
+  created_by: string;
+  deleted: boolean;
+  editable: boolean;
+  updated_at: string;
+  created_at: string;
+}
+
+export interface Location {
+  coordinates: number[];
+  type: string;
+}
+
+export interface Plant {
+  _id: string;
+  description: string;
+  location: Location;
+  images: string[];
+  created_by: User;
+  upvotes: string[];
+  downvotes: string[];
+  specie_id: Specie;
+  reported: boolean;
+  deleted: boolean;
+  editable: boolean;
+  updated_at: string;
+  created_at: string;
+}
+
+export interface Favorite {
+  _id: string;
+  user_id: string;
+  plants: Plant[];
+  updated_at: string;
+  created_at: string;
+}
