@@ -1,0 +1,48 @@
+import React from 'react';
+import { HStack, View, useTheme } from 'native-base';
+import { Plant } from '~/shared/types';
+import { TouchableOpacity } from 'react-native';
+import { Avatar, IconButton, Text } from '~/shared/components';
+import { formatDistance } from '~/shared/utils/distance';
+import styles from './styles';
+
+interface Props {
+  data: Plant;
+  distance: number;
+  onPress: (item: Plant) => void;
+  onFavorite: (item: Plant) => void;
+}
+
+export default function FavoriteItem({
+  data,
+  distance,
+  onFavorite,
+  onPress,
+}: Props) {
+  const theme = useTheme();
+
+  const onFavoritePress = () => {
+    onFavorite(data);
+  };
+
+  const onItemPress = () => {
+    onPress(data);
+  };
+
+  return (
+    <TouchableOpacity onPress={onItemPress}>
+      <View bgColor={theme.colors.container.dark} style={styles.itemContainer}>
+        <HStack>
+          <Avatar type="plant" size="md" avatarUrl={data.images[0]} />
+          <View style={styles.infoContainer}>
+            <Text style={styles.title}>{data.description}</Text>
+            <Text size="helper">{`Distância: ${formatDistance(
+              distance
+            )}`}</Text>
+          </View>
+        </HStack>
+        <IconButton size={20} iconName="ios-heart" onPress={onFavoritePress} />
+      </View>
+    </TouchableOpacity>
+  );
+}
