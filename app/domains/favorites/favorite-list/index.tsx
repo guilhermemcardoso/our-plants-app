@@ -9,15 +9,18 @@ import { useFavoritesStore } from '~/store/favorites-store';
 import { useGetFavorites } from '~/hooks/use-get-favorites';
 import { useLoading } from '~/hooks/use-loading';
 import { calcDistance } from '~/shared/utils/distance';
+import { useRemoveFromFavorites } from '~/hooks/use-remove-from-favorites';
 
 const Favorites = () => {
   const favorites = useFavoritesStore((state) => state.favorites);
   const { setLoading } = useLoading();
   const { isLoading: isGetFavoritesLoading, getFavorites } = useGetFavorites();
+  const { isLoading: isRemoveFromFavoritesLoading, removeFromFavorites } =
+    useRemoveFromFavorites();
 
   const isLoading = useMemo(() => {
-    return isGetFavoritesLoading;
-  }, [isGetFavoritesLoading]);
+    return isGetFavoritesLoading || isRemoveFromFavoritesLoading;
+  }, [isGetFavoritesLoading, isRemoveFromFavoritesLoading]);
 
   const onGetFavoritesPress = () => {
     getFavorites();
@@ -28,7 +31,7 @@ const Favorites = () => {
   };
 
   const onFavoriteItem = (item: Plant) => {
-    console.log('onFavoriteItem', item);
+    removeFromFavorites(item._id);
   };
 
   useEffect(() => {
