@@ -5,7 +5,7 @@ import {
   formatSpecieIconName,
   getPlantIconBySpecie,
 } from '~/shared/utils/icon';
-import { Container } from '~/shared/components';
+import { Container, Fab } from '~/shared/components';
 import { View } from 'native-base';
 import styles from './styles';
 
@@ -26,6 +26,7 @@ const Map = () => {
             onPress={() => console.log('Clicou aqui')}
           />
         </MapView>
+        <Fab onPress={() => console.log('CLICOU')} />
       </View>
     </Container>
   );

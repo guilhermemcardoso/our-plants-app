@@ -4,6 +4,7 @@ export { default as Button } from './button';
 export { default as Card } from './card';
 export { ConfirmationModal } from './modal';
 export { default as Container } from './container';
+export { default as Fab } from './fab';
 export { default as Header } from './header';
 export { default as IconButton } from './icon-button';
 export { default as ImagePicker } from './image-picker';
