@@ -4,14 +4,15 @@ import { TextProps } from 'react-native';
 import { styles } from './styles';
 
 type Props = TextProps & {
-  size?: 'title' | 'subtitle' | 'body' | 'helper';
+  size?: 'title' | 'subtitle' | 'body' | 'helper' | 'label';
   variant?:
     | 'primary'
     | 'secondary'
     | 'error'
     | 'interactive'
     | 'disabled'
-    | 'progress';
+    | 'progress'
+    | 'label';
 };
 
 export default function Text({

@@ -23,4 +23,10 @@ export const styles = StyleSheet.create({
     fontFamily: 'Inter',
     lineHeight: 14,
   },
+  label: {
+    fontSize: 14,
+    fontFamily: 'Inter',
+    lineHeight: 21,
+    fontWeight: '500',
+  },
 });
