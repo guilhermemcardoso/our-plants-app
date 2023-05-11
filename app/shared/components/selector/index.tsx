@@ -10,6 +10,9 @@ type Props = ViewProps & {
   options: string[];
   label: string;
   error?: string;
+  placeholder?: string;
+  createNewOptionLabel?: string;
+  onCreateNewOption?: () => void;
   onSelect: (option: string) => void;
 };
 
@@ -19,7 +22,10 @@ export default function Selector({
   options,
   error,
   accessibilityLabel = 'Selecione uma opção',
+  placeholder = 'UF',
   style,
+  createNewOptionLabel,
+  onCreateNewOption,
   onSelect,
 }: Props) {
   const theme = useTheme();
@@ -38,7 +44,7 @@ export default function Selector({
           selectedValue={value}
           onValueChange={onSelect}
           placeholderTextColor={theme.colors.font.secondary}
-          placeholder="UF"
+          placeholder={placeholder}
           _actionSheetContent={{
             backgroundColor: theme.colors.container.light,
           }}
@@ -61,6 +67,25 @@ export default function Selector({
           }}
           accessibilityLabel={accessibilityLabel}
         >
+          {createNewOptionLabel && onCreateNewOption && (
+            <Select.Item
+              opacity={0.5}
+              onPress={onCreateNewOption}
+              startIcon={
+                <Icon
+                  name={'ios-add'}
+                  size={20}
+                  color={theme.colors.font.primary}
+                />
+              }
+              _text={{
+                color: theme.colors.font.secondary,
+              }}
+              key={createNewOptionLabel}
+              label={createNewOptionLabel}
+              value={createNewOptionLabel}
+            />
+          )}
           {options.map((option) => (
             <Select.Item
               startIcon={

@@ -7,6 +7,9 @@ const styles = StyleSheet.create({
     backgroundColor: 'transparent',
   },
   iconError: { alignSelf: 'flex-start' },
+  newItem: {
+    color: 'font.secondary',
+  },
 });
 
 export default styles;
