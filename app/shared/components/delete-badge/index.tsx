@@ -1,6 +1,6 @@
 import React from 'react';
 import Icon from 'react-native-vector-icons/Ionicons';
-import { TouchableOpacity } from 'react-native-gesture-handler';
+import { TouchableOpacity } from 'react-native';
 import { Box, useTheme } from 'native-base';
 import styles from './styles';
 
