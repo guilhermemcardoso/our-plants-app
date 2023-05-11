@@ -9,16 +9,29 @@ import { themes } from './theme';
 import { useSettings } from './hooks/use-settings';
 import { Loading } from './shared/components';
 import { useLoading } from './hooks/use-loading';
+import { useLocation } from './hooks/use-location';
+import { AskForLocation } from './domains/location';
+import useAppIsActive from './hooks/use-app-is-active';
 
 const App = () => {
   const { loadSettings } = useSettings();
+  const { requestLocationPermission, isLocationAllowed } = useLocation();
+  useAppIsActive(requestLocationPermission);
 
   useEffect(() => {
     loadSettings();
     SplashScreen.hide();
   });
 
-  return <Router />;
+  useEffect(() => {
+    requestLocationPermission();
+  }, [requestLocationPermission]);
+
+  if (isLocationAllowed) {
+    return <Router />;
+  }
+
+  return <AskForLocation />;
 };
 
 const AppWrapper = () => {
