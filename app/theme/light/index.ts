@@ -34,6 +34,7 @@ export const lightPalette = {
     primary: '#2c2c2c',
     secondary: '#757575',
     progress: '#2c2c2c',
+    label: '#737373',
   },
   loading: {
     background: 'rgba(0,0,0,0.75)',
