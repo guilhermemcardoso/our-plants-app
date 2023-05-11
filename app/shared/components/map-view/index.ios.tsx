@@ -7,16 +7,19 @@ export default function MapViewIos({
   children,
   latitude,
   longitude,
+  longitudeDelta = 0.04,
+  latitudeDelta = 0.08,
   style,
 }: MapProps) {
   return (
     <MapView
+      zoomEnabled
       style={[styles.mapContainer, style]}
       initialRegion={{
         latitude,
         longitude,
-        latitudeDelta: 0.08,
-        longitudeDelta: 0.04,
+        latitudeDelta,
+        longitudeDelta,
       }}
     >
       {children}

@@ -1,6 +1,6 @@
 import React from 'react';
-import MapView from './components/map-view';
-import MarkerView from './components/marker-view';
+import MapView from '~/shared/components/map-view';
+import MarkerView from '~/shared/components/marker-view';
 import {
   formatSpecieIconName,
   getPlantIconBySpecie,
@@ -8,8 +8,17 @@ import {
 import { Container, Fab } from '~/shared/components';
 import { View } from 'native-base';
 import styles from './styles';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { SignedInStackParamList } from '~/navigation/stacks/signed-in';
+import { Routes } from '~/navigation/routes';
 
-const Map = () => {
+type Props = NativeStackScreenProps<SignedInStackParamList, Routes.MAP>;
+
+const Map = ({ navigation }: Props) => {
+  const onCreatePlantPlress = () => {
+    navigation.navigate(Routes.CREATE_EDIT_PLANT, { plant: undefined });
+  };
+
   return (
     <Container>
       <View style={styles.mapContainer}>
@@ -26,7 +35,7 @@ const Map = () => {
             onPress={() => console.log('Clicou aqui')}
           />
         </MapView>
-        <Fab onPress={() => console.log('CLICOU')} />
+        <Fab onPress={onCreatePlantPlress} />
       </View>
     </Container>
   );
