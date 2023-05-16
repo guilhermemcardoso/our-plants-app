@@ -12,7 +12,9 @@ export default function MarkerViewAndroid({
   onPress,
 }: MarkerProps) {
   const handlePress = () => {
-    onPress(id);
+    if (onPress) {
+      onPress(id);
+    }
   };
 
   return (

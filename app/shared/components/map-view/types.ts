@@ -1,4 +1,5 @@
 import { ViewStyle } from 'react-native';
+import { Location } from '~/shared/types';
 
 export interface MapProps {
   children: React.ReactNode;
@@ -8,4 +9,5 @@ export interface MapProps {
   longitudeDelta?: number;
   zoom?: number;
   style?: ViewStyle;
+  onPress?: (location: Location) => void;
 }

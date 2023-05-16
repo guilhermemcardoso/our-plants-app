@@ -27,6 +27,8 @@ import {
 import { Asset } from 'react-native-image-picker';
 import { getErrorByField } from '../validations';
 import { MAX_IMAGES } from '~/shared/constants/constants';
+import { Location } from '~/shared/types';
+import { useLocation } from '~/hooks/use-location';
 
 type Props = NativeStackScreenProps<
   SignedInStackParamList,
@@ -35,6 +37,7 @@ type Props = NativeStackScreenProps<
 
 const CreateEditPlant = ({ route, navigation }: Props) => {
   const { plant } = route.params;
+  const { currentLocation } = useLocation();
   const species = useSpecieStore((state) => state.species);
   const [showImagePicker, setShowImagePicker] = useState(false);
   const [canAddImages, setcanAddImages] = useState(false);
@@ -42,8 +45,8 @@ const CreateEditPlant = ({ route, navigation }: Props) => {
   const [selectedImages, setSelectedImages] = useState<Asset[]>([]);
   const [plantData, setPlantData] = useState<CreateEditPlantData>({
     description: '',
-    latitude: '',
-    longitude: '',
+    latitude: String(currentLocation?.coordinates[0] || 0),
+    longitude: String(currentLocation?.coordinates[1] || 0),
     specie_id: '',
     images: [],
   });
@@ -89,6 +92,14 @@ const CreateEditPlant = ({ route, navigation }: Props) => {
 
   const handleCancelImagePicker = () => {
     setShowImagePicker(false);
+  };
+
+  const handleChangePlantLocation = (location: Location) => {
+    setPlantData({
+      ...plantData,
+      latitude: String(location.coordinates[0]),
+      longitude: String(location.coordinates[1]),
+    });
   };
 
   const handleImageSelected = (images: Asset[]) => {
@@ -186,18 +197,18 @@ const CreateEditPlant = ({ route, navigation }: Props) => {
           </Text>
           <View style={styles.mapContainer}>
             <MapView
+              onPress={handleChangePlantLocation}
               style={styles.map}
-              latitude={-21.950384}
-              longitude={-47.892363}
-              latitudeDelta={0.001}
-              longitudeDelta={0.001}
+              latitude={Number(plantData.latitude)}
+              longitude={Number(plantData.longitude)}
+              latitudeDelta={0.006}
+              longitudeDelta={0.006}
             >
               <MarkerView
-                latitude={-21.950384}
-                longitude={-47.892363}
+                latitude={Number(plantData.latitude)}
+                longitude={Number(plantData.longitude)}
                 id="id-1"
                 icon={getPlantIconBySpecie(formatSpecieIconName('default'))}
-                onPress={() => console.log('Clicou aqui')}
               />
             </MapView>
           </View>

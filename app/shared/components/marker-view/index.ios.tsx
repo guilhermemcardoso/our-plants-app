@@ -12,7 +12,9 @@ export default function MarkerViewIos({
   onPress,
 }: MarkerProps) {
   const handlePress = () => {
-    onPress(id);
+    if (onPress) {
+      onPress(id);
+    }
   };
 
   return (
@@ -20,8 +22,6 @@ export default function MarkerViewIos({
       identifier={id}
       key={id}
       onPress={handlePress}
-      title="title"
-      description="description"
       coordinate={{ latitude, longitude }}
     >
       <Image source={icon} style={styles.markerIcon} />

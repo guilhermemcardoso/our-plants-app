@@ -5,5 +5,5 @@ export interface MarkerProps {
   id: string;
   latitude: number;
   longitude: number;
-  onPress: (id: string) => void;
+  onPress?: (id: string) => void;
 }

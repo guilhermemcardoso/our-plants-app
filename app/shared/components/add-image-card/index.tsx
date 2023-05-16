@@ -11,8 +11,8 @@ interface Props {
 export default function AddImageCard({ onPress }: Props) {
   const theme = useTheme();
   return (
-    <Box borderColor={theme.colors.font.secondary}>
-      <TouchableOpacity onPress={onPress} style={styles.container}>
+    <Box borderColor={theme.colors.font.secondary} style={styles.container}>
+      <TouchableOpacity onPress={onPress}>
         <Icon name={'ios-add'} size={30} color={theme.colors.font.secondary} />
       </TouchableOpacity>
     </Box>

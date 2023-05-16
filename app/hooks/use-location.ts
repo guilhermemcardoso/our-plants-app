@@ -1,9 +1,12 @@
 import { useCallback } from 'react';
 import { PermissionsAndroid, Platform } from 'react-native';
 import Geolocation from 'react-native-geolocation-service';
+import { useLocationStore } from '~/store/location-store';
 import { usePermissionStore } from '~/store/permission-store';
 
 export function useLocation() {
+  const { setCurrentLocation, currentLocation } = useLocationStore();
+
   const isLocationAllowed = usePermissionStore(
     (state) => state.locationAllowed
   );
@@ -14,7 +17,10 @@ export function useLocation() {
   const getCurrentLocation = useCallback(() => {
     Geolocation.getCurrentPosition(
       (position) => {
-        console.log('COORDS', position.coords);
+        setCurrentLocation({
+          coordinates: [position.coords.latitude, position.coords.longitude],
+          type: 'Point',
+        });
       },
       (error) => {
         console.log('ERRO NA LOCATION DO USUARIO', error);
@@ -25,7 +31,7 @@ export function useLocation() {
         maximumAge: 10000,
       }
     );
-  }, []);
+  }, [setCurrentLocation]);
 
   const requestLocationPermission = useCallback(async () => {
     if (Platform.OS === 'ios') {
@@ -57,5 +63,10 @@ export function useLocation() {
     }
   }, [setIsLocationAllowed]);
 
-  return { isLocationAllowed, requestLocationPermission, getCurrentLocation };
+  return {
+    isLocationAllowed,
+    requestLocationPermission,
+    getCurrentLocation,
+    currentLocation,
+  };
 }
