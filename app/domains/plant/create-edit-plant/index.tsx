@@ -26,6 +26,7 @@ import {
 } from '~/shared/utils/icon';
 import { Asset } from 'react-native-image-picker';
 import { getErrorByField } from '../validations';
+import { MAX_IMAGES } from '~/shared/constants/constants';
 
 type Props = NativeStackScreenProps<
   SignedInStackParamList,
@@ -96,14 +97,20 @@ const CreateEditPlant = ({ route, navigation }: Props) => {
       return;
     }
 
-    const imageUris: string[] = [];
+    const imageUris: string[] = plantData.images || [];
+    const newSelectedImages = [...selectedImages];
+
     images.forEach((image) => {
-      if (image.uri) {
+      if (image.uri && imageUris.length < MAX_IMAGES) {
         imageUris.push(image.uri);
+      }
+
+      if (image && newSelectedImages.length < MAX_IMAGES) {
+        newSelectedImages.push(image);
       }
     });
 
-    setSelectedImages(images);
+    setSelectedImages(newSelectedImages);
     setPlantData({ ...plantData, images: imageUris });
   };
 
@@ -239,7 +246,7 @@ const CreateEditPlant = ({ route, navigation }: Props) => {
         onClose={onCloseAlert}
       /> */}
       <ImagePicker
-        selectionLimit={3}
+        selectionLimit={MAX_IMAGES - selectedImages.length}
         open={showImagePicker}
         onCancel={handleCancelImagePicker}
         onImageSelected={handleImageSelected}
