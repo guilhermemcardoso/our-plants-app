@@ -10,6 +10,10 @@ const styles = StyleSheet.create({
   newItem: {
     color: 'font.secondary',
   },
+  noResults: {
+    padding: 16,
+    textAlign: 'center',
+  },
 });
 
 export default styles;

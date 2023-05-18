@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { ViewProps } from 'react-native';
 import { FormControl, HStack, Select, useTheme } from 'native-base';
 import Icon from 'react-native-vector-icons/Ionicons';
-import Text from '../text';
+import { SearchBar, Text } from '~/shared/components';
 import styles from './styles';
 
 type Props = ViewProps & {
@@ -12,6 +12,7 @@ type Props = ViewProps & {
   error?: string;
   placeholder?: string;
   createNewOptionLabel?: string;
+  searchable?: boolean;
   onCreateNewOption?: () => void;
   onSelect: (option: string) => void;
 };
@@ -25,10 +26,29 @@ export default function Selector({
   placeholder = 'UF',
   style,
   createNewOptionLabel,
+  searchable = false,
   onCreateNewOption,
   onSelect,
 }: Props) {
   const theme = useTheme();
+  const [filteredOptions, setFilteredOptions] = useState<string[]>(options);
+  const [searchText, setSearchText] = useState('');
+
+  const onChangeSearchText = (text: string) => {
+    setSearchText(text);
+  };
+
+  const onSearch = () => {
+    if (searchText.length === 0) {
+      setFilteredOptions(options);
+      return;
+    }
+
+    const filter = options.filter((option) =>
+      option.toLowerCase().includes(searchText.toLowerCase())
+    );
+    setFilteredOptions(filter);
+  };
 
   return (
     <FormControl style={style} isInvalid={!!error}>
@@ -45,6 +65,32 @@ export default function Selector({
           onValueChange={onSelect}
           placeholderTextColor={theme.colors.font.secondary}
           placeholder={placeholder}
+          _actionSheetBody={{
+            ListFooterComponent: (
+              <>
+                {filteredOptions.length === 0 && (
+                  <Text
+                    variant="secondary"
+                    size="label"
+                    style={styles.noResults}
+                  >
+                    Nenhum resultado foi encontrado para a busca
+                  </Text>
+                )}
+              </>
+            ),
+            ListHeaderComponent: (
+              <>
+                {searchable && (
+                  <SearchBar
+                    searchText={searchText}
+                    onChangeSearchText={onChangeSearchText}
+                    onSearch={onSearch}
+                  />
+                )}
+              </>
+            ),
+          }}
           _actionSheetContent={{
             backgroundColor: theme.colors.container.light,
           }}
@@ -86,7 +132,7 @@ export default function Selector({
               value={createNewOptionLabel}
             />
           )}
-          {options.map((option) => (
+          {filteredOptions.map((option) => (
             <Select.Item
               startIcon={
                 <Icon

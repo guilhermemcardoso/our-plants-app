@@ -231,6 +231,7 @@ const CreateEditPlant = ({ route, navigation }: Props) => {
             value={selectedSpecie}
             options={specieNames}
             onSelect={handleSelectSpecie}
+            searchable
           />
           <Text size="label" variant="label" style={styles.mapLabel}>
             Selecione imagens da planta (opcional):

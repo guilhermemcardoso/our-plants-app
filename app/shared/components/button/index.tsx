@@ -2,11 +2,17 @@ import React from 'react';
 import { IButtonProps, Button as NativeButton } from 'native-base';
 
 type Props = IButtonProps & {
-  title: string;
+  title?: string;
   warning?: boolean;
 };
 
-export default function Button({ title, variant, warning, ...rest }: Props) {
+export default function Button({
+  title,
+  variant,
+  warning,
+  children,
+  ...rest
+}: Props) {
   const getBackgroundColor = () => {
     if (variant === 'solid' || !variant) {
       if (warning) {
@@ -48,6 +54,7 @@ export default function Button({ title, variant, warning, ...rest }: Props) {
       {...rest}
     >
       {title}
+      {children}
     </NativeButton>
   );
 }

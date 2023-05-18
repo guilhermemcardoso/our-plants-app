@@ -14,6 +14,7 @@ export { default as ImagePicker } from './image-picker';
 export { InfoModal } from './modal';
 export { default as Loading } from './loading';
 export { default as ProgressBar } from './progress-bar';
+export { default as SearchBar } from './search-bar';
 export { default as Selector } from './selector';
 export { default as Text } from './text';
 export { default as TextInput } from './text-input';
