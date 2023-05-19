@@ -10,11 +10,15 @@ type Props = ViewProps & {
   options: string[];
   label: string;
   error?: string;
+  isOpen?: boolean;
   placeholder?: string;
   createNewOptionLabel?: string;
   searchable?: boolean;
+  show: boolean;
   onCreateNewOption?: () => void;
   onSelect: (option: string) => void;
+  onClose: () => void;
+  onOpen: () => void;
 };
 
 export default function Selector({
@@ -27,6 +31,9 @@ export default function Selector({
   style,
   createNewOptionLabel,
   searchable = false,
+  show,
+  onClose,
+  onOpen,
   onCreateNewOption,
   onSelect,
 }: Props) {
@@ -55,6 +62,8 @@ export default function Selector({
       <FormControl.Label>{label}</FormControl.Label>
       <HStack>
         <Select
+          onClose={onClose}
+          onOpen={onOpen}
           p={3}
           flex={'1'}
           color="font.primary"
@@ -65,6 +74,9 @@ export default function Selector({
           onValueChange={onSelect}
           placeholderTextColor={theme.colors.font.secondary}
           placeholder={placeholder}
+          _actionSheet={{
+            isOpen: show,
+          }}
           _actionSheetBody={{
             ListFooterComponent: (
               <>

@@ -68,6 +68,7 @@ const EditProfile = ({ navigation }: Props) => {
   const [showConfirmImageSelectedModal, setShowConfirmImageSelectedModal] =
     useState(false);
   const [showImagePicker, setShowImagePicker] = useState(false);
+  const [showSelector, setShowSelector] = useState(false);
   const [showAlert, setShowAlert] = useState(false);
   const [alertType, setAlertType] = useState<'error' | 'success'>('error');
   const [alertMessage, setAlertMessage] = useState('');
@@ -248,6 +249,14 @@ const EditProfile = ({ navigation }: Props) => {
     changePassword(data.current, data.password);
   };
 
+  const onCloseSelector = () => {
+    setShowSelector(false);
+  };
+
+  const onOpenSelector = () => {
+    setShowSelector(true);
+  };
+
   useEffect(() => {
     setLoading(isLoading);
   }, [isLoading, setLoading]);
@@ -390,6 +399,9 @@ const EditProfile = ({ navigation }: Props) => {
               value={userData?.address?.city}
             />
             <Selector
+              onClose={onCloseSelector}
+              onOpen={onOpenSelector}
+              show={showSelector}
               label="Estado"
               style={styles.rightInput}
               value={userData?.address?.state_or_province || ''}
