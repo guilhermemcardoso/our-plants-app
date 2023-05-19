@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { ViewProps } from 'react-native';
 import { FormControl, HStack, Select, useTheme } from 'native-base';
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -56,6 +56,11 @@ export default function Selector({
     );
     setFilteredOptions(filter);
   };
+
+  useEffect(() => {
+    setFilteredOptions(options);
+    setSearchText('');
+  }, [options]);
 
   return (
     <FormControl style={style} isInvalid={!!error}>

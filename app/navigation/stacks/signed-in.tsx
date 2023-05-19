@@ -5,8 +5,9 @@ import TabNavigator from '~/navigation/tabs';
 import { Routes } from '../routes';
 import { EditProfile } from '~/domains/profile';
 import { useGetSpecies } from '~/hooks/use-get-species';
-import { Plant } from '~/shared/types';
+import { Plant, Specie } from '~/shared/types';
 import { CreateEditPlant, VisualizePlant } from '~/domains/plant';
+import { CreateEditSpecie } from '~/domains/specie';
 
 const screenOptions = { headerShown: false };
 
@@ -22,6 +23,9 @@ export type SignedInStackParamList = {
   };
   [Routes.VISUALIZE_PLANT]: {
     plant: Plant;
+  };
+  [Routes.CREATE_EDIT_SPECIE]: {
+    specie?: Specie;
   };
 };
 
@@ -45,6 +49,10 @@ const Signed = () => {
       <RootStack.Screen
         name={Routes.VISUALIZE_PLANT}
         component={VisualizePlant}
+      />
+      <RootStack.Screen
+        name={Routes.CREATE_EDIT_SPECIE}
+        component={CreateEditSpecie}
       />
     </RootStack.Navigator>
   );

@@ -1,3 +1,4 @@
+import { CreateEditSpecieData } from '~/domains/specie/types';
 import { Api } from '~/services/api';
 
 export async function getSpecies({
@@ -10,6 +11,15 @@ export async function getSpecies({
   return await Api({
     method: 'get',
     url: `specie/list?page=${page}&items=${items}`,
+    hasToken: true,
+  });
+}
+
+export async function createSpecie(createSpecieData: CreateEditSpecieData) {
+  return await Api({
+    method: 'post',
+    url: 'specie',
+    data: createSpecieData,
     hasToken: true,
   });
 }

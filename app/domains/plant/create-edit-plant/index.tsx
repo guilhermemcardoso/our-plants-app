@@ -40,6 +40,7 @@ const CreateEditPlant = ({ route, navigation }: Props) => {
   const { currentLocation } = useLocation();
   const species = useSpecieStore((state) => state.species);
   const [showImagePicker, setShowImagePicker] = useState(false);
+  const [showSelector, setShowSelector] = useState(false);
   const [canAddImages, setcanAddImages] = useState(false);
   const [selectedSpecie, setSelectedSpecie] = useState('');
   const [selectedImages, setSelectedImages] = useState<Asset[]>([]);
@@ -87,7 +88,8 @@ const CreateEditPlant = ({ route, navigation }: Props) => {
   };
 
   const handleCreateNewSpecie = () => {
-    console.log('CLICOU PRA CRIAR');
+    onCloseSelector();
+    navigation.navigate(Routes.CREATE_EDIT_SPECIE, { specie: undefined });
   };
 
   const handleCancelImagePicker = () => {
@@ -144,6 +146,27 @@ const CreateEditPlant = ({ route, navigation }: Props) => {
     setShowImagePicker(true);
   };
 
+  const validateField = (field: keyof CreateEditPlantValidationErrors) => {
+    const validation = validate(plantData);
+    if (!validation.success) {
+      const error = getErrorByField(validation.error, field);
+      setErrors({ ...errors, [field]: error });
+      return;
+    }
+
+    setErrors({
+      description: '',
+      latitude: '',
+      longitude: '',
+      specie_id: '',
+      images: '',
+    });
+  };
+
+  const handleOnBlur = (field: string) => {
+    validateField(field as keyof CreateEditPlantValidationErrors);
+  };
+
   const onSubmitPress = async () => {
     const validation = validate(plantData);
     if (!validation.success) {
@@ -166,6 +189,14 @@ const CreateEditPlant = ({ route, navigation }: Props) => {
     }
 
     // TODO create or edit plant
+  };
+
+  const onCloseSelector = () => {
+    setShowSelector(false);
+  };
+
+  const onOpenSelector = () => {
+    setShowSelector(true);
   };
 
   useEffect(() => {
@@ -213,6 +244,7 @@ const CreateEditPlant = ({ route, navigation }: Props) => {
             </MapView>
           </View>
           <TextInput
+            onBlur={() => handleOnBlur('description')}
             onChangeText={(text) =>
               handleChangePlantValue({ field: 'description', value: text })
             }
@@ -231,6 +263,9 @@ const CreateEditPlant = ({ route, navigation }: Props) => {
             value={selectedSpecie}
             options={specieNames}
             onSelect={handleSelectSpecie}
+            onClose={onCloseSelector}
+            onOpen={onOpenSelector}
+            show={showSelector}
             searchable
           />
           <Text size="label" variant="label" style={styles.mapLabel}>
