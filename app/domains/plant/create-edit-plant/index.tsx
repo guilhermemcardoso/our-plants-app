@@ -1,5 +1,6 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import {
+  Alert,
   Button,
   Container,
   Header,
@@ -29,6 +30,8 @@ import { getErrorByField } from '../validations';
 import { MAX_IMAGES } from '~/shared/constants/constants';
 import { Location } from '~/shared/types';
 import { useLocation } from '~/hooks/use-location';
+import { useCreateEditPlant } from '~/hooks/use-create-edit-plant';
+import { useLoading } from '~/hooks/use-loading';
 
 type Props = NativeStackScreenProps<
   SignedInStackParamList,
@@ -37,6 +40,13 @@ type Props = NativeStackScreenProps<
 
 const CreateEditPlant = ({ route, navigation }: Props) => {
   const { plant } = route.params;
+  const {
+    onResponse: onCreateEditPlantResponse,
+    isLoading: isCreateEditPlantLoading,
+    createPlant,
+    editPlant,
+  } = useCreateEditPlant();
+  const { setLoading } = useLoading();
   const { currentLocation } = useLocation();
   const species = useSpecieStore((state) => state.species);
   const [showImagePicker, setShowImagePicker] = useState(false);
@@ -58,14 +68,21 @@ const CreateEditPlant = ({ route, navigation }: Props) => {
     specie_id: '',
     images: '',
   });
+  const [showAlert, setShowAlert] = useState(false);
+  const [alertType, setAlertType] = useState('error');
+  const [alertMessage, setAlertMessage] = useState('');
 
   const specieNames = useMemo(() => {
     return species.map((specie) => specie.popular_name);
   }, [species]);
 
-  const handleBackPress = () => {
-    navigation.goBack();
+  const onCloseAlert = () => {
+    setShowAlert(false);
   };
+
+  const handleBackPress = useCallback(() => {
+    navigation.goBack();
+  }, [navigation]);
 
   const handleChangePlantValue = ({
     field,
@@ -78,12 +95,12 @@ const CreateEditPlant = ({ route, navigation }: Props) => {
   };
 
   const handleSelectSpecie = (selected: string) => {
+    setShowSelector(false);
     const specie = species.find((item) => item.popular_name === selected);
 
     if (specie) {
       setPlantData({ ...plantData, specie_id: specie._id });
       setSelectedSpecie(specie.popular_name);
-      console.log('selectedSpecie', specie);
     }
   };
 
@@ -188,7 +205,12 @@ const CreateEditPlant = ({ route, navigation }: Props) => {
       return;
     }
 
-    // TODO create or edit plant
+    if (!plant) {
+      createPlant(plantData);
+      return;
+    }
+
+    editPlant(plant._id, plantData);
   };
 
   const onCloseSelector = () => {
@@ -200,6 +222,23 @@ const CreateEditPlant = ({ route, navigation }: Props) => {
   };
 
   useEffect(() => {
+    if (plant) {
+      setSelectedSpecie(plant.specie_id.popular_name);
+      setPlantData({
+        description: plant.description,
+        images: plant.images,
+        latitude: String(plant.location.coordinates[0]),
+        longitude: String(plant.location.coordinates[1]),
+        specie_id: plant.specie_id._id,
+      });
+    }
+  }, [plant]);
+
+  useEffect(() => {
+    setLoading(isCreateEditPlantLoading);
+  }, [isCreateEditPlantLoading, setLoading]);
+
+  useEffect(() => {
     if (plant && plant.images) {
       setcanAddImages(plant.images.length < 3);
       return;
@@ -207,6 +246,20 @@ const CreateEditPlant = ({ route, navigation }: Props) => {
 
     setcanAddImages(selectedImages.length < 3);
   }, [plant, selectedImages]);
+
+  useEffect(() => {
+    if (onCreateEditPlantResponse.status === 201) {
+      setAlertMessage('Planta cadastrada com sucesso');
+      setAlertType('success');
+      setShowAlert(true);
+      handleBackPress();
+    }
+    if ([400, 500, 404].includes(onCreateEditPlantResponse.status || 0)) {
+      setAlertMessage('Algo deu errado. Tente novamente mais tarde');
+      setAlertType('error');
+      setShowAlert(true);
+    }
+  }, [onCreateEditPlantResponse, handleBackPress]);
 
   return (
     <Container>
@@ -285,13 +338,12 @@ const CreateEditPlant = ({ route, navigation }: Props) => {
           title={plant ? 'EDITAR PLANTA' : 'CADASTRAR PLANTA'}
         />
       </ScrollView>
-      {/*      
       <Alert
         show={showAlert}
         status={alertType}
         title={alertMessage}
         onClose={onCloseAlert}
-      /> */}
+      />
       <ImagePicker
         selectionLimit={MAX_IMAGES - selectedImages.length}
         open={showImagePicker}
