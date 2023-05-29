@@ -12,11 +12,17 @@ import { useLoading } from './hooks/use-loading';
 import { useLocation } from './hooks/use-location';
 import { AskForLocation } from './domains/location';
 import useAppIsActive from './hooks/use-app-is-active';
+import useNetInfo from './hooks/use-net-info';
 
 const App = () => {
   const { loadSettings } = useSettings();
   const { requestLocationPermission, isLocationAllowed } = useLocation();
   useAppIsActive(requestLocationPermission);
+  const { checkInternetConnection } = useNetInfo();
+
+  useEffect(() => {
+    checkInternetConnection();
+  }, [checkInternetConnection]);
 
   useEffect(() => {
     loadSettings();

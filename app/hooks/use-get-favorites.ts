@@ -25,8 +25,9 @@ export function useGetFavorites() {
     }
 
     const { response, status } = getFavoritesResponse;
-    setOnResponse({ status, data: response.data });
+    setOnResponse({ status, data: response?.data || [] });
     if (
+      status === 200 &&
       response.data &&
       response.data.favorites &&
       response.data.favorites.plants
