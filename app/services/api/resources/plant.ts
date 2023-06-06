@@ -2,12 +2,8 @@ import { CreateEditPlantData } from '~/domains/plant/types';
 import { Api } from '~/services/api';
 
 export async function getPlants({
-  page,
-  items,
   locationData,
 }: {
-  page: number;
-  items: number;
   locationData: {
     latitude: number;
     longitude: number;
@@ -15,8 +11,8 @@ export async function getPlants({
   };
 }) {
   return await Api({
-    method: 'get',
-    url: `plant/list?page=${page}&items=${items}`,
+    method: 'post',
+    url: 'plant/near-by',
     data: locationData,
     hasToken: true,
   });
@@ -29,7 +25,7 @@ export async function createPlant(createPlantData: CreateEditPlantData) {
     data: {
       description: createPlantData.description.trim(),
       location: {
-        coordinates: [createPlantData.latitude, createPlantData.longitude],
+        coordinates: [createPlantData.longitude, createPlantData.latitude],
       },
       images: createPlantData.images,
       specie_id: createPlantData.specie_id,

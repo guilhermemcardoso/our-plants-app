@@ -20,7 +20,9 @@ export async function fetchRefreshToken() {
   return Api({
     method: 'post',
     url: '/auth/refresh',
-    headers: { Authorization: `Bearer ${accessToken}` },
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+    },
     data: { refresh_token: refreshToken },
   });
 }
@@ -78,6 +80,7 @@ export async function Api({ method, url, data, hasToken, headers }: ApiType) {
       data,
       headers: requestHeaders,
     });
+
     return { response: response.data, status: response.status };
   } catch (error) {
     if (error instanceof AxiosError) {

@@ -44,7 +44,7 @@ const Favorites = () => {
 
   const onRenderItem: ListRenderItem<Plant> = ({ item }: { item: Plant }) => {
     const userLocation: Location = {
-      coordinates: [-21.954603, -47.884553],
+      coordinates: [item.location.coordinates[1], item.location.coordinates[0]],
       type: 'Point',
     };
 

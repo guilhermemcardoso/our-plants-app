@@ -1,5 +1,5 @@
 import { useMutation } from '@tanstack/react-query';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 
 import { getFavorites as getFavoritesMutation } from '~/services/api/resources/favorite';
 import { Plant } from '~/shared/types';
@@ -19,6 +19,8 @@ export function useGetFavorites() {
   } = useMutation({
     mutationFn: getFavoritesMutation,
   });
+  const done = useRef(true);
+
   useEffect(() => {
     if (!getFavoritesResponse) {
       return;
@@ -26,12 +28,10 @@ export function useGetFavorites() {
 
     const { response, status } = getFavoritesResponse;
     setOnResponse({ status, data: response?.data || [] });
-    if (
-      status === 200 &&
-      response.data &&
-      response.data.favorites &&
-      response.data.favorites.plants
-    ) {
+
+    if (!done.current && response.data) {
+      done.current = true;
+
       const {
         favorites: { plants },
       } = response.data;
@@ -42,6 +42,7 @@ export function useGetFavorites() {
 
   const getFavorites = useCallback(async () => {
     mutate();
+    done.current = false;
   }, [mutate]);
 
   return { isLoading, getFavorites, onResponse };

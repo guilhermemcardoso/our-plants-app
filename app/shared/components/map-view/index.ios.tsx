@@ -30,7 +30,7 @@ export default function MapViewIos({
       onPress={handleOnPress}
       zoomEnabled
       style={[styles.mapContainer, style]}
-      initialRegion={{
+      region={{
         latitude,
         longitude,
         latitudeDelta,

@@ -15,21 +15,28 @@ export function useLocation() {
   );
 
   const getCurrentLocation = useCallback(() => {
-    Geolocation.getCurrentPosition(
-      (position) => {
-        setCurrentLocation({
-          coordinates: [position.coords.latitude, position.coords.longitude],
-          type: 'Point',
-        });
-      },
-      (error) => {
-        console.log('ERRO NA LOCATION DO USUARIO', error);
-      },
-      {
-        enableHighAccuracy: false,
-        timeout: 15000,
-        maximumAge: 10000,
-      }
+    return new Promise((resolve) =>
+      Geolocation.getCurrentPosition(
+        (position) => {
+          setCurrentLocation({
+            coordinates: [position.coords.latitude, position.coords.longitude],
+            type: 'Point',
+          });
+          resolve({
+            coordinates: [position.coords.latitude, position.coords.longitude],
+            type: 'Point',
+          });
+        },
+        (error) => {
+          console.log('[useLocation] - getCurrentLocation', error);
+          resolve(null);
+        },
+        {
+          enableHighAccuracy: false,
+          timeout: 15000,
+          maximumAge: 10000,
+        }
+      )
     );
   }, [setCurrentLocation]);
 
