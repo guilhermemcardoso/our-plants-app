@@ -5,15 +5,18 @@ interface SettingsState {
   theme: Theme;
   notificationEnabled: boolean;
   soundEnabled: boolean;
+  distance: number;
   setTheme: (theme: Theme) => void;
   setNotificationEnabled: (enabled: boolean) => void;
   setSoundEnabled: (enabled: boolean) => void;
+  setDistance: (distance: number) => void;
 }
 
 export const useSettingsStore = create<SettingsState>((set) => ({
   theme: 'dark',
   notificationEnabled: true,
   soundEnabled: true,
+  distance: 100,
   setTheme: async (theme) => {
     set((state) => ({
       ...state,
@@ -30,6 +33,12 @@ export const useSettingsStore = create<SettingsState>((set) => ({
     set((state) => ({
       ...state,
       soundEnabled: enabled,
+    }));
+  },
+  setDistance: async (distance) => {
+    set((state) => ({
+      ...state,
+      distance: distance,
     }));
   },
 }));

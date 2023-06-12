@@ -3,17 +3,19 @@ import { Container, Header, IconButton } from '~/shared/components';
 import styles from './styles';
 import { FlatList, View } from 'native-base';
 import { ListRenderItem } from 'react-native';
-import { Location, Plant } from '~/shared/types';
+import { Plant } from '~/shared/types';
 import { EmptyList, FavoriteItem } from '../components';
 import { useFavoritesStore } from '~/store/favorites-store';
 import { useGetFavorites } from '~/hooks/use-get-favorites';
 import { useLoading } from '~/hooks/use-loading';
 import { calcDistance } from '~/shared/utils/distance';
 import { useRemoveFromFavorites } from '~/hooks/use-remove-from-favorites';
+import { useLocation } from '~/hooks/use-location';
 
 const Favorites = () => {
   const favorites = useFavoritesStore((state) => state.favorites);
   const { setLoading } = useLoading();
+  const { currentLocation } = useLocation();
   const { isLoading: isGetFavoritesLoading, getFavorites } = useGetFavorites();
   const { isLoading: isRemoveFromFavoritesLoading, removeFromFavorites } =
     useRemoveFromFavorites();
@@ -43,12 +45,9 @@ const Favorites = () => {
   }, [isLoading, setLoading]);
 
   const onRenderItem: ListRenderItem<Plant> = ({ item }: { item: Plant }) => {
-    const userLocation: Location = {
-      coordinates: [item.location.coordinates[1], item.location.coordinates[0]],
-      type: 'Point',
-    };
-
-    const distance = calcDistance(userLocation, item.location);
+    const distance = currentLocation
+      ? calcDistance(currentLocation, item.location)
+      : null;
 
     return (
       <FavoriteItem

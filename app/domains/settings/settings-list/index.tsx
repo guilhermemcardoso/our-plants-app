@@ -1,6 +1,6 @@
 import React, { useCallback, useMemo, useState } from 'react';
 import { ListRenderItem } from 'react-native';
-import { FlatList, Switch, View } from 'native-base';
+import { FlatList, View } from 'native-base';
 import { useSignOut } from '~/hooks/use-sign-out';
 import { Container, ConfirmationModal, InfoModal } from '~/shared/components';
 import { AboutDescription, SettingsItem } from './components';
@@ -11,8 +11,9 @@ import { Theme } from '~/types/theme';
 
 interface Item {
   title: string;
-  value?: boolean;
-  setValue?: (value: boolean) => void;
+  value?: boolean | number;
+  type: 'default' | 'switch' | 'slider';
+  setValue?: (value: any) => void;
   onPress?: () => void;
 }
 
@@ -25,6 +26,8 @@ const Settings = () => {
     setNotificationEnabled,
     soundEnabled,
     setSoundEnabled,
+    distance,
+    setDistance,
   } = useSettings();
 
   const [showSignOutModal, setShowSignOutModal] = useState(false);
@@ -55,24 +58,35 @@ const Settings = () => {
       {
         title: 'Tema escuro',
         value: theme === 'dark' ? true : false,
+        type: 'switch',
         setValue: onSetTheme,
       },
       {
         title: 'Notificações habilitadas',
         value: notificationEnabled,
+        type: 'switch',
         setValue: setNotificationEnabled,
       },
       {
         title: 'Sons habilitados',
         value: soundEnabled,
+        type: 'switch',
         setValue: setSoundEnabled,
       },
       {
+        title: 'Distância máxima',
+        value: distance,
+        type: 'slider',
+        setValue: setDistance,
+      },
+      {
         title: 'Sobre',
+        type: 'default',
         onPress: onOpenAboutModal,
       },
       {
         title: 'Sair',
+        type: 'default',
         onPress: handleSignOut,
       },
     ];
@@ -80,6 +94,8 @@ const Settings = () => {
     notificationEnabled,
     soundEnabled,
     theme,
+    distance,
+    setDistance,
     onSetTheme,
     setNotificationEnabled,
     setSoundEnabled,
@@ -101,24 +117,14 @@ const Settings = () => {
   };
 
   const onRenderItem: ListRenderItem<Item> = ({ item }: { item: Item }) => {
-    const getRightComponent = () => {
-      if (item.value !== undefined) {
-        return (
-          <Switch
-            onTrackColor="primary.pure"
-            value={item.value}
-            onToggle={item.setValue}
-          />
-        );
-      }
-    };
-
     return (
       <SettingsItem
         onPress={item.onPress}
+        setValue={item.setValue}
         title={item.title}
         pressable={!item.value}
-        RightComponent={getRightComponent()}
+        type={item.type}
+        value={item.value}
       />
     );
   };

@@ -8,7 +8,7 @@ import styles from './styles';
 
 interface Props {
   data: Plant;
-  distance: number;
+  distance: number | null;
   onPress: (item: Plant) => void;
   onFavorite: (item: Plant) => void;
 }
@@ -36,9 +36,9 @@ export default function FavoriteItem({
           <Avatar type="plant" size="md" avatarUrl={data.images[0]} />
           <View style={styles.infoContainer}>
             <Text style={styles.title}>{data.description}</Text>
-            <Text size="helper">{`Distância: ${formatDistance(
-              distance
-            )}`}</Text>
+            <Text size="helper">{`Distância: ${
+              distance !== null ? formatDistance(distance) : '---'
+            }`}</Text>
           </View>
         </HStack>
         <IconButton size={20} iconName="ios-heart" onPress={onFavoritePress} />

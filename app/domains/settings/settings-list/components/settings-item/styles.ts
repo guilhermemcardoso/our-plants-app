@@ -6,6 +6,15 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     paddingVertical: 12,
+    marginLeft: 8,
+  },
+  slider: { flex: 1, marginRight: 16 },
+  sliderValue: {
+    minWidth: 50,
+    textAlign: 'right',
+  },
+  sliderLabel: {
+    marginBottom: 4,
   },
 });
 

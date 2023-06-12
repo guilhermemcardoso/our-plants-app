@@ -14,10 +14,12 @@ import { Routes } from '~/navigation/routes';
 import { useLocation } from '~/hooks/use-location';
 import { useGetPlants } from '~/hooks/use-get-plants';
 import { usePlantStore } from '~/store/plant-store';
+import { useSettings } from '~/hooks/use-settings';
 
 type Props = NativeStackScreenProps<SignedInStackParamList, Routes.MAP>;
 
 const Map = ({ navigation }: Props) => {
+  const { distance } = useSettings();
   const { getCurrentLocation } = useLocation();
   const { currentLocation } = useLocation();
   const { getPlants } = useGetPlants();
@@ -37,11 +39,11 @@ const Map = ({ navigation }: Props) => {
         locationData: {
           latitude: currentLocation.coordinates[0],
           longitude: currentLocation.coordinates[1],
-          distance: 1000000000,
+          distance: distance,
         },
       });
     }
-  }, [currentLocation, getPlants]);
+  }, [currentLocation, distance, getPlants]);
 
   return (
     <Container>

@@ -11,11 +11,13 @@ export function useSettings() {
     (state) => state.setSoundEnabled
   );
   const setThemeState = useSettingsStore((state) => state.setTheme);
+  const setDistanceState = useSettingsStore((state) => state.setDistance);
   const theme = useSettingsStore((state) => state.theme);
   const notificationEnabled = useSettingsStore(
     (state) => state.notificationEnabled
   );
   const soundEnabled = useSettingsStore((state) => state.soundEnabled);
+  const distance = useSettingsStore((state) => state.distance);
 
   const loadSettings = async () => {
     const themeValue = await getKey(StorageKeys.THEME);
@@ -23,6 +25,7 @@ export function useSettings() {
       StorageKeys.NOTIFICATIONS_ENABLED
     );
     const soundEnabledValue = await getKey(StorageKeys.SOUND_ENABLED);
+    const distanceValue = await getKey(StorageKeys.DISTANCE);
 
     setThemeState(themeValue ? (themeValue as Theme) : 'dark');
     setNotificationEnabledState(
@@ -31,6 +34,7 @@ export function useSettings() {
     setSoundEnabledState(
       soundEnabledValue ? JSON.parse(soundEnabledValue) : true
     );
+    setDistanceState(distanceValue ? Number(distanceValue) : 100);
   };
 
   const setNotificationEnabled = async (value: boolean) => {
@@ -46,13 +50,20 @@ export function useSettings() {
     setKey(StorageKeys.THEME, value);
   };
 
+  const setDistance = async (value: number) => {
+    setDistanceState(value);
+    setKey(StorageKeys.DISTANCE, JSON.stringify(value));
+  };
+
   return {
     loadSettings,
     setNotificationEnabled,
     setSoundEnabled,
     setTheme,
+    setDistance,
     notificationEnabled,
     soundEnabled,
+    distance,
     theme,
   };
 }

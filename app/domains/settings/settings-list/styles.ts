@@ -5,7 +5,9 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
   },
   listContainer: {
-    padding: 16,
+    paddingRight: 16,
+    paddingLeft: 8,
+    paddingVertical: 16,
     borderRadius: 8,
     marginTop: 16,
   },
