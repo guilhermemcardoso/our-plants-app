@@ -1,19 +1,21 @@
 import { CreateEditPlantData } from '~/domains/plant/types';
 import { Api } from '~/services/api';
 
-export async function getPlants({
+export async function getPlantsNearBy({
   locationData,
+  filteredSpecies,
 }: {
   locationData: {
     latitude: number;
     longitude: number;
     distance: number;
   };
+  filteredSpecies: string[];
 }) {
   return await Api({
     method: 'post',
     url: 'plant/near-by',
-    data: locationData,
+    data: { ...locationData, filteredSpecies },
     hasToken: true,
   });
 }

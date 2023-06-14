@@ -1,7 +1,7 @@
 import { useMutation } from '@tanstack/react-query';
 import { useCallback, useEffect, useRef, useState } from 'react';
 
-import { getPlants as getPlantsMutation } from '~/services/api/resources/plant';
+import { getPlantsNearBy as getPlantsNearByMutation } from '~/services/api/resources/plant';
 import { usePlantStore } from '~/store/plant-store';
 
 export function useGetPlants() {
@@ -16,7 +16,7 @@ export function useGetPlants() {
     isLoading,
     data: getPlantsResponse,
   } = useMutation({
-    mutationFn: getPlantsMutation,
+    mutationFn: getPlantsNearByMutation,
   });
   const done = useRef(true);
 
@@ -36,23 +36,23 @@ export function useGetPlants() {
     }
   }, [getPlantsResponse, setPlants]);
 
-  const getPlants = useCallback(
+  const getPlantsNearBy = useCallback(
     async ({
       locationData,
+      filteredSpecies,
     }: {
-      page?: number;
-      items?: number;
+      filteredSpecies: string[];
       locationData: {
         latitude: number;
         longitude: number;
         distance: number;
       };
     }) => {
-      mutate({ locationData });
+      mutate({ locationData, filteredSpecies });
       done.current = false;
     },
     [mutate]
   );
 
-  return { isLoading, getPlants, onResponse };
+  return { isLoading, getPlantsNearBy, onResponse };
 }
