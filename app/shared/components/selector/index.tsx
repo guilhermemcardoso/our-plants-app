@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { ViewProps } from 'react-native';
+import { Platform, ViewProps } from 'react-native';
 import { FormControl, HStack, Select, useTheme } from 'native-base';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { SearchBar, Text } from '~/shared/components';
@@ -69,7 +69,8 @@ export default function Selector({
         <Select
           onClose={onClose}
           onOpen={onOpen}
-          p={3}
+          px={3}
+          py={Platform.OS === 'ios' ? 3 : 1}
           flex={'1'}
           color="font.primary"
           backgroundColor={theme.colors.container.light}

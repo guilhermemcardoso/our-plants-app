@@ -10,6 +10,7 @@ import {
 import Icon from 'react-native-vector-icons/Ionicons';
 import Text from '../text';
 import styles from './styles';
+import { Platform } from 'react-native';
 
 type Props = IInputProps & {
   label?: string;
@@ -101,7 +102,8 @@ export default function TextInput({
           autoCapitalize={getAutoCapitalize()}
           pr={entryType === 'password' ? '16' : null}
           secureTextEntry={entryType === 'password' ? !showContent : false}
-          p={3}
+          py={Platform.OS === 'ios' ? 3 : 1}
+          px={3}
           {...props}
           flex={'1'}
         />
