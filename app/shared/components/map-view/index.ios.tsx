@@ -8,8 +8,8 @@ export default function MapViewIos({
   children,
   latitude,
   longitude,
-  longitudeDelta = 0.04,
-  latitudeDelta = 0.08,
+  longitudeDelta = 0.006,
+  latitudeDelta = 0.006,
   onPress,
   style,
 }: MapProps) {

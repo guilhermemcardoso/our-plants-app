@@ -15,7 +15,7 @@ export default function MapViewAndroid({
   latitude,
   longitude,
   onPress,
-  zoom = 15,
+  zoom = 14,
   style,
 }: MapProps) {
   const handleOnPress = (feature: any) => {
