@@ -7,6 +7,7 @@ export { ConfirmationModal } from './modal';
 export { default as Container } from './container';
 export { default as DeleteBadge } from './delete-badge';
 export { default as Fab } from './fab';
+export { default as Filter } from './filter';
 export { default as Header } from './header';
 export { default as IconButton } from './icon-button';
 export { default as ImageCarousel } from './image-carousel';
