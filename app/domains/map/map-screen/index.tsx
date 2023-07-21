@@ -1,11 +1,7 @@
 import React, { useLayoutEffect, useState } from 'react';
 import MapView from '~/shared/components/map-view';
 import MarkerView from '~/shared/components/marker-view';
-import {
-  formatSpecieIconName,
-  getPlantIconBySpecie,
-} from '~/shared/utils/icon';
-import { Container, Fab, Filter } from '~/shared/components';
+import { Container, Fab, Filter, PlantDetails } from '~/shared/components';
 import { View } from 'native-base';
 import styles from './styles';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
@@ -16,12 +12,14 @@ import { useGetPlants } from '~/hooks/use-get-plants';
 import { usePlantStore } from '~/store/plant-store';
 import { useSettings } from '~/hooks/use-settings';
 import { useSpecieStore } from '~/store/specie-store';
-import { Specie } from '~/shared/types';
+import { Plant, Specie } from '~/shared/types';
 
 type Props = NativeStackScreenProps<SignedInStackParamList, Routes.MAP>;
 
 const Map = ({ navigation }: Props) => {
   const [filterIsOpen, setFilterIsOpen] = useState(false);
+  const [detailsIsOpen, setDetailsIsOpen] = useState(false);
+  const [selectedPlant, setSelectedPlant] = useState<Plant>();
   const [filteredSpecies, setFilteredSpecies] = useState<Specie[]>([]);
   const { distance } = useSettings();
   const { getCurrentLocation } = useLocation();
@@ -45,6 +43,22 @@ const Map = ({ navigation }: Props) => {
   const onFilter = (options: Specie[]) => {
     setFilterIsOpen(false);
     setFilteredSpecies(options);
+  };
+
+  const showPlantDetails = (plant: Plant) => {
+    setSelectedPlant(plant);
+    setDetailsIsOpen(true);
+  };
+
+  const closePlantDetails = () => {
+    setDetailsIsOpen(false);
+  };
+
+  const visualizePlant = () => {
+    if (selectedPlant) {
+      navigation.navigate(Routes.VISUALIZE_PLANT, { plant: selectedPlant });
+      setDetailsIsOpen(false);
+    }
   };
 
   useLayoutEffect(() => {
@@ -76,11 +90,8 @@ const Map = ({ navigation }: Props) => {
             return (
               <MarkerView
                 key={plant._id}
-                latitude={plant.location.coordinates[1]}
-                longitude={plant.location.coordinates[0]}
-                id={plant._id}
-                icon={getPlantIconBySpecie(formatSpecieIconName('default'))}
-                onPress={() => console.log('Clicou aqui')}
+                plant={plant}
+                onPress={showPlantDetails}
               />
             );
           })}
@@ -93,6 +104,12 @@ const Map = ({ navigation }: Props) => {
           options={species}
           onOpen={onOpenFilter}
           onClose={onCloseFilter}
+        />
+        <PlantDetails
+          plant={selectedPlant}
+          isOpen={detailsIsOpen}
+          onClose={closePlantDetails}
+          onSeeMorePress={visualizePlant}
         />
       </View>
     </Container>

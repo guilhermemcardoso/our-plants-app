@@ -1,9 +1,6 @@
-import { ImageSourcePropType } from 'react-native';
+import { Plant } from '~/shared/types';
 
 export interface MarkerProps {
-  icon: ImageSourcePropType;
-  id: string;
-  latitude: number;
-  longitude: number;
-  onPress?: (id: string) => void;
+  plant: Plant;
+  onPress?: (plant: Plant) => void;
 }
