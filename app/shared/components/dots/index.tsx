@@ -26,7 +26,7 @@ export default function Dots({
         };
 
         return (
-          <TouchableOpacity onPress={onPress}>
+          <TouchableOpacity key={index} onPress={onPress}>
             <View
               bgColor={
                 index === current
