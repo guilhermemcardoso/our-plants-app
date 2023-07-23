@@ -46,7 +46,7 @@ export default function PlantDetails({
           <Image
             borderColor={theme.colors.font.secondary}
             style={styles.image}
-            resizeMode="contain"
+            resizeMode="cover"
             source={
               plant?.images[0]
                 ? {
