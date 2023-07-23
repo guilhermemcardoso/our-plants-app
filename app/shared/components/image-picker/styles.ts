@@ -1,13 +1,14 @@
 import { StyleSheet } from 'react-native';
+import { dimens } from '~/theme/dimens';
 
 const styles = StyleSheet.create({
   buttonContainer: {
-    padding: 16,
+    padding: dimens.padding.lg,
     flexDirection: 'row',
   },
   button: {
-    marginVertical: 16,
-    marginHorizontal: 24,
+    marginVertical: dimens.padding.lg,
+    marginHorizontal: dimens.padding.xl,
     alignItems: 'center',
   },
 });

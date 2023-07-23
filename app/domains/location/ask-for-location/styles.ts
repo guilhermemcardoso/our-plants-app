@@ -1,4 +1,5 @@
 import { StyleSheet } from 'react-native';
+import { dimens } from '~/theme/dimens';
 
 export const styles = StyleSheet.create({
   mainContainer: {
@@ -9,21 +10,21 @@ export const styles = StyleSheet.create({
   logo: {
     width: 80,
     height: 80,
-    marginRight: 10,
+    marginRight: dimens.margin.md,
   },
   subtitle: {
-    marginTop: 20,
+    marginTop: dimens.margin.lg,
     textAlign: 'center',
   },
   title: {
-    marginTop: 20,
+    marginTop: dimens.margin.xl,
   },
   description: {
-    margin: 16,
+    margin: dimens.margin.lg,
     textAlign: 'center',
   },
   button: {
-    marginTop: 24,
+    marginTop: dimens.margin.xl,
     alignSelf: 'stretch',
   },
 });

@@ -1,4 +1,5 @@
 import { StyleSheet } from 'react-native';
+import { dimens } from '~/theme/dimens';
 
 const styles = StyleSheet.create({
   container: {
@@ -6,7 +7,7 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   button: {
-    marginLeft: 4,
+    marginLeft: dimens.margin.sm,
   },
   input: {},
 });

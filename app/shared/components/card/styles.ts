@@ -6,14 +6,14 @@ export const styles = StyleSheet.create({
     padding: dimens.padding.lg,
     alignItems: 'center',
     justifyContent: 'center',
-    borderRadius: 8,
+    borderRadius: dimens.radius.md,
     shadowColor: '#000',
     shadowOffset: {
       width: 1,
       height: 1,
     },
     shadowOpacity: 0.25,
-    shadowRadius: 8,
+    shadowRadius: dimens.radius.md,
     elevation: 2,
   },
   container: {

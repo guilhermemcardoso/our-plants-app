@@ -1,4 +1,5 @@
 import { StyleSheet } from 'react-native';
+import { dimens } from '~/theme/dimens';
 
 const styles = StyleSheet.create({
   avatar: {
@@ -8,7 +9,7 @@ const styles = StyleSheet.create({
       height: 2,
     },
     shadowOpacity: 0.25,
-    shadowRadius: 4,
+    shadowRadius: dimens.radius.sm,
     elevation: 2,
   },
   levelContainer: {
@@ -26,7 +27,7 @@ const styles = StyleSheet.create({
       height: 2,
     },
     shadowOpacity: 0.25,
-    shadowRadius: 4,
+    shadowRadius: dimens.radius.sm,
     elevation: 2,
   },
   levelText: {

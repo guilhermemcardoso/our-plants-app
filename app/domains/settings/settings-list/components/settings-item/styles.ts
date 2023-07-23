@@ -1,20 +1,21 @@
 import { StyleSheet } from 'react-native';
+import { dimens } from '~/theme/dimens';
 
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    paddingVertical: 12,
-    marginLeft: 8,
+    paddingVertical: dimens.padding.lg,
+    marginLeft: dimens.margin.md,
   },
-  slider: { flex: 1, marginRight: 16 },
+  slider: { flex: 1, marginRight: dimens.margin.lg },
   sliderValue: {
     minWidth: 50,
     textAlign: 'right',
   },
   sliderLabel: {
-    marginBottom: 4,
+    marginBottom: dimens.margin.sm,
   },
 });
 

@@ -1,9 +1,10 @@
 import { StyleSheet } from 'react-native';
+import { dimens } from '~/theme/dimens';
 
 const styles = StyleSheet.create({
   iconButton: {
     position: 'absolute',
-    right: 4,
+    right: dimens.margin.sm,
     backgroundColor: 'transparent',
   },
   iconError: { alignSelf: 'flex-start' },
@@ -11,7 +12,7 @@ const styles = StyleSheet.create({
     color: 'font.secondary',
   },
   noResults: {
-    padding: 16,
+    padding: dimens.padding.lg,
     textAlign: 'center',
   },
 });

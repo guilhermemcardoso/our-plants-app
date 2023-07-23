@@ -1,13 +1,14 @@
 import { StyleSheet } from 'react-native';
+import { dimens } from '~/theme/dimens';
 
 const styles = StyleSheet.create({
   description: {
-    marginBottom: 8,
+    marginBottom: dimens.margin.md,
     textAlign: 'center',
   },
   version: {
     textAlign: 'center',
-    marginTop: 8,
+    marginTop: dimens.margin.md,
     fontWeight: 'bold',
   },
 });

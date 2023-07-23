@@ -1,15 +1,16 @@
 import { StyleSheet } from 'react-native';
+import { dimens } from '~/theme/dimens';
 
 const styles = StyleSheet.create({
   title: {
-    paddingVertical: 10,
+    paddingVertical: dimens.padding.md,
   },
   listContainer: {
-    paddingRight: 16,
-    paddingLeft: 8,
-    paddingVertical: 16,
-    borderRadius: 8,
-    marginTop: 16,
+    paddingRight: dimens.padding.lg,
+    paddingLeft: dimens.padding.md,
+    paddingVertical: dimens.padding.lg,
+    borderRadius: dimens.radius.md,
+    marginTop: dimens.margin.lg,
   },
 });
 

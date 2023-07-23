@@ -1,27 +1,28 @@
 import { StyleSheet } from 'react-native';
+import { dimens } from '~/theme/dimens';
 
 const styles = StyleSheet.create({
   topContainer: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    borderRadius: 8,
-    padding: 16,
+    borderRadius: dimens.radius.md,
+    padding: dimens.padding.lg,
   },
   removeImageButton: {
-    marginTop: 8,
+    marginTop: dimens.margin.md,
   },
   infoContainer: {
     flex: 1,
-    marginLeft: 16,
+    marginLeft: dimens.margin.lg,
   },
   sectionLabel: {
-    marginBottom: 10,
+    marginBottom: dimens.margin.md,
     textAlign: 'center',
     fontWeight: 'bold',
   },
   mappedCount: {
-    marginTop: 8,
+    marginTop: dimens.margin.md,
     fontWeight: 'bold',
   },
   leftInput: {
@@ -29,25 +30,25 @@ const styles = StyleSheet.create({
   },
   rightInput: {
     flex: 0.4,
-    marginLeft: 8,
+    marginLeft: dimens.margin.md,
   },
   editButton: {
-    marginTop: 16,
-    marginBottom: 30,
+    marginTop: dimens.margin.lg,
+    marginBottom: dimens.margin.xl,
   },
   divider: {
-    marginVertical: 16,
+    marginVertical: dimens.margin.lg,
   },
   infoCard: {
-    marginTop: 16,
+    marginTop: dimens.margin.lg,
   },
   profileContainer: {
-    padding: 16,
-    borderRadius: 8,
-    marginTop: 16,
+    padding: dimens.padding.lg,
+    borderRadius: dimens.radius.md,
+    marginTop: dimens.margin.lg,
   },
   fieldLabel: {
-    marginBottom: 4,
+    marginBottom: dimens.margin.sm,
     fontWeight: 'bold',
   },
 });

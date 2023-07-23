@@ -1,4 +1,5 @@
 import { StyleSheet } from 'react-native';
+import { dimens } from '~/theme/dimens';
 
 export const styles = StyleSheet.create({
   container: {
@@ -9,7 +10,7 @@ export const styles = StyleSheet.create({
   activeBadge: {
     width: 8,
     height: 8,
-    borderRadius: 4,
+    borderRadius: dimens.radius.sm,
     position: 'absolute',
     top: -20,
   },

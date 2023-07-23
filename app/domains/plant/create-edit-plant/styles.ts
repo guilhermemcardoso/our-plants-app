@@ -1,40 +1,41 @@
 import { StyleSheet } from 'react-native';
+import { dimens } from '~/theme/dimens';
 
 const styles = StyleSheet.create({
   mapLabel: {
-    marginTop: 24,
+    marginTop: dimens.margin.xl,
   },
   mapContainer: {
     height: 240,
-    marginTop: 8,
-    marginBottom: 16,
+    marginTop: dimens.margin.md,
+    marginBottom: dimens.margin.lg,
   },
   map: {
-    borderRadius: 8,
+    borderRadius: dimens.radius.md,
   },
   sectionLabel: {
-    marginBottom: 10,
+    marginBottom: dimens.margin.md,
     textAlign: 'center',
     fontWeight: 'bold',
   },
   createEditButton: {
-    marginTop: 16,
-    marginBottom: 30,
+    marginTop: dimens.margin.lg,
+    marginBottom: dimens.margin.xl,
   },
   infoContainer: {
-    padding: 16,
-    borderRadius: 8,
-    marginTop: 16,
+    padding: dimens.padding.lg,
+    borderRadius: dimens.radius.md,
+    marginTop: dimens.margin.lg,
   },
   specieSelector: {
-    marginTop: 16,
+    marginTop: dimens.margin.lg,
   },
   fieldLabel: {
-    marginBottom: 4,
+    marginBottom: dimens.margin.sm,
     fontWeight: 'bold',
   },
   imageCarousel: {
-    marginTop: 16,
+    marginTop: dimens.margin.lg,
   },
 });
 

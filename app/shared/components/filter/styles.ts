@@ -1,4 +1,5 @@
 import { StyleSheet } from 'react-native';
+import { dimens } from '~/theme/dimens';
 
 const styles = StyleSheet.create({
   mainContent: {
@@ -24,14 +25,14 @@ const styles = StyleSheet.create({
     elevation: 1,
   },
   list: { width: '100%' },
-  searchContainer: { width: '100%', marginBottom: 10 },
+  searchContainer: { width: '100%', marginBottom: dimens.margin.md },
   selectedItemsLabel: {
-    marginTop: 12,
-    marginHorizontal: 12,
+    marginTop: dimens.margin.md,
+    marginHorizontal: dimens.margin.md,
     textAlign: 'right',
   },
   noResults: {
-    padding: 16,
+    padding: dimens.padding.lg,
     textAlign: 'center',
   },
   buttonContainer: {
@@ -40,7 +41,7 @@ const styles = StyleSheet.create({
   },
   button: {
     flex: 1,
-    margin: 4,
+    margin: dimens.margin.sm,
   },
 });
 

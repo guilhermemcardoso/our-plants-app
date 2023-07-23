@@ -1,36 +1,37 @@
 import { StyleSheet } from 'react-native';
+import { dimens } from '~/theme/dimens';
 
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
-    padding: 16,
+    padding: dimens.padding.lg,
     width: '100%',
   },
   image: {
-    borderRadius: 8,
+    borderRadius: dimens.radius.md,
     borderWidth: 1,
     height: 100,
     width: 100,
   },
   infoContainer: {
-    marginLeft: 8,
+    marginLeft: dimens.margin.md,
     flex: 1,
   },
   description: {
-    marginTop: 4,
-    marginBottom: 8,
+    marginTop: dimens.margin.sm,
+    marginBottom: dimens.margin.md,
   },
   locationContainer: {
     flexDirection: 'row',
   },
   goButton: {
-    borderRadius: 8,
-    paddingLeft: 6,
-    paddingTop: 6,
-    paddingRight: 6,
-    paddingBottom: 6,
+    borderRadius: dimens.radius.md,
+    paddingLeft: dimens.padding.md,
+    paddingTop: dimens.padding.md,
+    paddingRight: dimens.padding.md,
+    paddingBottom: dimens.padding.md,
   },
-  button: { alignSelf: 'stretch', marginHorizontal: 16 },
+  button: { alignSelf: 'stretch', marginHorizontal: dimens.margin.lg },
 });
 
 export default styles;

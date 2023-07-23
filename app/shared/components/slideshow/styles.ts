@@ -1,4 +1,5 @@
 import { StyleSheet } from 'react-native';
+import { dimens } from '~/theme/dimens';
 
 const styles = StyleSheet.create({
   imageItem: {
@@ -34,7 +35,7 @@ const styles = StyleSheet.create({
   },
   dots: {
     position: 'absolute',
-    bottom: 4,
+    bottom: dimens.margin.sm,
     left: 0,
     right: 0,
   },

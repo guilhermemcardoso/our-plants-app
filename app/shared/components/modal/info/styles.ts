@@ -1,4 +1,5 @@
 import { StyleSheet } from 'react-native';
+import { dimens } from '~/theme/dimens';
 
 const styles = StyleSheet.create({
   buttonContainer: {
@@ -10,7 +11,7 @@ const styles = StyleSheet.create({
 
   button: {
     flex: 1,
-    marginHorizontal: 4,
+    marginHorizontal: dimens.margin.sm,
   },
 });
 

@@ -1,21 +1,22 @@
 import { StyleSheet } from 'react-native';
+import { dimens } from '~/theme/dimens';
 
 const styles = StyleSheet.create({
   itemContainer: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    borderRadius: 8,
-    paddingLeft: 16,
-    marginBottom: 4,
+    borderRadius: dimens.radius.md,
+    paddingLeft: dimens.padding.lg,
+    marginBottom: dimens.margin.sm,
     paddingVertical: 12,
   },
   infoContainer: {
-    paddingLeft: 16,
+    paddingLeft: dimens.padding.lg,
   },
   title: {
     fontWeight: 'bold',
-    marginBottom: 8,
+    marginBottom: dimens.margin.md,
   },
 });
 

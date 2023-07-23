@@ -1,22 +1,23 @@
 import { StyleSheet } from 'react-native';
+import { dimens } from '~/theme/dimens';
 
 const styles = StyleSheet.create({
   infoContainer: {
-    padding: 16,
-    borderRadius: 8,
-    marginTop: 16,
+    padding: dimens.padding.lg,
+    borderRadius: dimens.radius.md,
+    marginTop: dimens.margin.lg,
   },
   sectionLabel: {
-    marginBottom: 10,
+    marginBottom: dimens.margin.md,
     textAlign: 'center',
     fontWeight: 'bold',
   },
   createEditButton: {
-    marginTop: 16,
-    marginBottom: 30,
+    marginTop: dimens.margin.lg,
+    marginBottom: dimens.margin.xl,
   },
   input: {
-    marginTop: 16,
+    marginTop: dimens.margin.lg,
   },
 });
 

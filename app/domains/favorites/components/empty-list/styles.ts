@@ -1,14 +1,15 @@
 import { StyleSheet } from 'react-native';
+import { dimens } from '~/theme/dimens';
 
 const styles = StyleSheet.create({
   container: {
     alignItems: 'center',
     justifyContent: 'center',
-    borderRadius: 8,
-    padding: 16,
+    borderRadius: dimens.radius.md,
+    padding: dimens.padding.lg,
   },
   title: {
-    marginBottom: 24,
+    marginBottom: dimens.margin.xl,
   },
   description: {
     lineHeight: 28,

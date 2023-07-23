@@ -4,6 +4,7 @@ import { FormControl, HStack, Select, useTheme } from 'native-base';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { SearchBar, Text } from '~/shared/components';
 import styles from './styles';
+import { dimens } from '~/theme/dimens';
 
 type Props = ViewProps & {
   value: string;
@@ -120,7 +121,7 @@ export default function Selector({
           }}
           _selectedItem={{
             bg: theme.colors.primary.pure,
-            borderRadius: 8,
+            borderRadius: dimens.radius.md,
             startIcon: (
               <Icon
                 color={theme.colors.font.primary}

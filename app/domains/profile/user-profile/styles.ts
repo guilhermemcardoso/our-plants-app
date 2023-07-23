@@ -1,43 +1,44 @@
 import { StyleSheet } from 'react-native';
+import { dimens } from '~/theme/dimens';
 
 const styles = StyleSheet.create({
   topContainer: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    borderRadius: 8,
-    padding: 16,
+    borderRadius: dimens.radius.md,
+    padding: dimens.padding.lg,
   },
   infoContainer: {
     flex: 1,
-    marginLeft: 16,
+    marginLeft: dimens.margin.lg,
   },
   name: {
-    marginBottom: 4,
+    marginBottom: dimens.margin.sm,
   },
   email: {
-    marginBottom: 8,
+    marginBottom: dimens.margin.md,
   },
   mappedCount: {
-    marginTop: 8,
+    marginTop: dimens.margin.md,
     fontWeight: 'bold',
   },
   editButton: {
-    marginTop: 16,
+    marginTop: dimens.margin.lg,
   },
   divider: {
-    marginVertical: 16,
+    marginVertical: dimens.margin.lg,
   },
   infoCard: {
-    marginTop: 16,
+    marginTop: dimens.margin.lg,
   },
   profileContainer: {
-    padding: 16,
-    borderRadius: 8,
-    marginTop: 16,
+    padding: dimens.padding.lg,
+    borderRadius: dimens.radius.md,
+    marginTop: dimens.margin.lg,
   },
   fieldLabel: {
-    marginBottom: 4,
+    marginBottom: dimens.margin.sm,
     fontWeight: 'bold',
   },
 });
