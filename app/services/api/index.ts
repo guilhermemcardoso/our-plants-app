@@ -19,7 +19,7 @@ export async function fetchRefreshToken() {
 
   return Api({
     method: 'post',
-    url: '/auth/refresh',
+    url: '/auth/refresh-token',
     headers: {
       Authorization: `Bearer ${accessToken}`,
     },
