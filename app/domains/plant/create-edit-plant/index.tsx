@@ -21,10 +21,6 @@ import { CreateEditPlantData } from '../types';
 import { CreateEditPlantValidationErrors, validate } from '../validations';
 import MapView from '~/shared/components/map-view';
 import MarkerView from '~/shared/components/marker-view';
-import {
-  formatSpecieIconName,
-  getPlantIconBySpecie,
-} from '~/shared/utils/icon';
 import { Asset } from 'react-native-image-picker';
 import { getErrorByField } from '../validations';
 import { MAX_IMAGES } from '~/shared/constants/constants';
@@ -291,8 +287,7 @@ const CreateEditPlant = ({ route, navigation }: Props) => {
               <MarkerView
                 latitude={Number(plantData.latitude)}
                 longitude={Number(plantData.longitude)}
-                id="id-1"
-                icon={getPlantIconBySpecie(formatSpecieIconName('default'))}
+                key="id-1"
               />
             </MapView>
           </View>

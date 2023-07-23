@@ -8,21 +8,26 @@ import {
   getPlantIconBySpecie,
 } from '~/shared/utils/icon';
 
-export default function MarkerViewIos({ plant, onPress }: MarkerProps) {
+export default function MarkerViewIos({
+  plant,
+  latitude,
+  longitude,
+  onPress,
+}: MarkerProps) {
   const handlePress = () => {
-    if (onPress) {
+    if (onPress && plant) {
       onPress(plant);
     }
   };
 
   return (
     <Marker
-      identifier={plant._id}
-      key={plant._id}
+      identifier={`${latitude}-${longitude}`}
+      key={`${latitude}-${longitude}`}
       onPress={handlePress}
       coordinate={{
-        latitude: plant.location.coordinates[1],
-        longitude: plant.location.coordinates[0],
+        latitude: latitude,
+        longitude: longitude,
       }}
     >
       <Image

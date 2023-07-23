@@ -8,20 +8,22 @@ import {
   getPlantIconBySpecie,
 } from '~/shared/utils/icon';
 
-export default function MarkerViewAndroid({ plant, onPress }: MarkerProps) {
+export default function MarkerViewAndroid({
+  plant,
+  latitude,
+  longitude,
+  onPress,
+}: MarkerProps) {
   const handlePress = () => {
-    if (onPress) {
+    if (onPress && plant) {
       onPress(plant);
     }
   };
 
   return (
     <MarkerView
-      key={plant._id}
-      coordinate={[
-        plant.location.coordinates[0],
-        plant.location.coordinates[1],
-      ]}
+      key={`${latitude}-${longitude}`}
+      coordinate={[longitude, latitude]}
       allowOverlap
     >
       <Pressable onPress={handlePress}>

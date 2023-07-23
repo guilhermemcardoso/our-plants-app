@@ -91,6 +91,8 @@ const Map = ({ navigation }: Props) => {
             return (
               <MarkerView
                 key={plant._id}
+                latitude={Number(plant.location.coordinates[1])}
+                longitude={Number(plant.location.coordinates[0])}
                 plant={plant}
                 onPress={showPlantDetails}
               />
