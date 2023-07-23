@@ -21,9 +21,7 @@ export type SignedInStackParamList = {
   [Routes.CREATE_EDIT_PLANT]: {
     plant?: Plant;
   };
-  [Routes.VISUALIZE_PLANT]: {
-    plant: Plant;
-  };
+  [Routes.VISUALIZE_PLANT]: undefined;
   [Routes.CREATE_EDIT_SPECIE]: {
     specie?: Specie;
   };

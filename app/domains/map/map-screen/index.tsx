@@ -19,7 +19,8 @@ type Props = NativeStackScreenProps<SignedInStackParamList, Routes.MAP>;
 const Map = ({ navigation }: Props) => {
   const [filterIsOpen, setFilterIsOpen] = useState(false);
   const [detailsIsOpen, setDetailsIsOpen] = useState(false);
-  const [selectedPlant, setSelectedPlant] = useState<Plant>();
+  const selectedPlant = usePlantStore((state) => state.selectedPlant);
+  const setSelectedPlant = usePlantStore((state) => state.setSelectedPlant);
   const [filteredSpecies, setFilteredSpecies] = useState<Specie[]>([]);
   const { distance } = useSettings();
   const { getCurrentLocation } = useLocation();
@@ -28,7 +29,7 @@ const Map = ({ navigation }: Props) => {
   const plants = usePlantStore((state) => state.plants);
   const species = useSpecieStore((state) => state.species);
 
-  const onCreatePlantPlress = () => {
+  const onCreatePlantPress = () => {
     navigation.navigate(Routes.CREATE_EDIT_PLANT, { plant: undefined });
   };
 
@@ -56,7 +57,7 @@ const Map = ({ navigation }: Props) => {
 
   const visualizePlant = () => {
     if (selectedPlant) {
-      navigation.navigate(Routes.VISUALIZE_PLANT, { plant: selectedPlant });
+      navigation.navigate(Routes.VISUALIZE_PLANT);
       setDetailsIsOpen(false);
     }
   };
@@ -96,7 +97,7 @@ const Map = ({ navigation }: Props) => {
             );
           })}
         </MapView>
-        <Fab onPress={onCreatePlantPlress} />
+        <Fab onPress={onCreatePlantPress} />
         <Filter
           selectedValues={filteredSpecies}
           onFilter={onFilter}
