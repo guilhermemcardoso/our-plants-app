@@ -18,6 +18,9 @@ import MarkerView from '~/shared/components/marker-view';
 import { useVotePlant } from '~/hooks/use-vote-plant';
 import { useAuthStore } from '~/store/auth-store';
 import { ADMIN_LEVEL } from '~/shared/constants/constants';
+import { useAddToFavorites } from '~/hooks/use-add-to-favorites';
+import { useFavoritesStore } from '~/store/favorites-store';
+import { useRemoveFromFavorites } from '~/hooks/use-remove-from-favorites';
 
 type Props = NativeStackScreenProps<
   SignedInStackParamList,
@@ -28,6 +31,17 @@ const VisualizePlant = ({ navigation }: Props) => {
   const selectedPlant = usePlantStore((state) => state.selectedPlant);
   const { currentUser } = useAuthStore();
   const { downvote, upvote } = useVotePlant();
+  const favorites = useFavoritesStore((state) => state.favorites);
+  const { addToFavorites } = useAddToFavorites();
+  const { removeFromFavorites } = useRemoveFromFavorites();
+
+  const isFavorite = useMemo(() => {
+    const index = favorites.findIndex(
+      (item) => selectedPlant && item._id === selectedPlant?._id
+    );
+    return index >= 0;
+  }, [favorites, selectedPlant]);
+
   const handleBackPress = useCallback(() => {
     navigation.goBack();
   }, [navigation]);
@@ -38,6 +52,19 @@ const VisualizePlant = ({ navigation }: Props) => {
       (currentUser && currentUser?.score.level >= ADMIN_LEVEL)
     );
   }, [currentUser, selectedPlant]);
+
+  const saveFavorite = () => {
+    if (!selectedPlant) {
+      return;
+    }
+
+    if (isFavorite) {
+      removeFromFavorites(selectedPlant._id);
+      return;
+    }
+
+    addToFavorites(selectedPlant?._id);
+  };
 
   const editPlant = () => {
     navigation.navigate(Routes.CREATE_EDIT_PLANT, { plant: selectedPlant });
@@ -115,9 +142,19 @@ const VisualizePlant = ({ navigation }: Props) => {
               </View>
             </Box>
           </Box>
-          <Text size="label" variant="label" style={styles.label}>
-            Localização:
-          </Text>
+          <Box
+            flexDirection="row"
+            justifyContent="space-between"
+            alignItems="flex-end"
+          >
+            <Text size="label" variant="label" style={styles.label}>
+              Localização:
+            </Text>
+            <IconButton
+              iconName={isFavorite ? 'ios-heart-sharp' : 'ios-heart-outline'}
+              onPress={saveFavorite}
+            />
+          </Box>
           <View style={styles.mapContainer}>
             <MapView
               latitude={selectedPlant?.location.coordinates[1] || 0}

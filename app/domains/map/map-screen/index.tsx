@@ -13,6 +13,7 @@ import { usePlantStore } from '~/store/plant-store';
 import { useSettings } from '~/hooks/use-settings';
 import { useSpecieStore } from '~/store/specie-store';
 import { Plant, Specie } from '~/shared/types';
+import { useGetFavorites } from '~/hooks/use-get-favorites';
 
 type Props = NativeStackScreenProps<SignedInStackParamList, Routes.MAP>;
 
@@ -25,6 +26,7 @@ const Map = ({ navigation }: Props) => {
   const { distance } = useSettings();
   const { getCurrentLocation } = useLocation();
   const { currentLocation } = useLocation();
+  const { getFavorites } = useGetFavorites();
   const { getPlantsNearBy } = useGetPlants();
   const plants = usePlantStore((state) => state.plants);
   const species = useSpecieStore((state) => state.species);
@@ -65,6 +67,10 @@ const Map = ({ navigation }: Props) => {
   useLayoutEffect(() => {
     getCurrentLocation();
   }, [getCurrentLocation]);
+
+  useLayoutEffect(() => {
+    getFavorites();
+  }, [getFavorites]);
 
   useLayoutEffect(() => {
     if (currentLocation) {

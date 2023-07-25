@@ -62,7 +62,6 @@ export function useCreateEditPlant() {
     const { response, status } = editPlantResponse;
     if (!done.current && response.data) {
       done.current = true;
-      console.log('TERMINOU A EDICAO', response.data.plant);
       const { plant } = response.data;
       const updatedPlants = plants.map((item) => {
         if (item._id === plant._id) {

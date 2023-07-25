@@ -18,6 +18,10 @@ const styles = StyleSheet.create({
     marginLeft: dimens.margin.md,
     flex: 1,
   },
+  titleContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
   description: {
     marginTop: dimens.margin.sm,
     marginBottom: dimens.margin.md,

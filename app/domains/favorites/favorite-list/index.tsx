@@ -37,10 +37,6 @@ const Favorites = () => {
   };
 
   useEffect(() => {
-    getFavorites();
-  }, [getFavorites]);
-
-  useEffect(() => {
     setLoading(isLoading);
   }, [isLoading, setLoading]);
 
