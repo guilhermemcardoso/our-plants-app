@@ -49,7 +49,8 @@ export async function editPlant({
     data: {
       description: editPlantData.description.trim(),
       location: {
-        coordinates: [editPlantData.latitude, editPlantData.longitude],
+        type: 'Point',
+        coordinates: [editPlantData.longitude, editPlantData.latitude],
       },
       images: editPlantData.images,
       specie_id: editPlantData.specie_id,

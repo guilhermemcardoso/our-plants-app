@@ -22,7 +22,7 @@ const styles = StyleSheet.create({
     height: 78,
     width: 78,
     borderRadius: dimens.radius.sm,
-    resizeMode: 'center',
+    resizeMode: 'cover',
   },
 });
 

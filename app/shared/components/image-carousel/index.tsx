@@ -3,13 +3,13 @@ import React from 'react';
 import { ListRenderItem, ViewProps } from 'react-native';
 import { AddImageCard, DeleteBadge } from '..';
 import styles from './styles';
-import { Asset } from 'react-native-image-picker';
+import { Image as ImageType } from '~/types/image';
 
 type Props = ViewProps & {
-  images: Asset[];
+  images: ImageType[];
   canAdd?: boolean;
   onAddImagePress: () => void;
-  onDeleteImagePress?: (image: Asset) => void;
+  onDeleteImagePress?: (image: ImageType) => void;
 };
 
 export default function ImageCarousel({
@@ -19,7 +19,11 @@ export default function ImageCarousel({
   onDeleteImagePress,
   ...rest
 }: Props) {
-  const renderItem: ListRenderItem<Asset> = ({ item }: { item: Asset }) => {
+  const renderItem: ListRenderItem<ImageType> = ({
+    item,
+  }: {
+    item: ImageType;
+  }) => {
     const onDeletePress = () => {
       if (onDeleteImagePress) {
         onDeleteImagePress(item);
@@ -30,7 +34,7 @@ export default function ImageCarousel({
       <View style={styles.imageItemContainer}>
         <Image
           style={styles.imageItem}
-          source={{ uri: item.uri }}
+          source={{ uri: typeof item === 'string' ? item : item.uri }}
           alt="Image selecionada para cadastrar nova planta"
         />
         {onDeleteImagePress && <DeleteBadge onPress={onDeletePress} />}

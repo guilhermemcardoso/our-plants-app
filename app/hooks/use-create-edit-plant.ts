@@ -46,11 +46,12 @@ export function useCreateEditPlant() {
     }
 
     const { response, status } = createPlantResponse;
-    if (!done.current && response.data) {
+    if (!done.current) {
       done.current = true;
-
-      setPlants([...plants, response.data.plant]);
-      setOnResponse({ status: status || 500, data: response.data });
+      setOnResponse({ status: status || 500, data: response });
+      if (response.data) {
+        setPlants([...plants, response.data.plant]);
+      }
     }
   }, [createPlantResponse, setPlants, plants]);
 
@@ -60,19 +61,21 @@ export function useCreateEditPlant() {
     }
 
     const { response, status } = editPlantResponse;
-    if (!done.current && response.data) {
+    if (!done.current && response) {
       done.current = true;
-      const { plant } = response.data;
-      const updatedPlants = plants.map((item) => {
-        if (item._id === plant._id) {
-          return plant;
-        }
+      setOnResponse({ status: status || 500, data: response });
+      if (response.data) {
+        const { plant } = response.data;
+        const updatedPlants = plants.map((item) => {
+          if (item._id === plant._id) {
+            return plant;
+          }
 
-        return item;
-      });
-      setPlants(updatedPlants);
-      setSelectedPlant(plant);
-      setOnResponse({ status: status || 500, data: response.data });
+          return item;
+        });
+        setPlants(updatedPlants);
+        setSelectedPlant(plant);
+      }
     }
   }, [editPlantResponse, setPlants, setSelectedPlant, plants]);
 
@@ -111,9 +114,6 @@ export function useCreateEditPlant() {
           imageUrls.push(imageUrl);
         }
       }
-
-      console.log('IMAGE URLS', imageUrls);
-      console.log('PLANT ID', plantId);
       const updatedPlantData = { ...plantData, images: imageUrls };
       setIsUploading(false);
       editMutate({ plantId, editPlantData: updatedPlantData });

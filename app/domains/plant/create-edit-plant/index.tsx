@@ -28,6 +28,7 @@ import { Location } from '~/shared/types';
 import { useLocation } from '~/hooks/use-location';
 import { useCreateEditPlant } from '~/hooks/use-create-edit-plant';
 import { useLoading } from '~/hooks/use-loading';
+import { Image } from '~/types/image';
 
 type Props = NativeStackScreenProps<
   SignedInStackParamList,
@@ -49,7 +50,7 @@ const CreateEditPlant = ({ route, navigation }: Props) => {
   const [showSelector, setShowSelector] = useState(false);
   const [canAddImages, setcanAddImages] = useState(false);
   const [selectedSpecie, setSelectedSpecie] = useState('');
-  const [selectedImages, setSelectedImages] = useState<Asset[]>([]);
+  const [selectedImages, setSelectedImages] = useState<Image[]>([]);
   const [plantData, setPlantData] = useState<CreateEditPlantData>({
     description: '',
     latitude: String(currentLocation?.coordinates[0] || 0),
@@ -140,17 +141,26 @@ const CreateEditPlant = ({ route, navigation }: Props) => {
     setPlantData({ ...plantData, images: imageUris });
   };
 
-  const handleImageDeleted = (image: Asset) => {
-    const imageUris: string[] = (plantData.images || []).filter(
-      (item) => item !== image.uri
-    );
+  const handleImageDeleted = (image: Image) => {
+    const imageUris: string[] = (plantData.images || []).filter((item) => {
+      if (typeof image === 'string') {
+        return item !== image;
+      } else {
+        return item !== image.uri;
+      }
+    });
 
-    const newSelectedImages = [...selectedImages].filter(
-      (item) => item.uri && imageUris.includes(item.uri)
-    );
+    const newSelectedImages = [...selectedImages].filter((item) => {
+      if (typeof item === 'string') {
+        return imageUris.includes(item);
+      } else {
+        return item.uri && imageUris.includes(item.uri);
+      }
+    });
 
     setSelectedImages(newSelectedImages);
     setPlantData({ ...plantData, images: imageUris });
+    console.log('setPlantData', { ...plantData, images: imageUris });
   };
 
   const handleImagePickerError = () => {};
@@ -223,10 +233,11 @@ const CreateEditPlant = ({ route, navigation }: Props) => {
       setPlantData({
         description: plant.description,
         images: plant.images,
-        latitude: String(plant.location.coordinates[0]),
-        longitude: String(plant.location.coordinates[1]),
+        latitude: String(plant.location.coordinates[1]),
+        longitude: String(plant.location.coordinates[0]),
         specie_id: plant.specie_id._id,
       });
+      setSelectedImages(plant.images);
     }
   }, [plant]);
 
@@ -235,17 +246,18 @@ const CreateEditPlant = ({ route, navigation }: Props) => {
   }, [isCreateEditPlantLoading, setLoading]);
 
   useEffect(() => {
-    if (plant && plant.images) {
-      setcanAddImages(plant.images.length < 3);
-      return;
-    }
-
     setcanAddImages(selectedImages.length < 3);
-  }, [plant, selectedImages]);
+  }, [selectedImages]);
 
   useEffect(() => {
     if (onCreateEditPlantResponse.status === 201) {
       setAlertMessage('Planta cadastrada com sucesso');
+      setAlertType('success');
+      setShowAlert(true);
+      handleBackPress();
+    }
+    if (onCreateEditPlantResponse.status === 200) {
+      setAlertMessage('Planta editada com sucesso');
       setAlertType('success');
       setShowAlert(true);
       handleBackPress();
