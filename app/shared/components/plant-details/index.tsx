@@ -6,6 +6,8 @@ import styles from './styles';
 import Button from '../button';
 import IconButton from '../icon-button';
 import { Linking, Platform } from 'react-native';
+import Votes from '../votes';
+import { useVotePlant } from '~/hooks/use-vote-plant';
 
 interface Props {
   plant: Plant | undefined;
@@ -21,6 +23,7 @@ export default function PlantDetails({
   onSeeMorePress,
 }: Props) {
   const theme = useTheme();
+  const { downvote, upvote } = useVotePlant();
 
   const openRoutes = () => {
     const scheme = Platform.select({
@@ -43,6 +46,7 @@ export default function PlantDetails({
     <Actionsheet isOpen={isOpen} onClose={onClose}>
       <Actionsheet.Content backgroundColor={theme.colors.container.light}>
         <Box style={styles.container}>
+          <Votes upvote={upvote} downvote={downvote} plant={plant} />
           <Image
             borderColor={theme.colors.font.secondary}
             style={styles.image}
@@ -65,10 +69,10 @@ export default function PlantDetails({
             <Text style={styles.description}>{plant?.description}</Text>
             <View style={styles.locationContainer}>
               <View flex={1}>
-                <Text size="helper">{`Latitude: ${plant?.location.coordinates[1].toFixed(
+                <Text size="helper">{`Lat:    ${plant?.location.coordinates[1].toFixed(
                   5
                 )}`}</Text>
-                <Text size="helper">{`Longitude: ${plant?.location.coordinates[0].toFixed(
+                <Text size="helper">{`Long: ${plant?.location.coordinates[0].toFixed(
                   5
                 )}`}</Text>
               </View>

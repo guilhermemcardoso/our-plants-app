@@ -16,6 +16,7 @@ export function useCreateEditPlant() {
     status: number | undefined;
   }>({ data: undefined, status: undefined });
   const setPlants = usePlantStore((state) => state.setPlants);
+  const setSelectedPlant = usePlantStore((state) => state.setSelectedPlant);
   const plants = usePlantStore((state) => state.plants);
   const done = useRef(true);
 
@@ -61,18 +62,20 @@ export function useCreateEditPlant() {
     const { response, status } = editPlantResponse;
     if (!done.current && response.data) {
       done.current = true;
-
-      const updatedPlants = plants.map((plant) => {
-        if (plant._id === response.data.plant._id) {
-          return response.data.plant;
+      console.log('TERMINOU A EDICAO', response.data.plant);
+      const { plant } = response.data;
+      const updatedPlants = plants.map((item) => {
+        if (item._id === plant._id) {
+          return plant;
         }
 
-        return plant;
+        return item;
       });
       setPlants(updatedPlants);
+      setSelectedPlant(plant);
       setOnResponse({ status: status || 500, data: response.data });
     }
-  }, [editPlantResponse, setPlants, plants]);
+  }, [editPlantResponse, setPlants, setSelectedPlant, plants]);
 
   const createPlant = async (plantData: CreateEditPlantData) => {
     try {
@@ -110,6 +113,8 @@ export function useCreateEditPlant() {
         }
       }
 
+      console.log('IMAGE URLS', imageUrls);
+      console.log('PLANT ID', plantId);
       const updatedPlantData = { ...plantData, images: imageUrls };
       setIsUploading(false);
       editMutate({ plantId, editPlantData: updatedPlantData });

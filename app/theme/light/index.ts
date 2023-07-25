@@ -29,6 +29,7 @@ export const lightPalette = {
   font: {
     disabled: '#b5b5b5',
     error: '#bf0000',
+    success: '#35a03d',
     link: '#0071bc',
     interactive: '#649463',
     primary: '#2c2c2c',

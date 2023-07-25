@@ -57,3 +57,19 @@ export async function editPlant({
     hasToken: true,
   });
 }
+
+export async function upvotePlant(plantId: string) {
+  return await Api({
+    method: 'post',
+    url: `plant/upvote/${plantId}`,
+    hasToken: true,
+  });
+}
+
+export async function downvotePlant(plantId: string) {
+  return await Api({
+    method: 'post',
+    url: `plant/downvote/${plantId}`,
+    hasToken: true,
+  });
+}

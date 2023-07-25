@@ -2,6 +2,7 @@ import { useMutation } from '@tanstack/react-query';
 import { useCallback, useEffect, useRef, useState } from 'react';
 
 import { getPlantsNearBy as getPlantsNearByMutation } from '~/services/api/resources/plant';
+import { Plant } from '~/shared/types';
 import { usePlantStore } from '~/store/plant-store';
 
 export function useGetPlants() {
@@ -30,7 +31,10 @@ export function useGetPlants() {
     if (!done.current && response?.data) {
       if (response && response.data && response.data.items) {
         const { items: plants } = response.data;
-
+        console.log(
+          'PLANTS',
+          plants.map((plant: Plant) => plant.upvotes)
+        );
         setPlants(plants);
       }
     }

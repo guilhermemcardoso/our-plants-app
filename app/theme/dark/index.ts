@@ -29,6 +29,7 @@ export const darkPalette = {
   font: {
     disabled: '#bfbfbf',
     error: '#FF454F',
+    success: '#35a03d',
     link: '#0071bc',
     interactive: '#649463',
     primary: '#ffffff',

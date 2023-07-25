@@ -8,6 +8,7 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   image: {
+    marginLeft: dimens.margin.lg,
     borderRadius: dimens.radius.md,
     borderWidth: 1,
     height: 100,
@@ -23,6 +24,7 @@ const styles = StyleSheet.create({
   },
   locationContainer: {
     flexDirection: 'row',
+    alignItems: 'center',
   },
   goButton: {
     borderRadius: dimens.radius.md,

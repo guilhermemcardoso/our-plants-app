@@ -22,3 +22,4 @@ export { default as Selector } from './selector';
 export { default as Slideshow } from './slideshow';
 export { default as Text } from './text';
 export { default as TextInput } from './text-input';
+export { default as Votes } from './votes';
