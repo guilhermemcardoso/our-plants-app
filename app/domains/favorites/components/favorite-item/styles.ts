@@ -10,13 +10,18 @@ const styles = StyleSheet.create({
     paddingLeft: dimens.padding.lg,
     marginBottom: dimens.margin.sm,
     paddingVertical: 12,
+    flex: 1,
   },
   infoContainer: {
     paddingLeft: dimens.padding.lg,
+    flex: 1,
   },
   title: {
     fontWeight: 'bold',
     marginBottom: dimens.margin.md,
+    marginRight: dimens.margin.md,
+    flexWrap: 'wrap',
+    flex: 1,
   },
 });
 

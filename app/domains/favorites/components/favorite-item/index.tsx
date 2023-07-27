@@ -1,5 +1,5 @@
 import React from 'react';
-import { HStack, View, useTheme } from 'native-base';
+import { View, useTheme } from 'native-base';
 import { Plant } from '~/shared/types';
 import { TouchableOpacity } from 'react-native';
 import { Avatar, IconButton, Text } from '~/shared/components';
@@ -32,15 +32,15 @@ export default function FavoriteItem({
   return (
     <TouchableOpacity onPress={onItemPress}>
       <View bgColor={theme.colors.container.dark} style={styles.itemContainer}>
-        <HStack>
-          <Avatar type="plant" size="md" avatarUrl={data.images[0]} />
-          <View style={styles.infoContainer}>
-            <Text style={styles.title}>{data.description}</Text>
-            <Text size="helper">{`Distância: ${
-              distance !== null ? formatDistance(distance) : '---'
-            }`}</Text>
-          </View>
-        </HStack>
+        <Avatar type="plant" size="md" avatarUrl={data.images[0]} />
+        <View style={styles.infoContainer}>
+          <Text numberOfLines={1} style={styles.title}>
+            {data.description}
+          </Text>
+          <Text size="helper">{`Distância: ${
+            distance !== null ? formatDistance(distance) : '---'
+          }`}</Text>
+        </View>
         <IconButton size={20} iconName="ios-heart" onPress={onFavoritePress} />
       </View>
     </TouchableOpacity>

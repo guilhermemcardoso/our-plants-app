@@ -37,7 +37,6 @@ const Favorites = ({ navigation }: Props) => {
 
   const onPressItem = (item: Plant) => {
     setSelectedPlant(item);
-    console.log('ITEM', item.created_by.name);
     navigation.navigate(Routes.VISUALIZE_PLANT);
   };
 
