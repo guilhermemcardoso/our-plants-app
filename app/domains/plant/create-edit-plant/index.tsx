@@ -160,7 +160,6 @@ const CreateEditPlant = ({ route, navigation }: Props) => {
 
     setSelectedImages(newSelectedImages);
     setPlantData({ ...plantData, images: imageUris });
-    console.log('setPlantData', { ...plantData, images: imageUris });
   };
 
   const handleImagePickerError = () => {};

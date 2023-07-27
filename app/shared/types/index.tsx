@@ -66,3 +66,19 @@ export interface Favorite {
   updated_at: string;
   created_at: string;
 }
+
+export interface Complaint {
+  _id: string;
+  description: string;
+  reason: string;
+  plant_id: Plant;
+  created_by: User;
+  evaluated_by?: User;
+  evaluation?: string;
+  was_helpful?: boolean;
+  deleted: boolean;
+  closed: boolean;
+  plants: Plant[];
+  updated_at: string;
+  created_at: string;
+}

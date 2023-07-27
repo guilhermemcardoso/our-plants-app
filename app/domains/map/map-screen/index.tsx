@@ -14,6 +14,8 @@ import { useSettings } from '~/hooks/use-settings';
 import { useSpecieStore } from '~/store/specie-store';
 import { Plant, Specie } from '~/shared/types';
 import { useGetFavorites } from '~/hooks/use-get-favorites';
+import { useGetComplaints } from '~/hooks/use-get-complaints';
+import { PER_PAGE } from '~/shared/constants/constants';
 
 type Props = NativeStackScreenProps<SignedInStackParamList, Routes.MAP>;
 
@@ -27,6 +29,7 @@ const Map = ({ navigation }: Props) => {
   const { getCurrentLocation } = useLocation();
   const { currentLocation } = useLocation();
   const { getFavorites } = useGetFavorites();
+  const { getComplaints } = useGetComplaints();
   const { getPlantsNearBy } = useGetPlants();
   const plants = usePlantStore((state) => state.plants);
   const species = useSpecieStore((state) => state.species);
@@ -71,6 +74,10 @@ const Map = ({ navigation }: Props) => {
   useLayoutEffect(() => {
     getFavorites();
   }, [getFavorites]);
+
+  useLayoutEffect(() => {
+    getComplaints({ page: 1, perPage: PER_PAGE, closed: true, opened: true });
+  }, [getComplaints]);
 
   useLayoutEffect(() => {
     if (currentLocation) {

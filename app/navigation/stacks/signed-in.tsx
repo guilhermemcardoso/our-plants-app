@@ -5,9 +5,10 @@ import TabNavigator from '~/navigation/tabs';
 import { Routes } from '../routes';
 import { EditProfile } from '~/domains/profile';
 import { useGetSpecies } from '~/hooks/use-get-species';
-import { Plant, Specie } from '~/shared/types';
+import { Complaint, Plant, Specie } from '~/shared/types';
 import { CreateEditPlant, VisualizePlant } from '~/domains/plant';
 import { CreateEditSpecie } from '~/domains/specie';
+import { CreateEditComplaint, EvaluateComplaint } from '~/domains/complaints';
 
 const screenOptions = { headerShown: false };
 
@@ -16,10 +17,17 @@ export type SignedInStackParamList = {
   [Routes.EDIT_PROFILE]: undefined;
   [Routes.MAP]: undefined;
   [Routes.FAVORITES]: undefined;
+  [Routes.COMPLAINTS]: undefined;
   [Routes.USER_PROFILE]: undefined;
   [Routes.SETTINGS]: undefined;
   [Routes.CREATE_EDIT_PLANT]: {
     plant?: Plant;
+  };
+  [Routes.CREATE_EDIT_COMPLAINT]: {
+    complaint?: Complaint;
+  };
+  [Routes.EVALUATE_COMPLAINT]: {
+    complaint?: Complaint;
   };
   [Routes.VISUALIZE_PLANT]: undefined;
   [Routes.CREATE_EDIT_SPECIE]: {
@@ -47,6 +55,14 @@ const Signed = () => {
       <RootStack.Screen
         name={Routes.VISUALIZE_PLANT}
         component={VisualizePlant}
+      />
+      <RootStack.Screen
+        name={Routes.CREATE_EDIT_COMPLAINT}
+        component={CreateEditComplaint}
+      />
+      <RootStack.Screen
+        name={Routes.EVALUATE_COMPLAINT}
+        component={EvaluateComplaint}
       />
       <RootStack.Screen
         name={Routes.CREATE_EDIT_SPECIE}
