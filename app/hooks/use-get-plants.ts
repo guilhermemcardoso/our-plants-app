@@ -31,11 +31,7 @@ export function useGetPlants() {
     if (!done.current && response?.data) {
       if (response && response.data && response.data.items) {
         const { items: plants } = response.data;
-        console.log(
-          'PLANTS',
-          plants.map((plant: Plant) => plant.upvotes)
-        );
-        setPlants(plants);
+        setPlants(plants as Plant[]);
       }
     }
   }, [getPlantsResponse, setPlants]);
