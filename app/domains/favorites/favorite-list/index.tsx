@@ -11,11 +11,18 @@ import { useLoading } from '~/hooks/use-loading';
 import { calcDistance } from '~/shared/utils/distance';
 import { useRemoveFromFavorites } from '~/hooks/use-remove-from-favorites';
 import { useLocation } from '~/hooks/use-location';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { SignedInStackParamList } from '~/navigation/stacks/signed-in';
+import { Routes } from '~/navigation/routes';
+import { usePlantStore } from '~/store/plant-store';
 
-const Favorites = () => {
+type Props = NativeStackScreenProps<SignedInStackParamList, Routes.FAVORITES>;
+
+const Favorites = ({ navigation }: Props) => {
   const favorites = useFavoritesStore((state) => state.favorites);
   const { setLoading } = useLoading();
   const { currentLocation } = useLocation();
+  const setSelectedPlant = usePlantStore((state) => state.setSelectedPlant);
   const { isLoading: isGetFavoritesLoading, getFavorites } = useGetFavorites();
   const { isLoading: isRemoveFromFavoritesLoading, removeFromFavorites } =
     useRemoveFromFavorites();
@@ -29,7 +36,9 @@ const Favorites = () => {
   };
 
   const onPressItem = (item: Plant) => {
-    console.log('onPressItem', item);
+    setSelectedPlant(item);
+    console.log('ITEM', item.created_by.name);
+    navigation.navigate(Routes.VISUALIZE_PLANT);
   };
 
   const onFavoriteItem = (item: Plant) => {
