@@ -4,14 +4,14 @@ import { Actionsheet, Fab, FlatList, View, useTheme } from 'native-base';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { Button, SearchBar, Text } from '~/shared/components';
 import styles from './styles';
-import { Specie } from '~/shared/types';
+import { FilterOption } from '~/shared/types';
 
 type Props = ViewProps & {
-  selectedValues: Specie[];
-  options: Specie[];
+  selectedValues: FilterOption[];
+  options: FilterOption[];
   isOpen?: boolean;
   show: boolean;
-  onFilter: (options: Specie[]) => void;
+  onFilter: (options: FilterOption[]) => void;
   onClose: () => void;
   onOpen: () => void;
 };
@@ -25,9 +25,10 @@ export default function Selector({
   onFilter,
 }: Props) {
   const theme = useTheme();
-  const [filteredOptions, setFilteredOptions] = useState<Specie[]>(options);
+  const [filteredOptions, setFilteredOptions] =
+    useState<FilterOption[]>(options);
   const [selectedOptions, setSelectedOptions] =
-    useState<Specie[]>(selectedValues);
+    useState<FilterOption[]>(selectedValues);
   const [searchText, setSearchText] = useState('');
 
   const selectedItemsLabel = useMemo(() => {
@@ -52,17 +53,18 @@ export default function Selector({
     }
 
     const filter = options.filter((option) =>
-      option.popular_name.toLowerCase().includes(searchText.toLowerCase())
+      option.key.toLowerCase().includes(searchText.toLowerCase())
     );
     setFilteredOptions(filter);
   };
 
-  const onItemPress = (item: Specie) => {
+  const onItemPress = (item: FilterOption) => {
     const isAlreadySelected =
-      selectedOptions.filter((option) => option._id === item._id).length > 0;
+      selectedOptions.filter((option) => option.key === item.key).length > 0;
+
     if (isAlreadySelected) {
       setSelectedOptions(
-        selectedOptions.filter((option) => option._id !== item._id)
+        selectedOptions.filter((option) => option.key !== item.key)
       );
       return;
     }
@@ -83,27 +85,28 @@ export default function Selector({
     onClose();
   };
 
-  const onRenderItem: ListRenderItem<Specie> = ({ item }: { item: Specie }) => {
+  const onRenderItem: ListRenderItem<FilterOption> = ({
+    item,
+  }: {
+    item: FilterOption;
+  }) => {
+    const startIcon =
+      selectedOptions.filter((selectedValue) => {
+        return selectedValue.key === item.key;
+      }).length > 0
+        ? 'ios-checkmark-circle'
+        : 'ios-checkmark-circle-outline';
+
     return (
       <Actionsheet.Item
         onPress={() => onItemPress(item)}
         backgroundColor={theme.colors.container.light}
         startIcon={
-          <Icon
-            name={
-              selectedOptions.filter(
-                (selectedValue) => selectedValue._id === item._id
-              ).length > 0
-                ? 'ios-checkmark-circle'
-                : 'ios-checkmark-circle-outline'
-            }
-            size={20}
-            color={theme.colors.font.primary}
-          />
+          <Icon name={startIcon} size={20} color={theme.colors.font.primary} />
         }
-        key={item._id}
+        key={item.key}
       >
-        <Text>{item.popular_name}</Text>
+        <Text>{item.value}</Text>
       </Actionsheet.Item>
     );
   };
@@ -114,8 +117,10 @@ export default function Selector({
   }, [options]);
 
   useEffect(() => {
-    setSelectedOptions(selectedValues);
-  }, [selectedValues]);
+    if (show) {
+      setSelectedOptions(selectedValues);
+    }
+  }, [selectedValues, show]);
 
   return (
     <>

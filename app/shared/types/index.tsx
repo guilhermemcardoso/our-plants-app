@@ -82,3 +82,8 @@ export interface Complaint {
   updated_at: string;
   created_at: string;
 }
+
+export interface FilterOption {
+  key: string;
+  value: string;
+}

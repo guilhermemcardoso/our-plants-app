@@ -1,4 +1,4 @@
-import React, { useLayoutEffect, useState } from 'react';
+import React, { useLayoutEffect, useMemo, useState } from 'react';
 import MapView from '~/shared/components/map-view';
 import MarkerView from '~/shared/components/marker-view';
 import { Container, Fab, Filter, PlantDetails } from '~/shared/components';
@@ -12,10 +12,11 @@ import { useGetPlants } from '~/hooks/use-get-plants';
 import { usePlantStore } from '~/store/plant-store';
 import { useSettings } from '~/hooks/use-settings';
 import { useSpecieStore } from '~/store/specie-store';
-import { Plant, Specie } from '~/shared/types';
+import { FilterOption, Plant } from '~/shared/types';
 import { useGetFavorites } from '~/hooks/use-get-favorites';
 import { useGetComplaints } from '~/hooks/use-get-complaints';
 import { PER_PAGE } from '~/shared/constants/constants';
+import { useGetMyComplaints } from '~/hooks/use-get-my-complaints';
 
 type Props = NativeStackScreenProps<SignedInStackParamList, Routes.MAP>;
 
@@ -24,15 +25,22 @@ const Map = ({ navigation }: Props) => {
   const [detailsIsOpen, setDetailsIsOpen] = useState(false);
   const selectedPlant = usePlantStore((state) => state.selectedPlant);
   const setSelectedPlant = usePlantStore((state) => state.setSelectedPlant);
-  const [filteredSpecies, setFilteredSpecies] = useState<Specie[]>([]);
+  const [filteredSpecies, setFilteredSpecies] = useState<FilterOption[]>([]);
   const { distance } = useSettings();
   const { getCurrentLocation } = useLocation();
   const { currentLocation } = useLocation();
   const { getFavorites } = useGetFavorites();
   const { getComplaints } = useGetComplaints();
+  const { getMyComplaints } = useGetMyComplaints();
   const { getPlantsNearBy } = useGetPlants();
   const plants = usePlantStore((state) => state.plants);
   const species = useSpecieStore((state) => state.species);
+
+  const filterOptions = useMemo(() => {
+    return species.map((specie) => {
+      return { key: specie._id, value: specie.popular_name };
+    });
+  }, [species]);
 
   const onCreatePlantPress = () => {
     navigation.navigate(Routes.CREATE_EDIT_PLANT, { plant: undefined });
@@ -46,7 +54,7 @@ const Map = ({ navigation }: Props) => {
     setFilterIsOpen(false);
   };
 
-  const onFilter = (options: Specie[]) => {
+  const onFilter = (options: FilterOption[]) => {
     setFilterIsOpen(false);
     setFilteredSpecies(options);
   };
@@ -80,6 +88,10 @@ const Map = ({ navigation }: Props) => {
   }, [getComplaints]);
 
   useLayoutEffect(() => {
+    getMyComplaints({ page: 1, perPage: PER_PAGE, closed: true, opened: true });
+  }, [getMyComplaints]);
+
+  useLayoutEffect(() => {
     if (currentLocation) {
       getPlantsNearBy({
         locationData: {
@@ -87,7 +99,7 @@ const Map = ({ navigation }: Props) => {
           longitude: currentLocation.coordinates[1],
           distance: distance,
         },
-        filteredSpecies: filteredSpecies.map((specie) => specie._id),
+        filteredSpecies: filteredSpecies.map((specie) => specie.key),
       });
     }
   }, [currentLocation, distance, filteredSpecies, getPlantsNearBy]);
@@ -117,7 +129,7 @@ const Map = ({ navigation }: Props) => {
           selectedValues={filteredSpecies}
           onFilter={onFilter}
           show={filterIsOpen}
-          options={species}
+          options={filterOptions}
           onOpen={onOpenFilter}
           onClose={onCloseFilter}
         />
