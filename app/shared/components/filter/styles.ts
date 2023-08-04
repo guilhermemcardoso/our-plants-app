@@ -2,10 +2,27 @@ import { StyleSheet } from 'react-native';
 import { dimens } from '~/theme/dimens';
 
 const styles = StyleSheet.create({
-  mainContent: {
-    minHeight: 400,
-  },
+  mainContent: {},
   badge: {
+    zIndex: 9999,
+    position: 'absolute',
+    borderRadius: 5,
+    alignItems: 'center',
+    justifyContent: 'center',
+    height: 10,
+    width: 10,
+    right: 4,
+    top: 4,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 2,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 9,
+    elevation: 1,
+  },
+  fabBadge: {
     zIndex: 9999,
     position: 'absolute',
     borderRadius: 6,
@@ -42,6 +59,11 @@ const styles = StyleSheet.create({
   button: {
     flex: 1,
     margin: dimens.margin.sm,
+  },
+  filterBtn: {
+    paddingVertical: dimens.padding.lg,
+    height: 40,
+    width: 40,
   },
 });
 

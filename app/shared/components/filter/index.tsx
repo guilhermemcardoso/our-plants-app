@@ -11,6 +11,8 @@ type Props = ViewProps & {
   options: FilterOption[];
   isOpen?: boolean;
   show: boolean;
+  showSearch?: boolean;
+  isFab?: boolean;
   onFilter: (options: FilterOption[]) => void;
   onClose: () => void;
   onOpen: () => void;
@@ -20,6 +22,8 @@ export default function Selector({
   selectedValues,
   options,
   show,
+  isFab = true,
+  showSearch = true,
   onClose,
   onOpen,
   onFilter,
@@ -125,39 +129,63 @@ export default function Selector({
   return (
     <>
       {selectedValues.length > 0 && (
-        <View style={styles.badge} bgColor={theme.colors.white} />
+        <View
+          style={isFab ? styles.fabBadge : styles.badge}
+          bgColor={theme.colors.white}
+        />
       )}
-      <Fab
-        onPress={onOpen}
-        bgColor={theme.colors.primary.pure}
-        renderInPortal={false}
-        shadow={2}
-        borderRadius={8}
-        placement="top-right"
-        size="sm"
-        icon={
+      {isFab ? (
+        <Fab
+          onPress={onOpen}
+          bgColor={theme.colors.primary.pure}
+          renderInPortal={false}
+          shadow={2}
+          borderRadius={8}
+          placement="top-right"
+          size="sm"
+          icon={
+            <Icon
+              name={'ios-filter'}
+              size={20}
+              color={theme.colors.loading.text}
+            />
+          }
+        />
+      ) : (
+        <Button
+          style={styles.filterBtn}
+          onPress={onOpen}
+          bgColor={theme.colors.primary.pure}
+          shadow={2}
+          borderRadius={8}
+          size="sm"
+        >
           <Icon
             name={'ios-filter'}
-            size={20}
+            size={16}
             color={theme.colors.loading.text}
           />
-        }
-      />
+        </Button>
+      )}
+
       <Actionsheet onClose={onClosePress} isOpen={show}>
         <Actionsheet.Content
+          minHeight={showSearch ? 400 : 100}
           style={styles.mainContent}
           backgroundColor={theme.colors.container.light}
         >
-          <View style={styles.searchContainer}>
-            <SearchBar
-              searchText={searchText}
-              onChangeSearchText={onChangeSearchText}
-              onSearch={onSearch}
-            />
-            <Text variant="secondary" style={styles.selectedItemsLabel}>
-              {selectedItemsLabel}
-            </Text>
-          </View>
+          {showSearch && (
+            <View style={styles.searchContainer}>
+              <SearchBar
+                searchText={searchText}
+                onChangeSearchText={onChangeSearchText}
+                onSearch={onSearch}
+              />
+              <Text variant="secondary" style={styles.selectedItemsLabel}>
+                {selectedItemsLabel}
+              </Text>
+            </View>
+          )}
           {filteredOptions.length === 0 && searchText.length > 0 && (
             <Text variant="secondary" size="label" style={styles.noResults}>
               Nenhum resultado foi encontrado para a busca
