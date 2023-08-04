@@ -8,7 +8,11 @@ import { useGetSpecies } from '~/hooks/use-get-species';
 import { Complaint, Plant, Specie } from '~/shared/types';
 import { CreateEditPlant, VisualizePlant } from '~/domains/plant';
 import { CreateEditSpecie } from '~/domains/specie';
-import { CreateEditComplaint, EvaluateComplaint } from '~/domains/complaints';
+import {
+  CreateEditComplaint,
+  EvaluateComplaint,
+  MyComplaints,
+} from '~/domains/complaints';
 
 const screenOptions = { headerShown: false };
 
@@ -23,6 +27,7 @@ export type SignedInStackParamList = {
   [Routes.CREATE_EDIT_PLANT]: {
     plant?: Plant;
   };
+  [Routes.MY_COMPLAINTS]: undefined;
   [Routes.CREATE_EDIT_COMPLAINT]: {
     complaint?: Complaint;
   };
@@ -56,6 +61,7 @@ const Signed = () => {
         name={Routes.VISUALIZE_PLANT}
         component={VisualizePlant}
       />
+      <RootStack.Screen name={Routes.MY_COMPLAINTS} component={MyComplaints} />
       <RootStack.Screen
         name={Routes.CREATE_EDIT_COMPLAINT}
         component={CreateEditComplaint}

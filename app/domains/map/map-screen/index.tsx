@@ -1,4 +1,4 @@
-import React, { useLayoutEffect, useMemo, useState } from 'react';
+import React, { useLayoutEffect, useMemo, useRef, useState } from 'react';
 import MapView from '~/shared/components/map-view';
 import MarkerView from '~/shared/components/marker-view';
 import { Container, Fab, Filter, PlantDetails } from '~/shared/components';
@@ -15,7 +15,6 @@ import { useSpecieStore } from '~/store/specie-store';
 import { FilterOption, Plant } from '~/shared/types';
 import { useGetFavorites } from '~/hooks/use-get-favorites';
 import { useGetComplaints } from '~/hooks/use-get-complaints';
-import { PER_PAGE } from '~/shared/constants/constants';
 import { useGetMyComplaints } from '~/hooks/use-get-my-complaints';
 
 type Props = NativeStackScreenProps<SignedInStackParamList, Routes.MAP>;
@@ -41,6 +40,8 @@ const Map = ({ navigation }: Props) => {
       return { key: specie._id, value: specie.popular_name };
     });
   }, [species]);
+
+  const firstLoad = useRef(true);
 
   const onCreatePlantPress = () => {
     navigation.navigate(Routes.CREATE_EDIT_PLANT, { plant: undefined });
@@ -76,20 +77,14 @@ const Map = ({ navigation }: Props) => {
   };
 
   useLayoutEffect(() => {
-    getCurrentLocation();
-  }, [getCurrentLocation]);
-
-  useLayoutEffect(() => {
-    getFavorites();
-  }, [getFavorites]);
-
-  useLayoutEffect(() => {
-    getComplaints({ page: 1, perPage: PER_PAGE, closed: true, opened: true });
-  }, [getComplaints]);
-
-  useLayoutEffect(() => {
-    getMyComplaints({ page: 1, perPage: PER_PAGE, closed: true, opened: true });
-  }, [getMyComplaints]);
+    if (firstLoad.current) {
+      getCurrentLocation();
+      getFavorites();
+      getComplaints(false);
+      getMyComplaints(false);
+      firstLoad.current = false;
+    }
+  }, [getCurrentLocation, getFavorites, getComplaints, getMyComplaints]);
 
   useLayoutEffect(() => {
     if (currentLocation) {

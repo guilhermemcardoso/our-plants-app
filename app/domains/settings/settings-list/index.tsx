@@ -8,6 +8,9 @@ import styles from './styles';
 import Header from '~/shared/components/header';
 import { useSettings } from '~/hooks/use-settings';
 import { Theme } from '~/types/theme';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { SignedInStackParamList } from '~/navigation/stacks/signed-in';
+import { Routes } from '~/navigation/routes';
 
 interface Item {
   title: string;
@@ -17,7 +20,9 @@ interface Item {
   onPress?: () => void;
 }
 
-const Settings = () => {
+type Props = NativeStackScreenProps<SignedInStackParamList, Routes.SETTINGS>;
+
+const Settings = ({ navigation }: Props) => {
   const { signOut } = useSignOut();
   const {
     theme,
@@ -53,6 +58,10 @@ const Settings = () => {
     setShowSignOutModal(true);
   }, []);
 
+  const onOpenMyComplaints = useCallback(() => {
+    navigation.navigate(Routes.MY_COMPLAINTS);
+  }, [navigation]);
+
   const settings: Item[] = useMemo(() => {
     return [
       {
@@ -80,6 +89,11 @@ const Settings = () => {
         setValue: setDistance,
       },
       {
+        title: 'Minhas denúncias',
+        type: 'default',
+        onPress: onOpenMyComplaints,
+      },
+      {
         title: 'Sobre',
         type: 'default',
         onPress: onOpenAboutModal,
@@ -99,6 +113,7 @@ const Settings = () => {
     onSetTheme,
     setNotificationEnabled,
     setSoundEnabled,
+    onOpenMyComplaints,
     onOpenAboutModal,
     handleSignOut,
   ]);
