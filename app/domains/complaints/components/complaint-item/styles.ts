@@ -7,9 +7,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     borderRadius: dimens.radius.md,
-    paddingLeft: dimens.padding.lg,
     marginBottom: dimens.margin.sm,
-    paddingVertical: 12,
+    paddingLeft: dimens.padding.md,
+    paddingVertical: dimens.padding.md,
     flex: 1,
   },
   infoContainer: {
@@ -19,9 +19,24 @@ const styles = StyleSheet.create({
   title: {
     fontWeight: 'bold',
     marginBottom: dimens.margin.md,
-    marginRight: dimens.margin.md,
+    marginRight: dimens.margin.lg,
     flexWrap: 'wrap',
-    flex: 1,
+  },
+  description: {
+    marginRight: dimens.margin.lg,
+    marginBottom: dimens.margin.sm,
+    flexWrap: 'wrap',
+  },
+  createdAt: {
+    marginRight: dimens.margin.lg,
+    marginTop: dimens.margin.md,
+    textAlign: 'right',
+    flexWrap: 'wrap',
+  },
+  image: {
+    height: 86,
+    width: 86,
+    borderRadius: dimens.radius.md,
   },
 });
 
