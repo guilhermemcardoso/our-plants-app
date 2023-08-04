@@ -13,15 +13,27 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   infoContainer: {
+    alignItems: 'flex-start',
+    justifyContent: 'flex-start',
     paddingLeft: dimens.padding.lg,
     flex: 1,
+    height: '100%',
   },
   title: {
     fontWeight: 'bold',
-    marginBottom: dimens.margin.md,
     marginRight: dimens.margin.md,
+    marginBottom: dimens.margin.sm,
     flexWrap: 'wrap',
-    flex: 1,
+  },
+  description: {
+    marginRight: dimens.margin.md,
+    marginBottom: dimens.margin.sm,
+    flexWrap: 'wrap',
+  },
+  image: {
+    height: 72,
+    width: 72,
+    borderRadius: dimens.radius.md,
   },
 });
 
