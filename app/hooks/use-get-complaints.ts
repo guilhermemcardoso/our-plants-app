@@ -2,6 +2,7 @@ import { useMutation } from '@tanstack/react-query';
 import { useCallback, useEffect, useRef, useState } from 'react';
 
 import { getComplaints as getComplaintsMutation } from '~/services/api/resources/complaint';
+import { PER_PAGE } from '~/shared/constants/constants';
 import { Complaint } from '~/shared/types';
 import { useComplaintsStore } from '~/store/complaints-store';
 
@@ -10,7 +11,15 @@ export function useGetComplaints() {
     data: any;
     status: number | undefined;
   }>({ data: undefined, status: undefined });
+  const complaints = useComplaintsStore((state) => state.complaints);
   const setComplaints = useComplaintsStore((state) => state.setComplaints);
+  const complaintsPage = useComplaintsStore((state) => state.complaintsPage);
+  const setComplaintsPage = useComplaintsStore(
+    (state) => state.setComplaintsPage
+  );
+  const setHasNextComplaints = useComplaintsStore(
+    (state) => state.setHasNextComplaints
+  );
 
   const {
     mutate,
@@ -32,29 +41,40 @@ export function useGetComplaints() {
     if (!done.current && response.data) {
       done.current = true;
 
-      const { items } = response.data;
+      const { items, hasNext } = response.data;
 
-      setComplaints(items as Complaint[]);
+      setComplaints([...complaints, ...(items as Complaint[])]);
+      setHasNextComplaints(!!hasNext);
     }
-  }, [getComplaintsResponse, setComplaints]);
+  }, [getComplaintsResponse, complaints, setComplaints, setHasNextComplaints]);
 
   const getComplaints = useCallback(
-    async ({
-      page,
-      perPage,
-      closed,
-      opened,
-    }: {
-      page: number;
-      perPage: number;
-      closed: boolean;
-      opened: boolean;
-    }) => {
-      mutate({ page, perPage, closed, opened });
+    async (showClosed: boolean) => {
+      setComplaints([]);
+      mutate({
+        page: complaintsPage,
+        perPage: PER_PAGE,
+        closed: showClosed,
+        opened: true,
+      });
       done.current = false;
     },
-    [mutate]
+    [mutate, complaintsPage, setComplaints]
   );
 
-  return { isLoading, getComplaints, onResponse };
+  const loadMoreComplaints = useCallback(
+    async (showClosed: boolean) => {
+      mutate({
+        page: complaintsPage + 1,
+        perPage: PER_PAGE,
+        closed: showClosed,
+        opened: true,
+      });
+      setComplaintsPage(complaintsPage + 1);
+      done.current = false;
+    },
+    [mutate, complaintsPage, setComplaintsPage]
+  );
+
+  return { isLoading, getComplaints, loadMoreComplaints, onResponse };
 }

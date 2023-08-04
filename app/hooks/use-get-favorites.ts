@@ -36,7 +36,7 @@ export function useGetFavorites() {
         favorites: { plants },
       } = response.data;
 
-      setFavorites(plants as Plant[]);
+      setFavorites((plants || []) as Plant[]);
     }
   }, [getFavoritesResponse, setFavorites]);
 
