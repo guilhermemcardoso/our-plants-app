@@ -14,4 +14,12 @@ export const styles = StyleSheet.create({
     position: 'absolute',
     top: -20,
   },
+  notificationBadge: {
+    width: 10,
+    height: 10,
+    borderRadius: dimens.radius.sm,
+    position: 'absolute',
+    top: 0,
+    right: 2,
+  },
 });
