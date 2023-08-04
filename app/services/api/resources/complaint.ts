@@ -13,7 +13,7 @@ export async function getComplaints({
 }) {
   return await Api({
     method: 'get',
-    url: `complaint/list?page=${page}&perPage=${perPage}&closed=${closed}&open=${opened}`,
+    url: `complaint/list?page=${page}&perPage=${perPage}&closed=${closed}&opened=${opened}`,
     hasToken: true,
   });
 }
@@ -31,7 +31,7 @@ export async function getMyComplaints({
 }) {
   return await Api({
     method: 'get',
-    url: `complaint/my-complaints?page=${page}&perPage=${perPage}&closed=${closed}&open=${opened}`,
+    url: `complaint/my-complaints?page=${page}&perPage=${perPage}&closed=${closed}&opened=${opened}`,
     hasToken: true,
   });
 }
