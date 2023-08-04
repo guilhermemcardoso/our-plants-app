@@ -10,13 +10,12 @@ const styles = StyleSheet.create({
     left: -10,
     top: 0,
     bottom: 0,
-    shadowColor: '#000',
     shadowOffset: {
-      width: 1,
+      width: 3,
       height: 1,
     },
-    shadowOpacity: 0.25,
-    shadowRadius: 0,
+    shadowOpacity: 0.35,
+    shadowRadius: 1,
     elevation: 1,
   },
   nextBtn: {
@@ -24,13 +23,12 @@ const styles = StyleSheet.create({
     right: -10,
     top: 0,
     bottom: 0,
-    shadowColor: '#000',
     shadowOffset: {
-      width: 1,
+      width: 3,
       height: 1,
     },
-    shadowOpacity: 0.25,
-    shadowRadius: 0,
+    shadowOpacity: 0.35,
+    shadowRadius: 1,
     elevation: 1,
   },
   dots: {
