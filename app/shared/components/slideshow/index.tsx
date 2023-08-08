@@ -8,9 +8,14 @@ import { useSettingsStore } from '~/store/settings-store';
 
 type Props = ViewProps & {
   images: string[];
+  borderRadius?: number;
 };
 
-export default function Slideshow({ images, ...rest }: Props) {
+export default function Slideshow({
+  images,
+  borderRadius = 0,
+  ...rest
+}: Props) {
   const themeMode = useSettingsStore((state) => state.theme);
   const theme = useTheme();
   const [position, setPosition] = useState(0);
@@ -38,9 +43,10 @@ export default function Slideshow({ images, ...rest }: Props) {
 
   return (
     <View {...rest}>
-      <View>
+      <View borderRadius={borderRadius}>
         {images.length > 0 ? (
           <Image
+            borderRadius={borderRadius}
             width={width}
             height={height}
             style={styles.imageItem}

@@ -30,7 +30,9 @@ export default function Button({
     }
 
     if (variant !== 'solid' && variant) {
-      return 'button.background.primary';
+      return warning
+        ? 'button.background.warning'
+        : 'button.background.primary';
     }
 
     return 'button.text.primary';

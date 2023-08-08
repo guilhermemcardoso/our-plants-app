@@ -12,6 +12,7 @@ type Props = InterfaceModalProps & {
   yesLabel: string;
   onNo: () => void;
   onYes: () => void;
+  noButtonWarning?: boolean;
   yesButtonWarning?: boolean;
 };
 
@@ -21,6 +22,7 @@ const ConfirmationModal = ({
   description,
   noLabel,
   yesLabel,
+  noButtonWarning = true,
   yesButtonWarning = true,
   onNo,
   onYes,
@@ -38,6 +40,7 @@ const ConfirmationModal = ({
         <Modal.Footer bg="container.light" borderColor="divider.primary">
           <View style={styles.buttonContainer}>
             <Button
+              warning={noButtonWarning}
               variant="outline"
               style={styles.button}
               title={noLabel}

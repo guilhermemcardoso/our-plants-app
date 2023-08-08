@@ -8,7 +8,7 @@ import IconButton from '../icon-button';
 import { Linking, Platform } from 'react-native';
 import Votes from '../votes';
 import { useVotePlant } from '~/hooks/use-vote-plant';
-import { useFavoritesStore } from '~/store/favorites-store';
+import { useFavoriteStore } from '~/store/favorite-store';
 import { useAddToFavorites } from '~/hooks/use-add-to-favorites';
 import { useRemoveFromFavorites } from '~/hooks/use-remove-from-favorites';
 
@@ -27,7 +27,7 @@ export default function PlantDetails({
 }: Props) {
   const theme = useTheme();
   const { downvote, upvote } = useVotePlant();
-  const favorites = useFavoritesStore((state) => state.favorites);
+  const favorites = useFavoriteStore((state) => state.favorites);
   const { addToFavorites } = useAddToFavorites();
   const { removeFromFavorites } = useRemoveFromFavorites();
 
