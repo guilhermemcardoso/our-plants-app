@@ -1,5 +1,7 @@
 import React, { useCallback, useMemo } from 'react';
+import Icon from 'react-native-vector-icons/Ionicons';
 import {
+  Button,
   Container,
   Header,
   IconButton,
@@ -7,20 +9,20 @@ import {
   Text,
   Votes,
 } from '~/shared/components';
-import styles from './styles';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { SignedInStackParamList } from '~/navigation/stacks/signed-in';
 import { Routes } from '~/navigation/routes';
 import { usePlantStore } from '~/store/plant-store';
-import { Box, ScrollView, View } from 'native-base';
+import { Box, ScrollView, View, useTheme } from 'native-base';
 import MapView from '~/shared/components/map-view';
 import MarkerView from '~/shared/components/marker-view';
 import { useVotePlant } from '~/hooks/use-vote-plant';
 import { useAuthStore } from '~/store/auth-store';
 import { ADMIN_LEVEL } from '~/shared/constants/constants';
 import { useAddToFavorites } from '~/hooks/use-add-to-favorites';
-import { useFavoritesStore } from '~/store/favorites-store';
+import { useFavoriteStore } from '~/store/favorite-store';
 import { useRemoveFromFavorites } from '~/hooks/use-remove-from-favorites';
+import styles from './styles';
 
 type Props = NativeStackScreenProps<
   SignedInStackParamList,
@@ -28,10 +30,11 @@ type Props = NativeStackScreenProps<
 >;
 
 const VisualizePlant = ({ navigation }: Props) => {
+  const theme = useTheme();
   const selectedPlant = usePlantStore((state) => state.selectedPlant);
   const { currentUser } = useAuthStore();
   const { downvote, upvote } = useVotePlant();
-  const favorites = useFavoritesStore((state) => state.favorites);
+  const favorites = useFavoriteStore((state) => state.favorites);
   const { addToFavorites } = useAddToFavorites();
   const { removeFromFavorites } = useRemoveFromFavorites();
 
@@ -42,9 +45,13 @@ const VisualizePlant = ({ navigation }: Props) => {
     return index >= 0;
   }, [favorites, selectedPlant]);
 
-  const handleBackPress = useCallback(() => {
+  const onBackPress = useCallback(() => {
     navigation.goBack();
   }, [navigation]);
+
+  const onCreateComplaintPress = () => {
+    navigation.navigate(Routes.CREATE_COMPLAINT);
+  };
 
   const canEdit = useMemo(() => {
     return (
@@ -80,7 +87,7 @@ const VisualizePlant = ({ navigation }: Props) => {
               <IconButton
                 size={26}
                 iconName="ios-arrow-back"
-                onPress={handleBackPress}
+                onPress={onBackPress}
               />
             }
             RightComponent={
@@ -167,6 +174,19 @@ const VisualizePlant = ({ navigation }: Props) => {
               />
             </MapView>
           </View>
+          <Button
+            onPress={onCreateComplaintPress}
+            title="DENUNCIAR"
+            variant="outline"
+            warning
+            startIcon={
+              <Icon
+                name={'ios-alert-circle-outline'}
+                size={20}
+                color={theme.colors.font.error}
+              />
+            }
+          />
         </View>
       </ScrollView>
     </Container>

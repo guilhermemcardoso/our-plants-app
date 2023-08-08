@@ -5,7 +5,7 @@ import { FlatList, View } from 'native-base';
 import { ListRenderItem } from 'react-native';
 import { Plant } from '~/shared/types';
 import { EmptyList, FavoriteItem } from '../components';
-import { useFavoritesStore } from '~/store/favorites-store';
+import { useFavoriteStore } from '~/store/favorite-store';
 import { useGetFavorites } from '~/hooks/use-get-favorites';
 import { useLoading } from '~/hooks/use-loading';
 import { calcDistance } from '~/shared/utils/distance';
@@ -19,7 +19,7 @@ import { usePlantStore } from '~/store/plant-store';
 type Props = NativeStackScreenProps<SignedInStackParamList, Routes.FAVORITES>;
 
 const Favorites = ({ navigation }: Props) => {
-  const favorites = useFavoritesStore((state) => state.favorites);
+  const favorites = useFavoriteStore((state) => state.favorites);
   const { setLoading } = useLoading();
   const { currentLocation } = useLocation();
   const setSelectedPlant = usePlantStore((state) => state.setSelectedPlant);
