@@ -37,7 +37,7 @@ export async function getMyComplaints({
 }
 
 export async function createComplaint(complaintData: {
-  plantId: string;
+  plant_id: string;
   description: string;
   reason: string;
 }) {
@@ -50,17 +50,17 @@ export async function createComplaint(complaintData: {
 }
 
 export async function evaluateComplaint({
-  plantId,
+  complaintId,
   evaluation,
   wasHelpful,
 }: {
-  plantId: string;
+  complaintId: string;
   evaluation: string;
   wasHelpful: boolean;
 }) {
   return await Api({
     method: 'post',
-    url: `complaint/${plantId}`,
+    url: `complaint/${complaintId}`,
     data: {
       evaluation: evaluation,
       was_helpful: wasHelpful,
@@ -69,10 +69,10 @@ export async function evaluateComplaint({
   });
 }
 
-export async function deleteComplaint({ plantId }: { plantId: string }) {
+export async function deleteComplaint(complaintId: string) {
   return await Api({
     method: 'delete',
-    url: `complaint/${plantId}`,
+    url: `complaint/${complaintId}`,
     hasToken: true,
   });
 }
