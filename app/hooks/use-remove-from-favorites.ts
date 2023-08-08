@@ -3,14 +3,14 @@ import { useCallback, useEffect, useState } from 'react';
 
 import { removeFromFavorites as removeFromFavoritesMutation } from '~/services/api/resources/favorite';
 import { Plant } from '~/shared/types';
-import { useFavoritesStore } from '~/store/favorites-store';
+import { useFavoriteStore } from '~/store/favorite-store';
 
 export function useRemoveFromFavorites() {
   const [onResponse, setOnResponse] = useState<{
     data: any;
     status: number | undefined;
   }>({ data: undefined, status: undefined });
-  const setFavorites = useFavoritesStore((state) => state.setFavorites);
+  const setFavorites = useFavoriteStore((state) => state.setFavorites);
 
   const {
     mutate,

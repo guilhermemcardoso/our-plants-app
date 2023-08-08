@@ -4,20 +4,20 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { getComplaints as getComplaintsMutation } from '~/services/api/resources/complaint';
 import { PER_PAGE } from '~/shared/constants/constants';
 import { Complaint } from '~/shared/types';
-import { useComplaintsStore } from '~/store/complaints-store';
+import { useComplaintStore } from '~/store/complaint-store';
 
 export function useGetComplaints() {
   const [onResponse, setOnResponse] = useState<{
     data: any;
     status: number | undefined;
   }>({ data: undefined, status: undefined });
-  const complaints = useComplaintsStore((state) => state.complaints);
-  const setComplaints = useComplaintsStore((state) => state.setComplaints);
-  const complaintsPage = useComplaintsStore((state) => state.complaintsPage);
-  const setComplaintsPage = useComplaintsStore(
+  const complaints = useComplaintStore((state) => state.complaints);
+  const setComplaints = useComplaintStore((state) => state.setComplaints);
+  const complaintsPage = useComplaintStore((state) => state.complaintsPage);
+  const setComplaintsPage = useComplaintStore(
     (state) => state.setComplaintsPage
   );
-  const setHasNextComplaints = useComplaintsStore(
+  const setHasNextComplaints = useComplaintStore(
     (state) => state.setHasNextComplaints
   );
 
