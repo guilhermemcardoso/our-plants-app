@@ -5,7 +5,7 @@ import { FlatList, Switch, View } from 'native-base';
 import { ListRenderItem } from 'react-native';
 import { Complaint } from '~/shared/types';
 import { EmptyList, ComplaintItem } from '../components';
-import { useComplaintsStore } from '~/store/complaints-store';
+import { useComplaintStore } from '~/store/complaint-store';
 import { useGetComplaints } from '~/hooks/use-get-complaints';
 import { useLoading } from '~/hooks/use-loading';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
@@ -16,8 +16,8 @@ type Props = NativeStackScreenProps<SignedInStackParamList, Routes.COMPLAINTS>;
 
 const Complaints = ({ navigation }: Props) => {
   const [showClosed, setShowClosed] = useState(false);
-  const complaints = useComplaintsStore((state) => state.complaints);
-  const hasNextComplaints = useComplaintsStore(
+  const complaints = useComplaintStore((state) => state.complaints);
+  const hasNextComplaints = useComplaintStore(
     (state) => state.hasNextComplaints
   );
   const { setLoading } = useLoading();
