@@ -11,8 +11,9 @@ import { CreateEditSpecie } from '~/domains/specie';
 import {
   CreateEditComplaint,
   EvaluateComplaint,
+  VisualizeComplaint,
   MyComplaints,
-} from '~/domains/complaints';
+} from '~/domains/complaint';
 
 const screenOptions = { headerShown: false };
 
@@ -28,10 +29,11 @@ export type SignedInStackParamList = {
     plant?: Plant;
   };
   [Routes.MY_COMPLAINTS]: undefined;
-  [Routes.CREATE_EDIT_COMPLAINT]: {
+  [Routes.CREATE_COMPLAINT]: undefined;
+  [Routes.EVALUATE_COMPLAINT]: {
     complaint?: Complaint;
   };
-  [Routes.EVALUATE_COMPLAINT]: {
+  [Routes.VISUALIZE_COMPLAINT]: {
     complaint?: Complaint;
   };
   [Routes.VISUALIZE_PLANT]: undefined;
@@ -63,12 +65,16 @@ const Signed = () => {
       />
       <RootStack.Screen name={Routes.MY_COMPLAINTS} component={MyComplaints} />
       <RootStack.Screen
-        name={Routes.CREATE_EDIT_COMPLAINT}
+        name={Routes.CREATE_COMPLAINT}
         component={CreateEditComplaint}
       />
       <RootStack.Screen
         name={Routes.EVALUATE_COMPLAINT}
         component={EvaluateComplaint}
+      />
+      <RootStack.Screen
+        name={Routes.VISUALIZE_COMPLAINT}
+        component={VisualizeComplaint}
       />
       <RootStack.Screen
         name={Routes.CREATE_EDIT_SPECIE}

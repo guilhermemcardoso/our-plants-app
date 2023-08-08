@@ -3,7 +3,7 @@ import { TouchableOpacity } from 'react-native';
 import { View, useTheme } from 'native-base';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { styles } from './styles';
-import { useComplaintsStore } from '~/store/complaints-store';
+import { useComplaintStore } from '~/store/complaint-store';
 import { Tabs } from '../../constants';
 
 interface TabItemProps {
@@ -15,7 +15,7 @@ interface TabItemProps {
 
 const TabItem = ({ focused, iconName, label, onPress }: TabItemProps) => {
   const theme = useTheme();
-  const complaints = useComplaintsStore((state) => state.complaints);
+  const complaints = useComplaintStore((state) => state.complaints);
   const openedComplaints = complaints.filter((complaint) => !complaint.closed);
 
   return (

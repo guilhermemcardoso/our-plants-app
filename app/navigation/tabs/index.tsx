@@ -7,7 +7,7 @@ import { SettingsList } from '~/domains/settings';
 import { TabBar } from './components';
 import { Tabs } from './constants';
 import { UserProfile } from '~/domains/profile';
-import { ComplaintList } from '~/domains/complaints';
+import { ComplaintList } from '~/domains/complaint';
 import { useAuthStore } from '~/store/auth-store';
 import { ADMIN_LEVEL } from '~/shared/constants/constants';
 
