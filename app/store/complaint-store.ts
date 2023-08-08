@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 import { Complaint } from '~/shared/types';
 
-interface ComplaintsState {
+interface ComplaintState {
   complaints: Complaint[];
   complaintsPage: number;
   hasNextComplaints: boolean;
@@ -16,7 +16,7 @@ interface ComplaintsState {
   setHasNextMyComplaints: (hasNext: boolean) => void;
 }
 
-export const useComplaintsStore = create<ComplaintsState>((set) => ({
+export const useComplaintStore = create<ComplaintState>((set) => ({
   complaints: [],
   complaintsPage: 1,
   hasNextComplaints: false,
