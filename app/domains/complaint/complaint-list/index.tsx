@@ -28,6 +28,14 @@ const Complaints = ({ navigation }: Props) => {
     loadMoreComplaints,
   } = useGetComplaints();
 
+  const filteredComplaints = useMemo(() => {
+    if (showClosed) {
+      return complaints;
+    }
+
+    return complaints.filter((complaint) => !complaint.closed);
+  }, [complaints, showClosed]);
+
   const isLoading = useMemo(() => {
     return isGetComplaintsLoading;
   }, [isGetComplaintsLoading]);
@@ -73,7 +81,7 @@ const Complaints = ({ navigation }: Props) => {
         </View>
         <FlatList
           renderItem={onRenderItem}
-          data={complaints}
+          data={filteredComplaints}
           ListEmptyComponent={<EmptyList />}
           ListFooterComponent={
             hasNextComplaints ? <LoadMore onPress={loadMore} /> : null

@@ -77,7 +77,7 @@ const EvaluateComplaint = ({ route, navigation }: Props) => {
       <ScrollView>
         <View style={styles.headerContainer}>
           <Header
-            title={'Avaliar denúncia'}
+            title={'Detalhes da denúncia'}
             LeftComponent={
               <IconButton
                 size={26}
@@ -138,11 +138,13 @@ const EvaluateComplaint = ({ route, navigation }: Props) => {
             </Text>
           </View>
         )}
-        <Button
-          onPress={onOpenEvaluationModal}
-          style={styles.deleteButton}
-          title={'AVALIAR DENÚNCIA'}
-        />
+        {!complaint?.closed && !complaint?.deleted && (
+          <Button
+            onPress={onOpenEvaluationModal}
+            style={styles.deleteButton}
+            title={'AVALIAR DENÚNCIA'}
+          />
+        )}
       </ScrollView>
       <EvaluationModal
         open={showEvaluationModal}
