@@ -13,6 +13,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   infoContainer: {
+    flexDirection: 'column',
     paddingLeft: dimens.padding.lg,
     flex: 1,
   },
@@ -26,6 +27,7 @@ const styles = StyleSheet.create({
     marginRight: dimens.margin.lg,
     marginBottom: dimens.margin.sm,
     flexWrap: 'wrap',
+    flex: 1,
   },
   createdAt: {
     marginRight: dimens.margin.lg,

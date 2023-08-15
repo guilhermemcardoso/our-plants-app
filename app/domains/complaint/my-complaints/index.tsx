@@ -60,7 +60,7 @@ const MyComplaints = ({ navigation }: Props) => {
   return (
     <Container>
       <Header
-        title="Denúncias"
+        title="Minhas denúncias"
         LeftComponent={
           <IconButton
             size={26}
@@ -68,20 +68,18 @@ const MyComplaints = ({ navigation }: Props) => {
             onPress={handleBackPress}
           />
         }
-        RightComponent={
-          <>
-            <Text>Encerradas</Text>
-            <Switch
-              ml="2"
-              size="sm"
-              onTrackColor="primary.pure"
-              value={showClosed}
-              onToggle={onSwitchClosed}
-            />
-          </>
-        }
       />
       <View style={styles.mainContainer}>
+        <View style={styles.closedContainer}>
+          <Text>Encerradas</Text>
+          <Switch
+            ml="2"
+            size="sm"
+            onTrackColor="primary.pure"
+            value={showClosed}
+            onToggle={onSwitchClosed}
+          />
+        </View>
         <FlatList
           renderItem={onRenderItem}
           data={myComplaints}

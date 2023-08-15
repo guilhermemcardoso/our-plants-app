@@ -59,22 +59,18 @@ const Complaints = ({ navigation }: Props) => {
 
   return (
     <Container>
-      <Header
-        title="Denúncias"
-        RightComponent={
-          <>
-            <Text>Encerradas</Text>
-            <Switch
-              ml="2"
-              size="sm"
-              onTrackColor="primary.pure"
-              value={showClosed}
-              onToggle={onSwitchClosed}
-            />
-          </>
-        }
-      />
+      <Header title="Denúncias" />
       <View style={styles.mainContainer}>
+        <View style={styles.closedContainer}>
+          <Text>Encerradas</Text>
+          <Switch
+            ml="2"
+            size="sm"
+            onTrackColor="primary.pure"
+            value={showClosed}
+            onToggle={onSwitchClosed}
+          />
+        </View>
         <FlatList
           renderItem={onRenderItem}
           data={complaints}

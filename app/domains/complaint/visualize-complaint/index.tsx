@@ -97,39 +97,47 @@ const VisualizeComplaint = ({ route, navigation }: Props) => {
             <Text style={styles.content}>{complaint?.description}</Text>
           </Text>
         </View>
-        <View bgColor="container.dark" style={styles.infoContainer}>
-          <Text style={styles.sectionLabel}>Informações da planta</Text>
-          <Text style={styles.label}>
-            Espécie:{' '}
-            <Text style={styles.content}>
-              {complaint?.plant_id.specie_id.popular_name}
+        {!complaint?.plant_id.deleted ? (
+          <View bgColor="container.dark" style={styles.infoContainer}>
+            <Text style={styles.sectionLabel}>Informações da planta</Text>
+            <Text style={styles.label}>
+              Espécie:{' '}
+              <Text style={styles.content}>
+                {complaint?.plant_id.specie_id.popular_name}
+              </Text>
             </Text>
-          </Text>
-          <Text style={styles.label}>
-            Descrição:{' '}
-            <Text style={styles.content}>
-              {complaint?.plant_id.description}
+            <Text style={styles.label}>
+              Descrição:{' '}
+              <Text style={styles.content}>
+                {complaint?.plant_id.description}
+              </Text>
             </Text>
-          </Text>
-          <Text style={styles.label}>Localização:</Text>
+            <Text style={styles.label}>Localização:</Text>
 
-          <View style={styles.mapContainer}>
-            <MapView
-              latitude={complaint?.plant_id?.location.coordinates[1] || 0}
-              longitude={complaint?.plant_id?.location.coordinates[0] || 0}
-            >
-              <MarkerView
-                plant={complaint?.plant_id}
+            <View style={styles.mapContainer}>
+              <MapView
                 latitude={complaint?.plant_id?.location.coordinates[1] || 0}
                 longitude={complaint?.plant_id?.location.coordinates[0] || 0}
-              />
-            </MapView>
+              >
+                <MarkerView
+                  plant={complaint?.plant_id}
+                  latitude={complaint?.plant_id?.location.coordinates[1] || 0}
+                  longitude={complaint?.plant_id?.location.coordinates[0] || 0}
+                />
+              </MapView>
+            </View>
+            <Slideshow
+              borderRadius={dimens.radius.md}
+              images={complaint?.plant_id?.images || []}
+            />
           </View>
-          <Slideshow
-            borderRadius={dimens.radius.md}
-            images={complaint?.plant_id?.images || []}
-          />
-        </View>
+        ) : (
+          <View bgColor="container.dark" style={styles.infoContainer}>
+            <Text variant="label" style={styles.removedLabel}>
+              A planta foi removida do sistema.
+            </Text>
+          </View>
+        )}
         <Button
           warning
           onPress={onOpenConfirmationModal}

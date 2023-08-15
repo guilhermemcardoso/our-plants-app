@@ -27,6 +27,7 @@ export default function ComplaintItem({ data, onPress }: Props) {
       >
         <HStack>
           <Image
+            bgColor={theme.colors.container.light}
             alt={data.plant_id.specie_id.popular_name}
             style={styles.image}
             source={
@@ -44,7 +45,7 @@ export default function ComplaintItem({ data, onPress }: Props) {
             <Text numberOfLines={1} style={styles.description}>
               {data.description}
             </Text>
-            <Text numberOfLines={1} style={styles.createdAt}>
+            <Text size="helper" numberOfLines={1} style={styles.createdAt}>
               Criado em: {formatDate(data.created_at)}
             </Text>
           </View>

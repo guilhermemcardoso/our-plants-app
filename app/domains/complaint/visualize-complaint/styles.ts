@@ -37,6 +37,10 @@ const styles = StyleSheet.create({
   map: {
     borderRadius: dimens.radius.md,
   },
+  removedLabel: {
+    textAlign: 'center',
+    fontSize: 16,
+  },
 });
 
 export default styles;

@@ -7,6 +7,12 @@ const styles = StyleSheet.create({
     marginTop: Platform.OS === 'ios' ? dimens.margin.md : dimens.margin.lg,
     marginBottom: Platform.OS === 'ios' ? 68 : 88,
   },
+  closedContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'flex-end',
+    paddingBottom: dimens.padding.lg,
+  },
 });
 
 export default styles;

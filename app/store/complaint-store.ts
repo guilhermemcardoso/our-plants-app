@@ -5,9 +5,11 @@ interface ComplaintState {
   complaints: Complaint[];
   complaintsPage: number;
   hasNextComplaints: boolean;
+  selectedComplaint?: Complaint;
   setComplaints: (complaints: Complaint[]) => void;
   setComplaintsPage: (complaintsPage: number) => void;
   setHasNextComplaints: (hasNext: boolean) => void;
+  setSelectedComplaint: (complaint: Complaint) => void;
   myComplaints: Complaint[];
   myComplaintsPage: number;
   hasNextMyComplaints: boolean;
@@ -20,6 +22,7 @@ export const useComplaintStore = create<ComplaintState>((set) => ({
   complaints: [],
   complaintsPage: 1,
   hasNextComplaints: false,
+  selectedComplaint: undefined,
   myComplaints: [],
   myComplaintsPage: 1,
   hasNextMyComplaints: false,
@@ -39,6 +42,12 @@ export const useComplaintStore = create<ComplaintState>((set) => ({
     set((state) => ({
       ...state,
       hasNextComplaints: hasNext,
+    }));
+  },
+  setSelectedComplaint: async (complaint) => {
+    set((state) => ({
+      ...state,
+      selectedComplaint: complaint,
     }));
   },
   setMyComplaints: async (complaints) => {
