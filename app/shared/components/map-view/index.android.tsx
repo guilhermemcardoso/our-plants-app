@@ -37,9 +37,11 @@ export default function MapViewAndroid({
     feature: GeoJSON.Feature<GeoJSON.Point, RegionPayload>
   ) => {
     const { geometry } = feature;
+    const { properties } = feature;
+    const { zoomLevel } = properties;
     const long = geometry.coordinates[0];
     const lat = geometry.coordinates[1];
-    onRegionChange(lat, long);
+    onRegionChange({ latitude: lat, longitude: long, zoomLevel: zoomLevel });
   };
 
   return (

@@ -29,7 +29,7 @@ export default function MapViewIos({
   const onRegionChangeComplete = (region: Region) => {
     const lat = region.latitude;
     const long = region.longitude;
-    onRegionChange(lat, long);
+    onRegionChange({ latitude: lat, longitude: long });
   };
 
   return (

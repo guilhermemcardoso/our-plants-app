@@ -31,6 +31,7 @@ const Map = ({ navigation }: Props) => {
     coordinates: [-22, -48],
     type: 'Point',
   });
+  const [zoom, setZoom] = useState(14);
   const [canRecenter, setCanRecenter] = useState(false);
   const [filterIsOpen, setFilterIsOpen] = useState(false);
   const [detailsIsOpen, setDetailsIsOpen] = useState(false);
@@ -58,7 +59,16 @@ const Map = ({ navigation }: Props) => {
   const onRecenterMap = async () => {
     await getCurrentLocation();
   };
-  const onRegionChange = (latitude: number, longitude: number) => {
+  const onRegionChange = ({
+    latitude,
+    longitude,
+    zoomLevel = 14,
+  }: {
+    latitude: number;
+    longitude: number;
+    zoomLevel?: number;
+  }) => {
+    setZoom(zoomLevel);
     if (!currentLocation) {
       return;
     }
@@ -141,6 +151,7 @@ const Map = ({ navigation }: Props) => {
     <Container>
       <View style={styles.mapContainer}>
         <MapView
+          zoom={zoom}
           style={styles.map}
           latitude={mapLocation.coordinates[0]}
           longitude={mapLocation.coordinates[1]}

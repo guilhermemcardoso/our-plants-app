@@ -11,6 +11,7 @@ export function useGetPlants() {
     status: number | undefined;
   }>({ data: undefined, status: undefined });
   const setPlants = usePlantStore((state) => state.setPlants);
+  const plantList = usePlantStore((state) => state.plants);
 
   const {
     mutate,
@@ -29,12 +30,21 @@ export function useGetPlants() {
     const { response, status } = getPlantsResponse;
     setOnResponse({ status, data: response?.data || [] });
     if (!done.current && response?.data) {
+      done.current = true;
       if (response && response.data && response.data.items) {
         const { items: plants } = response.data;
-        setPlants(plants as Plant[]);
+        const updatedList = [...plantList];
+        plants.forEach((plant: Plant) => {
+          const alreadyExists =
+            updatedList.filter((item) => item._id === plant._id).length > 0;
+          if (!alreadyExists) {
+            updatedList.push(plant);
+          }
+        });
+        setPlants(updatedList);
       }
     }
-  }, [getPlantsResponse, setPlants]);
+  }, [getPlantsResponse, setPlants, plantList]);
 
   const getPlantsNearBy = useCallback(
     async ({
