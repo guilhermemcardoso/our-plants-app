@@ -10,6 +10,19 @@ const styles = StyleSheet.create({
   map: {
     borderRadius: dimens.radius.md,
   },
+  recenterBtn: {
+    position: 'absolute',
+    bottom: 88,
+    right: dimens.margin.lg,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 2,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 9,
+    elevation: 1,
+  },
 });
 
 export default styles;

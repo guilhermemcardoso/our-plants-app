@@ -1,5 +1,5 @@
 import React from 'react';
-import MapView, { MapPressEvent } from 'react-native-maps';
+import MapView, { MapPressEvent, Region } from 'react-native-maps';
 import { styles } from './styles';
 import { MapProps } from './types';
 import { Location } from '~/shared/types';
@@ -11,6 +11,7 @@ export default function MapViewIos({
   longitudeDelta = 0.006,
   latitudeDelta = 0.006,
   onPress,
+  onRegionChange,
   style,
 }: MapProps) {
   const handleOnPress = (event: MapPressEvent) => {
@@ -25,10 +26,17 @@ export default function MapViewIos({
     }
   };
 
+  const onRegionChangeComplete = (region: Region) => {
+    const lat = region.latitude;
+    const long = region.longitude;
+    onRegionChange(lat, long);
+  };
+
   return (
     <MapView
       onPress={handleOnPress}
       zoomEnabled
+      onRegionChangeComplete={onRegionChangeComplete}
       style={[styles.mapContainer, style]}
       region={{
         latitude,

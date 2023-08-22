@@ -1,6 +1,6 @@
 import React from 'react';
-import { Marker } from 'react-native-maps';
 import { Image } from 'react-native';
+import { Marker } from 'react-native-maps';
 import { styles } from './styles';
 import { MarkerProps } from './types';
 import {
@@ -12,6 +12,7 @@ export default function MarkerViewIos({
   plant,
   latitude,
   longitude,
+  isUserLocation,
   onPress,
 }: MarkerProps) {
   const handlePress = () => {
@@ -22,6 +23,7 @@ export default function MarkerViewIos({
 
   return (
     <Marker
+      zIndex={isUserLocation ? 1 : 0}
       identifier={`${latitude}-${longitude}`}
       key={`${latitude}-${longitude}`}
       onPress={handlePress}
@@ -30,10 +32,18 @@ export default function MarkerViewIos({
         longitude: longitude,
       }}
     >
-      <Image
-        source={getPlantIconBySpecie(formatSpecieIconName('default'))}
-        style={styles.markerIcon}
-      />
+      {isUserLocation ? (
+        <Image
+          resizeMode="contain"
+          source={require('~/assets/images/marker.png')}
+          style={styles.userIcon}
+        />
+      ) : (
+        <Image
+          source={getPlantIconBySpecie(formatSpecieIconName('default'))}
+          style={styles.markerIcon}
+        />
+      )}
     </Marker>
   );
 }

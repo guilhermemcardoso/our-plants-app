@@ -6,6 +6,7 @@ import MapboxGL from '@rnmapbox/maps';
 import { MAPBOX_API_KEY } from '@env';
 import { MapProps } from './types';
 import { Location } from '~/shared/types';
+import { RegionPayload } from '@rnmapbox/maps/lib/typescript/components/MapView';
 
 MapboxGL.setWellKnownTileServer(Platform.OS === 'ios' ? 'mapbox' : 'Mapbox');
 MapboxGL.setAccessToken(MAPBOX_API_KEY);
@@ -15,6 +16,7 @@ export default function MapViewAndroid({
   latitude,
   longitude,
   onPress,
+  onRegionChange,
   zoom = 14,
   style,
 }: MapProps) {
@@ -31,13 +33,30 @@ export default function MapViewAndroid({
     }
   };
 
+  const onRegionDidChange = (
+    feature: GeoJSON.Feature<GeoJSON.Point, RegionPayload>
+  ) => {
+    const { geometry } = feature;
+    const long = geometry.coordinates[0];
+    const lat = geometry.coordinates[1];
+    onRegionChange(lat, long);
+  };
+
   return (
     <MapView
+      logoEnabled={false}
       onPress={handleOnPress}
       style={[styles.mapContainer, style]}
       styleURL={StyleURL.Street}
+      // TODO: update to onMapIdle when onRegionDidChange is deprecated
+      // onMapIdle={(state) => console.log('MAP IDLE', state)}
+      onRegionDidChange={onRegionDidChange}
     >
-      <Camera zoomLevel={zoom} centerCoordinate={[longitude, latitude]} />
+      <Camera
+        zoomLevel={zoom}
+        animationDuration={150}
+        centerCoordinate={[longitude, latitude]}
+      />
       {children}
     </MapView>
   );

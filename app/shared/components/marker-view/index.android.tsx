@@ -1,6 +1,6 @@
 import React from 'react';
-import { MarkerView } from '@rnmapbox/maps';
 import { Image, Pressable } from 'react-native';
+import { MarkerView, PointAnnotation } from '@rnmapbox/maps';
 import { styles } from './styles';
 import { MarkerProps } from './types';
 import {
@@ -12,6 +12,7 @@ export default function MarkerViewAndroid({
   plant,
   latitude,
   longitude,
+  isUserLocation,
   onPress,
 }: MarkerProps) {
   const handlePress = () => {
@@ -20,18 +21,33 @@ export default function MarkerViewAndroid({
     }
   };
 
+  if (isUserLocation) {
+    return (
+      <MarkerView
+        key={`${latitude}-${longitude}`}
+        coordinate={[longitude, latitude]}
+      >
+        <Image
+          resizeMode="contain"
+          source={require('~/assets/images/marker.png')}
+          style={styles.userIcon}
+        />
+      </MarkerView>
+    );
+  }
+
   return (
-    <MarkerView
-      key={`${latitude}-${longitude}`}
-      coordinate={[longitude, latitude]}
-      allowOverlap
-    >
-      <Pressable onPress={handlePress}>
+    <Pressable onPress={handlePress}>
+      <PointAnnotation
+        id={`${latitude}-${longitude}`}
+        coordinate={[longitude, latitude]}
+        onSelected={handlePress}
+      >
         <Image
           source={getPlantIconBySpecie(formatSpecieIconName('default'))}
           style={styles.markerIcon}
         />
-      </Pressable>
-    </MarkerView>
+      </PointAnnotation>
+    </Pressable>
   );
 }

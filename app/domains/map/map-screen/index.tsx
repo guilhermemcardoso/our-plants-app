@@ -1,8 +1,14 @@
 import React, { useLayoutEffect, useMemo, useRef, useState } from 'react';
 import MapView from '~/shared/components/map-view';
 import MarkerView from '~/shared/components/marker-view';
-import { Container, Fab, Filter, PlantDetails } from '~/shared/components';
-import { View } from 'native-base';
+import {
+  Container,
+  Fab,
+  Filter,
+  IconButton,
+  PlantDetails,
+} from '~/shared/components';
+import { View, useTheme } from 'native-base';
 import styles from './styles';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { SignedInStackParamList } from '~/navigation/stacks/signed-in';
@@ -12,7 +18,7 @@ import { useGetPlants } from '~/hooks/use-get-plants';
 import { usePlantStore } from '~/store/plant-store';
 import { useSettings } from '~/hooks/use-settings';
 import { useSpecieStore } from '~/store/specie-store';
-import { FilterOption, Plant } from '~/shared/types';
+import { FilterOption, Location, Plant } from '~/shared/types';
 import { useGetFavorites } from '~/hooks/use-get-favorites';
 import { useGetComplaints } from '~/hooks/use-get-complaints';
 import { useGetMyComplaints } from '~/hooks/use-get-my-complaints';
@@ -20,6 +26,12 @@ import { useGetMyComplaints } from '~/hooks/use-get-my-complaints';
 type Props = NativeStackScreenProps<SignedInStackParamList, Routes.MAP>;
 
 const Map = ({ navigation }: Props) => {
+  const theme = useTheme();
+  const [mapLocation, setMapLocation] = useState<Location>({
+    coordinates: [-22, -48],
+    type: 'Point',
+  });
+  const [canRecenter, setCanRecenter] = useState(false);
   const [filterIsOpen, setFilterIsOpen] = useState(false);
   const [detailsIsOpen, setDetailsIsOpen] = useState(false);
   const selectedPlant = usePlantStore((state) => state.selectedPlant);
@@ -42,6 +54,30 @@ const Map = ({ navigation }: Props) => {
   }, [species]);
 
   const firstLoad = useRef(true);
+
+  const onRecenterMap = async () => {
+    await getCurrentLocation();
+  };
+  const onRegionChange = (latitude: number, longitude: number) => {
+    if (!currentLocation) {
+      return;
+    }
+    if (
+      latitude.toFixed(5) !== currentLocation.coordinates[0].toFixed(5) &&
+      longitude.toFixed(5) !== currentLocation.coordinates[1].toFixed(5)
+    ) {
+      setCanRecenter(true);
+    }
+    setMapLocation({ coordinates: [latitude, longitude], type: 'Point' });
+    getPlantsNearBy({
+      locationData: {
+        latitude: latitude,
+        longitude: longitude,
+        distance: distance,
+      },
+      filteredSpecies: filteredSpecies.map((specie) => specie.key),
+    });
+  };
 
   const onCreatePlantPress = () => {
     navigation.navigate(Routes.CREATE_EDIT_PLANT, { plant: undefined });
@@ -88,6 +124,8 @@ const Map = ({ navigation }: Props) => {
 
   useLayoutEffect(() => {
     if (currentLocation) {
+      setMapLocation(currentLocation);
+      setCanRecenter(false);
       getPlantsNearBy({
         locationData: {
           latitude: currentLocation.coordinates[0],
@@ -104,9 +142,16 @@ const Map = ({ navigation }: Props) => {
       <View style={styles.mapContainer}>
         <MapView
           style={styles.map}
-          latitude={currentLocation?.coordinates[0] || -22}
-          longitude={currentLocation?.coordinates[1] || -48}
+          latitude={mapLocation.coordinates[0]}
+          longitude={mapLocation.coordinates[1]}
+          onRegionChange={onRegionChange}
         >
+          <MarkerView
+            key={'user-location'}
+            latitude={currentLocation?.coordinates[0] || -22}
+            longitude={currentLocation?.coordinates[1] || -48}
+            isUserLocation
+          />
           {plants.map((plant) => {
             return (
               <MarkerView
@@ -120,6 +165,15 @@ const Map = ({ navigation }: Props) => {
           })}
         </MapView>
         <Fab onPress={onCreatePlantPress} />
+        {canRecenter && (
+          <IconButton
+            onPress={onRecenterMap}
+            style={styles.recenterBtn}
+            iconName="ios-locate-outline"
+            iconColor={theme.colors.loading.background}
+            backgroundColor={theme.colors.loading.text}
+          />
+        )}
         <Filter
           selectedValues={filteredSpecies}
           onFilter={onFilter}

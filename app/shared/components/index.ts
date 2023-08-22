@@ -18,6 +18,7 @@ export { default as ImagePicker } from './image-picker';
 export { InfoModal } from './modal';
 export { default as Loading } from './loading';
 export { default as LoadMore } from './load-more';
+export { default as OrderBy } from './order-by';
 export { default as PlantDetails } from './plant-details';
 export { default as ProgressBar } from './progress-bar';
 export { default as SearchBar } from './search-bar';
