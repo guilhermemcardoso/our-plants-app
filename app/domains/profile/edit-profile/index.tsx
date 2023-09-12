@@ -121,7 +121,10 @@ const EditProfile = ({ navigation }: Props) => {
       setErrors(errorsByField);
       return;
     }
-    updateUserProfile(userData);
+    updateUserProfile({
+      ...userData,
+      address: { ...userData.address, country: 'Brasil' },
+    });
   };
 
   const handleSelectStateOrProvince = (selected: string) => {
@@ -262,7 +265,13 @@ const EditProfile = ({ navigation }: Props) => {
   }, [isLoading, setLoading]);
 
   useEffect(() => {
-    setUserData(currentUser);
+    if (currentUser) {
+      const updatedUserData: User = {
+        ...currentUser,
+        address: { ...currentUser?.address, country: 'Brasil' },
+      };
+      setUserData(updatedUserData);
+    }
   }, [currentUser]);
 
   useEffect(() => {

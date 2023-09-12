@@ -4,10 +4,13 @@ import {
   createPlant as createPlantMutation,
   editPlant as editPlantMutation,
 } from '~/services/api/resources/plant';
+import { setKey } from '~/services/secure-storage';
 import { usePlantStore } from '~/store/plant-store';
 import { CreateEditPlantData } from '~/domains/plant/types';
 import { uploadImage } from '~/services/cloud-storage';
 import { isValidUrl } from '~/shared/utils/url';
+import { useAuthStore } from '~/store/auth-store';
+import { EncryptedKeys } from '~/services/secure-storage/constants';
 
 export function useCreateEditPlant() {
   const [isUploading, setIsUploading] = useState(false);
@@ -15,6 +18,8 @@ export function useCreateEditPlant() {
     data: any;
     status: number | undefined;
   }>({ data: undefined, status: undefined });
+  const setCurrentUser = useAuthStore((state) => state.setCurrentUser);
+  const currentUser = useAuthStore((state) => state.currentUser);
   const setPlants = usePlantStore((state) => state.setPlants);
   const setSelectedPlant = usePlantStore((state) => state.setSelectedPlant);
   const plants = usePlantStore((state) => state.plants);
@@ -49,11 +54,17 @@ export function useCreateEditPlant() {
     if (!done.current) {
       done.current = true;
       setOnResponse({ status: status || 500, data: response });
-      if (response.data) {
+      if (response.data && currentUser) {
+        const updatedCurrentUser = {
+          ...response.data.plant.created_by,
+          mapped_plants: (currentUser.mapped_plants || 0) + 1,
+        };
+        setCurrentUser(updatedCurrentUser);
+        setKey(EncryptedKeys.CURRENT_USER, JSON.stringify(updatedCurrentUser));
         setPlants([...plants, response.data.plant]);
       }
     }
-  }, [createPlantResponse, setPlants, plants]);
+  }, [createPlantResponse, currentUser, setCurrentUser, setPlants, plants]);
 
   useEffect(() => {
     if (!editPlantResponse) {

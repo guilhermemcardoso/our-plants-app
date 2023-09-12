@@ -8,11 +8,16 @@ import {
 import { usePlantStore } from '~/store/plant-store';
 import { Plant } from '~/shared/types';
 import { updatePlantList } from '~/shared/utils/plant';
+import { useAuthStore } from '~/store/auth-store';
+import { EncryptedKeys } from '~/services/secure-storage/constants';
+import { setKey } from '~/services/secure-storage';
 
 export function useVotePlant() {
   const setSelectedPlant = usePlantStore((state) => state.setSelectedPlant);
   const setPlants = usePlantStore((state) => state.setPlants);
   const plants = usePlantStore((state) => state.plants);
+  const setCurrentUser = useAuthStore((state) => state.setCurrentUser);
+  const currentUser = useAuthStore((state) => state.currentUser);
 
   const { mutate: mutateUpvote, data: upvoteResponse } = useMutation({
     mutationFn: upvoteMutation,
@@ -58,11 +63,26 @@ export function useVotePlant() {
     if (!done.current && response.data) {
       done.current = true;
 
+      if (currentUser) {
+        const updatedCurrentUser = {
+          ...response.data.plant.created_by,
+          mapped_plants: (currentUser.mapped_plants || 0) + 1,
+        };
+        setCurrentUser(updatedCurrentUser);
+        setKey(EncryptedKeys.CURRENT_USER, JSON.stringify(updatedCurrentUser));
+      }
+
       const { plant } = response.data;
 
       updatePlants(plant);
     }
-  }, [upvoteResponse, setSelectedPlant, updatePlants]);
+  }, [
+    upvoteResponse,
+    setCurrentUser,
+    currentUser,
+    setSelectedPlant,
+    updatePlants,
+  ]);
 
   const downvote = useCallback(
     async (plantId: string) => {

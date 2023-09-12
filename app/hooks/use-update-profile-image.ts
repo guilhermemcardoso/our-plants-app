@@ -35,7 +35,6 @@ export function useUpdateProfileImage() {
       const updatedCurrentUser = {
         ...response.data,
         mapped_plants: currentUser.mapped_plants,
-        score: currentUser.score,
       };
       setCurrentUser(updatedCurrentUser);
       setKey(EncryptedKeys.CURRENT_USER, JSON.stringify(updatedCurrentUser));
