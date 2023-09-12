@@ -1,4 +1,4 @@
-import React, { useLayoutEffect, useMemo, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import MapView from '~/shared/components/map-view';
 import MarkerView from '~/shared/components/marker-view';
 import {
@@ -44,7 +44,7 @@ const Map = ({ navigation }: Props) => {
   const { getFavorites } = useGetFavorites();
   const { getComplaints } = useGetComplaints();
   const { getMyComplaints } = useGetMyComplaints();
-  const { getPlantsNearBy } = useGetPlants();
+  const { getPlantsNearBy, isLoading } = useGetPlants();
   const plants = usePlantStore((state) => state.plants);
   const species = useSpecieStore((state) => state.species);
 
@@ -69,24 +69,30 @@ const Map = ({ navigation }: Props) => {
     zoomLevel?: number;
   }) => {
     setZoom(zoomLevel);
+
+    if (zoom !== zoomLevel) {
+      return;
+    }
+
     if (!currentLocation) {
       return;
     }
+
     if (
       latitude.toFixed(5) !== currentLocation.coordinates[0].toFixed(5) &&
       longitude.toFixed(5) !== currentLocation.coordinates[1].toFixed(5)
     ) {
       setCanRecenter(true);
+      setMapLocation({ coordinates: [latitude, longitude], type: 'Point' });
+      getPlantsNearBy({
+        locationData: {
+          latitude: latitude,
+          longitude: longitude,
+          distance: distance,
+        },
+        filteredSpecies: filteredSpecies.map((specie) => specie.key),
+      });
     }
-    setMapLocation({ coordinates: [latitude, longitude], type: 'Point' });
-    getPlantsNearBy({
-      locationData: {
-        latitude: latitude,
-        longitude: longitude,
-        distance: distance,
-      },
-      filteredSpecies: filteredSpecies.map((specie) => specie.key),
-    });
   };
 
   const onCreatePlantPress = () => {
@@ -122,7 +128,7 @@ const Map = ({ navigation }: Props) => {
     }
   };
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     if (firstLoad.current) {
       getCurrentLocation();
       getFavorites();
@@ -132,7 +138,7 @@ const Map = ({ navigation }: Props) => {
     }
   }, [getCurrentLocation, getFavorites, getComplaints, getMyComplaints]);
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     if (currentLocation) {
       setMapLocation(currentLocation);
       setCanRecenter(false);
@@ -192,6 +198,7 @@ const Map = ({ navigation }: Props) => {
           options={filterOptions}
           onOpen={onOpenFilter}
           onClose={onCloseFilter}
+          isLoading={isLoading}
         />
         <PlantDetails
           plant={selectedPlant}

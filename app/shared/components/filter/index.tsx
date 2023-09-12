@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { ListRenderItem, ViewProps } from 'react-native';
+import { ActivityIndicator, ListRenderItem, ViewProps } from 'react-native';
 import { Actionsheet, Fab, FlatList, View, useTheme } from 'native-base';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { Button, SearchBar, Text } from '~/shared/components';
@@ -13,6 +13,7 @@ type Props = ViewProps & {
   show: boolean;
   showSearch?: boolean;
   isFab?: boolean;
+  isLoading: boolean;
   onFilter: (options: FilterOption[]) => void;
   onClose: () => void;
   onOpen: () => void;
@@ -24,6 +25,7 @@ export default function Selector({
   show,
   isFab = true,
   showSearch = true,
+  isLoading,
   onClose,
   onOpen,
   onFilter,
@@ -57,7 +59,7 @@ export default function Selector({
     }
 
     const filter = options.filter((option) =>
-      option.key.toLowerCase().includes(searchText.toLowerCase())
+      option.value.toLowerCase().includes(searchText.toLowerCase())
     );
     setFilteredOptions(filter);
   };
@@ -144,27 +146,35 @@ export default function Selector({
           placement="top-right"
           size="sm"
           icon={
-            <Icon
-              name={'ios-filter'}
-              size={20}
-              color={theme.colors.loading.text}
-            />
+            isLoading ? (
+              <ActivityIndicator size={20} color={theme.colors.loading.text} />
+            ) : (
+              <Icon
+                name={'ios-filter'}
+                size={20}
+                color={theme.colors.loading.text}
+              />
+            )
           }
         />
       ) : (
         <Button
           style={styles.filterBtn}
-          onPress={onOpen}
+          onPress={isLoading ? undefined : onOpen}
           bgColor={theme.colors.primary.pure}
           shadow={2}
           borderRadius={8}
           size="sm"
         >
-          <Icon
-            name={'ios-filter'}
-            size={16}
-            color={theme.colors.loading.text}
-          />
+          {isLoading ? (
+            <ActivityIndicator size={16} color={theme.colors.loading.text} />
+          ) : (
+            <Icon
+              name={'ios-filter'}
+              size={16}
+              color={theme.colors.loading.text}
+            />
+          )}
         </Button>
       )}
 

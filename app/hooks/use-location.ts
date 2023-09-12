@@ -32,7 +32,7 @@ export function useLocation() {
           resolve(null);
         },
         {
-          enableHighAccuracy: false,
+          enableHighAccuracy: true,
           timeout: 15000,
           maximumAge: 10000,
         }

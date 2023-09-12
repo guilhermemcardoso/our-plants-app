@@ -27,7 +27,6 @@ export function useGetSpecies() {
     setOnResponse({ status, data: response?.data || [] });
     if (response && response.data && response.data.items) {
       const { items: species } = response.data;
-
       setSpecies(species);
     }
   }, [getSpeciesResponse, setSpecies]);

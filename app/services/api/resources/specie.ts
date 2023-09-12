@@ -10,7 +10,7 @@ export async function getSpecies({
 }) {
   return await Api({
     method: 'get',
-    url: `specie/list?page=${page}&items=${items}`,
+    url: `specie/list?page=${page}&perPage=${items}`,
     hasToken: true,
   });
 }
