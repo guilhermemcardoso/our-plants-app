@@ -29,6 +29,7 @@ import { useLocation } from '~/hooks/use-location';
 import { useCreateEditPlant } from '~/hooks/use-create-edit-plant';
 import { useLoading } from '~/hooks/use-loading';
 import { Image } from '~/types/image';
+import { useDebouncedCallback } from 'use-debounce';
 
 type Props = NativeStackScreenProps<
   SignedInStackParamList,
@@ -51,6 +52,7 @@ const CreateEditPlant = ({ route, navigation }: Props) => {
   const [canAddImages, setcanAddImages] = useState(false);
   const [selectedSpecie, setSelectedSpecie] = useState('');
   const [selectedImages, setSelectedImages] = useState<Image[]>([]);
+  const [zoom, setZoom] = useState(14);
   const [plantData, setPlantData] = useState<CreateEditPlantData>({
     description: '',
     latitude: String(currentLocation?.coordinates[0] || 0),
@@ -226,6 +228,26 @@ const CreateEditPlant = ({ route, navigation }: Props) => {
     setShowSelector(true);
   };
 
+  const onRegionChange = useDebouncedCallback(
+    ({
+      latitude,
+      longitude,
+      zoomLevel = 14,
+    }: {
+      latitude: number;
+      longitude: number;
+      zoomLevel?: number;
+    }) => {
+      setZoom(zoomLevel);
+      setPlantData({
+        ...plantData,
+        latitude: String(latitude),
+        longitude: String(longitude),
+      });
+    },
+    1000
+  );
+
   useEffect(() => {
     if (plant) {
       setSelectedSpecie(plant.specie_id.popular_name);
@@ -288,17 +310,20 @@ const CreateEditPlant = ({ route, navigation }: Props) => {
           </Text>
           <View style={styles.mapContainer}>
             <MapView
+              onRegionChange={onRegionChange}
               onPress={handleChangePlantLocation}
               style={styles.map}
               latitude={Number(plantData.latitude)}
               longitude={Number(plantData.longitude)}
               latitudeDelta={0.006}
               longitudeDelta={0.006}
+              zoom={zoom}
             >
               <MarkerView
                 latitude={Number(plantData.latitude)}
                 longitude={Number(plantData.longitude)}
                 key="id-1"
+                isUserLocation
               />
             </MapView>
           </View>
