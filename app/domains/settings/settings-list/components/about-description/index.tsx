@@ -2,7 +2,7 @@ import React from 'react';
 import { View } from 'native-base';
 import Text from '~/shared/components/text';
 import styles from './styles';
-
+import { APP_VERSION } from '@env';
 const AboutDescription = () => {
   return (
     <View>
@@ -14,7 +14,7 @@ const AboutDescription = () => {
         O aplicativo tem como objetivo principal o mapeamento de árvores
         frutíferas e plantas alimentícias não convencionais.
       </Text>
-      <Text style={styles.version}>Versão 1.0.0</Text>
+      <Text style={styles.version}>Versão {APP_VERSION}</Text>
     </View>
   );
 };
