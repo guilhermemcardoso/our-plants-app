@@ -3,10 +3,7 @@ import { Image } from 'react-native';
 import { Marker } from 'react-native-maps';
 import { styles } from './styles';
 import { MarkerProps } from './types';
-import {
-  formatSpecieIconName,
-  getPlantIconBySpecie,
-} from '~/shared/utils/icon';
+import { getPlantIconBySpecie } from '~/shared/utils/icon';
 
 export default function MarkerViewIos({
   plant,
@@ -40,7 +37,9 @@ export default function MarkerViewIos({
         />
       ) : (
         <Image
-          source={getPlantIconBySpecie(formatSpecieIconName('default'))}
+          resizeMode="contain"
+          fadeDuration={0}
+          source={getPlantIconBySpecie(plant?.specie_id._id.toString() || '')}
           style={styles.markerIcon}
         />
       )}

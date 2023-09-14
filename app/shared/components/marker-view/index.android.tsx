@@ -3,10 +3,7 @@ import { Image, Pressable } from 'react-native';
 import { MarkerView, PointAnnotation } from '@rnmapbox/maps';
 import { styles } from './styles';
 import { MarkerProps } from './types';
-import {
-  formatSpecieIconName,
-  getPlantIconBySpecie,
-} from '~/shared/utils/icon';
+import { getPlantIconBySpecie } from '~/shared/utils/icon';
 
 export default function MarkerViewAndroid({
   plant,
@@ -44,8 +41,9 @@ export default function MarkerViewAndroid({
     >
       <Pressable onPress={handlePress}>
         <Image
+          resizeMode="contain"
           fadeDuration={0}
-          source={getPlantIconBySpecie(formatSpecieIconName('default'))}
+          source={getPlantIconBySpecie(plant?.specie_id._id.toString() || '')}
           style={styles.markerIcon}
         />
       </Pressable>
