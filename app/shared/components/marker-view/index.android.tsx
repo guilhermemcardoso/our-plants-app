@@ -37,17 +37,18 @@ export default function MarkerViewAndroid({
   }
 
   return (
-    <Pressable onPress={handlePress}>
-      <PointAnnotation
-        id={`${latitude}-${longitude}`}
-        coordinate={[longitude, latitude]}
-        onSelected={handlePress}
-      >
+    <PointAnnotation
+      id={`${latitude}-${longitude}`}
+      coordinate={[longitude, latitude]}
+      onSelected={handlePress}
+    >
+      <Pressable onPress={handlePress}>
         <Image
+          fadeDuration={0}
           source={getPlantIconBySpecie(formatSpecieIconName('default'))}
           style={styles.markerIcon}
         />
-      </PointAnnotation>
-    </Pressable>
+      </Pressable>
+    </PointAnnotation>
   );
 }

@@ -22,6 +22,7 @@ import { FilterOption, Location, Plant } from '~/shared/types';
 import { useGetFavorites } from '~/hooks/use-get-favorites';
 import { useGetComplaints } from '~/hooks/use-get-complaints';
 import { useGetMyComplaints } from '~/hooks/use-get-my-complaints';
+import { useDebouncedCallback } from 'use-debounce';
 
 type Props = NativeStackScreenProps<SignedInStackParamList, Routes.MAP>;
 
@@ -59,41 +60,45 @@ const Map = ({ navigation }: Props) => {
   const onRecenterMap = async () => {
     await getCurrentLocation();
   };
-  const onRegionChange = ({
-    latitude,
-    longitude,
-    zoomLevel = 14,
-  }: {
-    latitude: number;
-    longitude: number;
-    zoomLevel?: number;
-  }) => {
-    setZoom(zoomLevel);
 
-    if (zoom !== zoomLevel) {
-      return;
-    }
+  const onRegionChange = useDebouncedCallback(
+    ({
+      latitude,
+      longitude,
+      zoomLevel = 14,
+    }: {
+      latitude: number;
+      longitude: number;
+      zoomLevel?: number;
+    }) => {
+      setZoom(zoomLevel);
 
-    if (!currentLocation) {
-      return;
-    }
+      if (zoom !== zoomLevel) {
+        return;
+      }
 
-    if (
-      latitude.toFixed(5) !== currentLocation.coordinates[0].toFixed(5) &&
-      longitude.toFixed(5) !== currentLocation.coordinates[1].toFixed(5)
-    ) {
-      setCanRecenter(true);
-      setMapLocation({ coordinates: [latitude, longitude], type: 'Point' });
-      getPlantsNearBy({
-        locationData: {
-          latitude: latitude,
-          longitude: longitude,
-          distance: distance,
-        },
-        filteredSpecies: filteredSpecies.map((specie) => specie.key),
-      });
-    }
-  };
+      if (!currentLocation) {
+        return;
+      }
+
+      if (
+        latitude.toFixed(5) !== currentLocation.coordinates[0].toFixed(5) &&
+        longitude.toFixed(5) !== currentLocation.coordinates[1].toFixed(5)
+      ) {
+        setCanRecenter(true);
+        setMapLocation({ coordinates: [latitude, longitude], type: 'Point' });
+        getPlantsNearBy({
+          locationData: {
+            latitude: latitude,
+            longitude: longitude,
+            distance: distance,
+          },
+          filteredSpecies: filteredSpecies.map((specie) => specie.key),
+        });
+      }
+    },
+    1000
+  );
 
   const onCreatePlantPress = () => {
     navigation.navigate(Routes.CREATE_EDIT_PLANT, { plant: undefined });
