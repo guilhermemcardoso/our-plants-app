@@ -150,6 +150,20 @@ const Map = ({ navigation }: Props) => {
     }
   };
 
+  const renderPlants = () => {
+    return plants.map((plant) => {
+      return (
+        <MarkerView
+          key={plant._id}
+          latitude={Number(plant.location.coordinates[1])}
+          longitude={Number(plant.location.coordinates[0])}
+          plant={plant}
+          onPress={showPlantDetails}
+        />
+      );
+    });
+  };
+
   useEffect(() => {
     if (firstLoad.current) {
       getCurrentLocation();
@@ -187,23 +201,13 @@ const Map = ({ navigation }: Props) => {
           longitude={mapCoords.location.coordinates[1]}
           onRegionChange={onRegionChange}
         >
+          {renderPlants()}
           <MarkerView
             key={'user-location'}
             latitude={currentLocation?.coordinates[0] || -22}
             longitude={currentLocation?.coordinates[1] || -48}
             isUserLocation
           />
-          {plants.map((plant) => {
-            return (
-              <MarkerView
-                key={plant._id}
-                latitude={Number(plant.location.coordinates[1])}
-                longitude={Number(plant.location.coordinates[0])}
-                plant={plant}
-                onPress={showPlantDetails}
-              />
-            );
-          })}
         </MapView>
         <Fab onPress={onCreatePlantPress} />
         {canRecenter && (
