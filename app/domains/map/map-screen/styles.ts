@@ -23,6 +23,22 @@ const styles = StyleSheet.create({
     shadowRadius: 9,
     elevation: 1,
   },
+  reloadBtn: {
+    height: 40,
+    borderRadius: 20,
+    padding: dimens.padding.lg,
+    position: 'absolute',
+    bottom: dimens.margin.lg,
+    left: dimens.margin.lg,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 2,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 9,
+    elevation: 1,
+  },
 });
 
 export default styles;

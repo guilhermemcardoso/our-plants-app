@@ -4,6 +4,7 @@ import { MarkerView, PointAnnotation } from '@rnmapbox/maps';
 import { styles } from './styles';
 import { MarkerProps } from './types';
 import { getPlantIconBySpecie } from '~/shared/utils/icon';
+import { View } from 'native-base';
 
 export default function MarkerViewAndroid({
   plant,
@@ -24,11 +25,13 @@ export default function MarkerViewAndroid({
         key={`${latitude}-${longitude}`}
         coordinate={[longitude, latitude]}
       >
-        <Image
-          resizeMode="contain"
-          source={require('~/assets/images/marker.png')}
-          style={styles.userIcon}
-        />
+        <View style={styles.userMarkerContainer}>
+          <Image
+            resizeMode="contain"
+            source={require('~/assets/images/marker.png')}
+            style={styles.userIcon}
+          />
+        </View>
       </MarkerView>
     );
   }

@@ -17,19 +17,23 @@ export default function MapViewIos({
   const handleOnPress = (event: MapPressEvent) => {
     if (event.nativeEvent.coordinate && onPress) {
       onPress({
-        coordinates: [
-          event.nativeEvent.coordinate.latitude,
-          event.nativeEvent.coordinate.longitude,
-        ],
-        type: 'Point',
-      } as Location);
+        location: {
+          coordinates: [
+            event.nativeEvent.coordinate.latitude,
+            event.nativeEvent.coordinate.longitude,
+          ],
+          type: 'Point',
+        } as Location,
+      });
     }
   };
 
   const onRegionChangeComplete = (region: Region) => {
     const lat = region.latitude;
     const long = region.longitude;
-    onRegionChange({ latitude: lat, longitude: long });
+    if (onRegionChange) {
+      onRegionChange({ latitude: lat, longitude: long });
+    }
   };
 
   return (

@@ -1,7 +1,9 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import MapView from '~/shared/components/map-view';
 import MarkerView from '~/shared/components/marker-view';
+import Icon from 'react-native-vector-icons/Ionicons';
 import {
+  Button,
   Container,
   Fab,
   Filter,
@@ -33,6 +35,17 @@ const Map = ({ navigation }: Props) => {
     type: 'Point',
   });
   const [zoom, setZoom] = useState(14);
+  const [mapCoords, setMapCoords] = useState<{
+    location: Location;
+    zoom: number;
+  }>({
+    location: {
+      coordinates: [-22, -48],
+      type: 'Point',
+    },
+    zoom: 14,
+  });
+  const [showReloadButton, setShowReloadButton] = useState(false);
   const [canRecenter, setCanRecenter] = useState(false);
   const [filterIsOpen, setFilterIsOpen] = useState(false);
   const [detailsIsOpen, setDetailsIsOpen] = useState(false);
@@ -57,48 +70,52 @@ const Map = ({ navigation }: Props) => {
 
   const firstLoad = useRef(true);
 
+  const loadPlants = useDebouncedCallback(
+    ({
+      latitude,
+      longitude,
+      maxDistance,
+      filter,
+    }: {
+      latitude: number;
+      longitude: number;
+      maxDistance: number;
+      filter: string[];
+    }) =>
+      getPlantsNearBy({
+        locationData: {
+          latitude: latitude,
+          longitude: longitude,
+          distance: maxDistance,
+        },
+        filteredSpecies: filter,
+      }),
+    1000
+  );
+
   const onRecenterMap = async () => {
     await getCurrentLocation();
   };
 
-  const onRegionChange = useDebouncedCallback(
-    ({
-      latitude,
-      longitude,
-      zoomLevel = 14,
-    }: {
-      latitude: number;
-      longitude: number;
-      zoomLevel?: number;
-    }) => {
-      setZoom(zoomLevel);
+  const onReloadMap = () => {
+    setMapCoords({ location: mapLocation, zoom: zoom });
+    setShowReloadButton(false);
+  };
 
-      if (zoom !== zoomLevel) {
-        return;
-      }
-
-      if (!currentLocation) {
-        return;
-      }
-
-      if (
-        latitude.toFixed(5) !== currentLocation.coordinates[0].toFixed(5) &&
-        longitude.toFixed(5) !== currentLocation.coordinates[1].toFixed(5)
-      ) {
-        setCanRecenter(true);
-        setMapLocation({ coordinates: [latitude, longitude], type: 'Point' });
-        getPlantsNearBy({
-          locationData: {
-            latitude: latitude,
-            longitude: longitude,
-            distance: distance,
-          },
-          filteredSpecies: filteredSpecies.map((specie) => specie.key),
-        });
-      }
-    },
-    1000
-  );
+  const onRegionChange = ({
+    latitude,
+    longitude,
+    zoomLevel = 14,
+  }: {
+    latitude: number;
+    longitude: number;
+    zoomLevel?: number;
+  }) => {
+    setShowReloadButton(true);
+    setCanRecenter(true);
+    setZoom(zoomLevel);
+    setMapLocation({ coordinates: [latitude, longitude], type: 'Point' });
+  };
 
   const onCreatePlantPress = () => {
     navigation.navigate(Routes.CREATE_EDIT_PLANT, { plant: undefined });
@@ -145,27 +162,29 @@ const Map = ({ navigation }: Props) => {
 
   useEffect(() => {
     if (currentLocation) {
+      setMapCoords({ location: currentLocation, zoom: 14 });
       setMapLocation(currentLocation);
       setCanRecenter(false);
-      getPlantsNearBy({
-        locationData: {
-          latitude: currentLocation.coordinates[0],
-          longitude: currentLocation.coordinates[1],
-          distance: distance,
-        },
-        filteredSpecies: filteredSpecies.map((specie) => specie.key),
-      });
     }
-  }, [currentLocation, distance, filteredSpecies, getPlantsNearBy]);
+  }, [currentLocation]);
+
+  useEffect(() => {
+    loadPlants({
+      latitude: mapCoords.location.coordinates[0],
+      longitude: mapCoords.location.coordinates[1],
+      maxDistance: distance,
+      filter: filteredSpecies.map((specie) => specie.key),
+    });
+  }, [mapCoords, distance, filteredSpecies, loadPlants]);
 
   return (
     <Container>
       <View style={styles.mapContainer}>
         <MapView
-          zoom={zoom}
+          zoom={mapCoords.zoom}
           style={styles.map}
-          latitude={mapLocation.coordinates[0]}
-          longitude={mapLocation.coordinates[1]}
+          latitude={mapCoords.location.coordinates[0]}
+          longitude={mapCoords.location.coordinates[1]}
           onRegionChange={onRegionChange}
         >
           <MarkerView
@@ -191,9 +210,23 @@ const Map = ({ navigation }: Props) => {
           <IconButton
             onPress={onRecenterMap}
             style={styles.recenterBtn}
-            iconName="ios-locate-outline"
+            iconName="ios-navigate"
             iconColor={theme.colors.loading.background}
             backgroundColor={theme.colors.loading.text}
+          />
+        )}
+        {showReloadButton && (
+          <Button
+            startIcon={
+              <Icon
+                name={'ios-download-outline'}
+                size={18}
+                color={theme.colors.button.text.primary}
+              />
+            }
+            onPress={onReloadMap}
+            style={styles.reloadBtn}
+            title="Recarregar plantas"
           />
         )}
         <Filter

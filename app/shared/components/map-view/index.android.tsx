@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Camera, MapView, StyleURL } from '@rnmapbox/maps';
 import { styles } from './styles';
 import { Platform } from 'react-native';
@@ -20,6 +20,8 @@ export default function MapViewAndroid({
   zoom = 14,
   style,
 }: MapProps) {
+  const [updatedZoom, setUpdatedZoom] = useState(14);
+
   const handleOnPress = (feature: any) => {
     if (feature.geometry.coordinates && feature.geometry.type && onPress) {
       const location: Location = {
@@ -29,7 +31,7 @@ export default function MapViewAndroid({
         ],
         type: 'Point',
       };
-      onPress(location);
+      onPress({ location: location, zoom: updatedZoom });
     }
   };
 
@@ -41,7 +43,10 @@ export default function MapViewAndroid({
     const { zoomLevel } = properties;
     const long = geometry.coordinates[0];
     const lat = geometry.coordinates[1];
-    onRegionChange({ latitude: lat, longitude: long, zoomLevel: zoomLevel });
+    if (onRegionChange) {
+      onRegionChange({ latitude: lat, longitude: long, zoomLevel: zoomLevel });
+    }
+    setUpdatedZoom(zoomLevel);
   };
 
   return (

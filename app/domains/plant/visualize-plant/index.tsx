@@ -168,6 +168,7 @@ const VisualizePlant = ({ navigation }: Props) => {
               longitude={selectedPlant?.location.coordinates[0] || 0}
             >
               <MarkerView
+                isUserLocation
                 plant={selectedPlant}
                 latitude={selectedPlant?.location.coordinates[1] || 0}
                 longitude={selectedPlant?.location.coordinates[0] || 0}

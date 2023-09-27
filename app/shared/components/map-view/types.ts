@@ -9,7 +9,7 @@ export interface MapProps {
   longitudeDelta?: number;
   zoom?: number;
   style?: ViewStyle;
-  onRegionChange: ({
+  onRegionChange?: ({
     latitude,
     longitude,
     zoomLevel = 14,
@@ -18,5 +18,5 @@ export interface MapProps {
     longitude: number;
     zoomLevel?: number;
   }) => void;
-  onPress?: (location: Location) => void;
+  onPress?: ({ location, zoom }: { location: Location; zoom?: number }) => void;
 }
