@@ -2,7 +2,10 @@ import { StyleSheet } from 'react-native';
 import { dimens } from '~/theme/dimens';
 
 const styles = StyleSheet.create({
-  mainContainer: { padding: 0 },
+  mainContainer: {
+    paddingVertical: dimens.padding.lg,
+    paddingHorizontal: 0,
+  },
   headerContainer: {
     paddingHorizontal: dimens.padding.lg,
   },
