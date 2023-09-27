@@ -16,7 +16,7 @@ export const useSettingsStore = create<SettingsState>((set) => ({
   theme: 'dark',
   notificationEnabled: true,
   soundEnabled: true,
-  distance: 100,
+  distance: 2000,
   setTheme: async (theme) => {
     set((state) => ({
       ...state,
