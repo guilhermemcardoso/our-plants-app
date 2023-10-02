@@ -2,7 +2,7 @@ import { ZodError, z } from 'zod';
 import { CreateEditPlantData } from './types';
 
 export const CreateEditPlantSchema = z.object({
-  description: z.string().min(3, 'A descrição não pode estar em branco'),
+  description: z.string().optional(),
   specie_id: z
     .string()
     .nonempty('Selecione ou cadastre uma espécie para a planta'),

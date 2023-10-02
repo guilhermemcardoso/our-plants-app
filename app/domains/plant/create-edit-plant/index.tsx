@@ -263,13 +263,11 @@ const CreateEditPlant = ({ route, navigation }: Props) => {
       setAlertMessage('Planta cadastrada com sucesso');
       setAlertType('success');
       setShowAlert(true);
-      handleBackPress();
     }
     if (onCreateEditPlantResponse.status === 200) {
       setAlertMessage('Planta editada com sucesso');
       setAlertType('success');
       setShowAlert(true);
-      handleBackPress();
     }
     if ([400, 500, 404].includes(onCreateEditPlantResponse.status || 0)) {
       setAlertMessage('Algo deu errado. Tente novamente mais tarde');
@@ -351,6 +349,7 @@ const CreateEditPlant = ({ route, navigation }: Props) => {
           />
         </View>
         <Button
+          isLoading={isCreateEditPlantLoading}
           onPress={onSubmitPress}
           style={styles.createEditButton}
           title={plant ? 'EDITAR PLANTA' : 'CADASTRAR PLANTA'}

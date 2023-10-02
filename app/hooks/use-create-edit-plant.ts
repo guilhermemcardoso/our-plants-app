@@ -1,5 +1,5 @@
 import { useMutation } from '@tanstack/react-query';
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import {
   createPlant as createPlantMutation,
   editPlant as editPlantMutation,
@@ -40,10 +40,6 @@ export function useCreateEditPlant() {
   } = useMutation({
     mutationFn: editPlantMutation,
   });
-
-  const isLoading = useMemo(() => {
-    return isCreateLoading || isEditLoading || isUploading;
-  }, [isCreateLoading, isEditLoading, isUploading]);
 
   useEffect(() => {
     if (!createPlantResponse) {
@@ -135,5 +131,10 @@ export function useCreateEditPlant() {
     }
   };
 
-  return { isLoading, createPlant, editPlant, onResponse };
+  return {
+    isLoading: isCreateLoading || isEditLoading || isUploading,
+    createPlant,
+    editPlant,
+    onResponse,
+  };
 }

@@ -36,7 +36,7 @@ export function useGetComplaints() {
     }
 
     const { response, status } = getComplaintsResponse;
-    setOnResponse({ status, data: response?.data.items || [] });
+    setOnResponse({ status, data: response?.data?.items || [] });
 
     if (!done.current && response.data) {
       done.current = true;
