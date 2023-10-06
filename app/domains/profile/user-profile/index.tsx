@@ -18,6 +18,7 @@ import { useLoading } from '~/hooks/use-loading';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { SignedInStackParamList } from '~/navigation/stacks/signed-in';
 import { Routes } from '~/navigation/routes';
+import { useAlert } from '~/hooks/use-alert';
 
 type Props = NativeStackScreenProps<
   SignedInStackParamList,
@@ -28,13 +29,18 @@ const UserProfile = ({ navigation }: Props) => {
   const theme = useTheme();
   const currentUser = useAuthStore((state) => state.currentUser);
   const { setLoading } = useLoading();
-  const { getCurrentUser, isLoading } = useGetCurrentUser();
+  const { showAlert } = useAlert();
+  const { getCurrentUser, isLoading, onResponse } = useGetCurrentUser();
 
   const handleEditProfile = () => {
     navigation.navigate(Routes.EDIT_PROFILE);
   };
   const handleGetCurrentUser = () => {
     getCurrentUser();
+  };
+
+  const checkField = (field: string | undefined) => {
+    return !!(field && field.length > 0);
   };
 
   useEffect(() => {
@@ -54,9 +60,21 @@ const UserProfile = ({ navigation }: Props) => {
     );
   }, [currentUser]);
 
-  const checkField = (field: string | undefined) => {
-    return !!(field && field.length > 0);
-  };
+  useEffect(() => {
+    if (onResponse.status === 503) {
+      showAlert({
+        alertType: 'error',
+        title: 'Serviço indisponível, verifique sua conexão de internet.',
+      });
+    }
+
+    if ([400, 500].includes(onResponse.status || 0)) {
+      showAlert({
+        alertType: 'error',
+        title: 'Algo deu errado.',
+      });
+    }
+  }, [onResponse, showAlert]);
 
   const renderAddress = () => {
     return (

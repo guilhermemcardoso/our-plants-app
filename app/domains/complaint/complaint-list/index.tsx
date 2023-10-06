@@ -11,6 +11,7 @@ import { useLoading } from '~/hooks/use-loading';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { SignedInStackParamList } from '~/navigation/stacks/signed-in';
 import { Routes } from '~/navigation/routes';
+import { useAlert } from '~/hooks/use-alert';
 
 type Props = NativeStackScreenProps<SignedInStackParamList, Routes.COMPLAINTS>;
 
@@ -23,10 +24,12 @@ const Complaints = ({ navigation }: Props) => {
   const { setLoading } = useLoading();
 
   const {
+    onResponse,
     isLoading: isGetComplaintsLoading,
     getComplaints,
     loadMoreComplaints,
   } = useGetComplaints();
+  const { showAlert } = useAlert();
 
   const filteredComplaints = useMemo(() => {
     if (showClosed) {
@@ -53,10 +56,6 @@ const Complaints = ({ navigation }: Props) => {
     loadMoreComplaints(showClosed);
   };
 
-  useEffect(() => {
-    setLoading(isLoading);
-  }, [isLoading, setLoading]);
-
   const onRenderItem: ListRenderItem<Complaint> = ({
     item,
   }: {
@@ -64,6 +63,26 @@ const Complaints = ({ navigation }: Props) => {
   }) => {
     return <ComplaintItem onPress={onPressItem} data={item} />;
   };
+
+  useEffect(() => {
+    setLoading(isLoading);
+  }, [isLoading, setLoading]);
+
+  useEffect(() => {
+    if (onResponse.status === 503) {
+      showAlert({
+        alertType: 'error',
+        title: 'Serviço indisponível, verifique sua conexão de internet.',
+      });
+    }
+
+    if ([400, 500].includes(onResponse.status || 0)) {
+      showAlert({
+        alertType: 'error',
+        title: 'Algo deu errado.',
+      });
+    }
+  }, [onResponse, showAlert]);
 
   return (
     <Container>

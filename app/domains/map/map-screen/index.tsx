@@ -25,6 +25,7 @@ import { useGetFavorites } from '~/hooks/use-get-favorites';
 import { useGetComplaints } from '~/hooks/use-get-complaints';
 import { useGetMyComplaints } from '~/hooks/use-get-my-complaints';
 import { useDebouncedCallback } from 'use-debounce';
+import { useAlert } from '~/hooks/use-alert';
 
 type Props = NativeStackScreenProps<SignedInStackParamList, Routes.MAP>;
 
@@ -58,7 +59,8 @@ const Map = ({ navigation }: Props) => {
   const { getFavorites } = useGetFavorites();
   const { getComplaints } = useGetComplaints();
   const { getMyComplaints } = useGetMyComplaints();
-  const { getPlantsNearBy, isLoading } = useGetPlants();
+  const { getPlantsNearBy, isLoading, onResponse } = useGetPlants();
+  const { showAlert } = useAlert();
   const plants = usePlantStore((state) => state.plants);
   const species = useSpecieStore((state) => state.species);
 
@@ -190,6 +192,22 @@ const Map = ({ navigation }: Props) => {
       filter: filteredSpecies.map((specie) => specie.key),
     });
   }, [mapCoords, distance, filteredSpecies, loadPlants]);
+
+  useEffect(() => {
+    if (onResponse.status === 503) {
+      showAlert({
+        alertType: 'error',
+        title: 'Serviço indisponível, verifique sua conexão de internet.',
+      });
+    }
+
+    if ([400, 500].includes(onResponse.status || 0)) {
+      showAlert({
+        alertType: 'error',
+        title: 'Algo deu errado.',
+      });
+    }
+  }, [onResponse, showAlert]);
 
   return (
     <Container>

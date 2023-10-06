@@ -1,5 +1,5 @@
 import axios, { AxiosError, RawAxiosRequestHeaders } from 'axios';
-
+import NetInfo from '@react-native-community/netinfo';
 import { ApiType } from './types';
 import { getKey, setKey } from '../secure-storage';
 
@@ -67,6 +67,12 @@ instance.interceptors.response.use(
 
 export async function Api({ method, url, data, hasToken, headers }: ApiType) {
   const requestHeaders: RawAxiosRequestHeaders = headers || {};
+
+  const { isConnected } = await NetInfo.fetch();
+
+  if (!isConnected) {
+    return { response: 'No internet connection', status: 503 };
+  }
 
   if (hasToken) {
     const accessToken = (await getKey(EncryptedKeys.ACCESS_TOKEN)) || '';

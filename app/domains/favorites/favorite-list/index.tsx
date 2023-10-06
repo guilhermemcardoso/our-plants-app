@@ -15,6 +15,7 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { SignedInStackParamList } from '~/navigation/stacks/signed-in';
 import { Routes } from '~/navigation/routes';
 import { usePlantStore } from '~/store/plant-store';
+import { useAlert } from '~/hooks/use-alert';
 
 type Props = NativeStackScreenProps<SignedInStackParamList, Routes.FAVORITES>;
 
@@ -23,9 +24,17 @@ const Favorites = ({ navigation }: Props) => {
   const { setLoading } = useLoading();
   const { currentLocation } = useLocation();
   const setSelectedPlant = usePlantStore((state) => state.setSelectedPlant);
-  const { isLoading: isGetFavoritesLoading, getFavorites } = useGetFavorites();
-  const { isLoading: isRemoveFromFavoritesLoading, removeFromFavorites } =
-    useRemoveFromFavorites();
+  const {
+    isLoading: isGetFavoritesLoading,
+    getFavorites,
+    onResponse: onGetFavoritesResponse,
+  } = useGetFavorites();
+  const {
+    isLoading: isRemoveFromFavoritesLoading,
+    removeFromFavorites,
+    onResponse: onRemoveFromFavoritesResponse,
+  } = useRemoveFromFavorites();
+  const { showAlert } = useAlert();
 
   const isLoading = useMemo(() => {
     return isGetFavoritesLoading || isRemoveFromFavoritesLoading;
@@ -44,10 +53,6 @@ const Favorites = ({ navigation }: Props) => {
     removeFromFavorites(item._id);
   };
 
-  useEffect(() => {
-    setLoading(isLoading);
-  }, [isLoading, setLoading]);
-
   const onRenderItem: ListRenderItem<Plant> = ({ item }: { item: Plant }) => {
     const distance = currentLocation
       ? calcDistance(currentLocation, item.location)
@@ -62,6 +67,42 @@ const Favorites = ({ navigation }: Props) => {
       />
     );
   };
+
+  useEffect(() => {
+    setLoading(isLoading);
+  }, [isLoading, setLoading]);
+
+  useEffect(() => {
+    if (onGetFavoritesResponse.status === 503) {
+      showAlert({
+        alertType: 'error',
+        title: 'Serviço indisponível, verifique sua conexão de internet.',
+      });
+    }
+
+    if ([400, 500].includes(onGetFavoritesResponse.status || 0)) {
+      showAlert({
+        alertType: 'error',
+        title: 'Algo deu errado.',
+      });
+    }
+  }, [onGetFavoritesResponse, showAlert]);
+
+  useEffect(() => {
+    if (onRemoveFromFavoritesResponse.status === 503) {
+      showAlert({
+        alertType: 'error',
+        title: 'Serviço indisponível, verifique sua conexão de internet.',
+      });
+    }
+
+    if ([400, 500].includes(onRemoveFromFavoritesResponse.status || 0)) {
+      showAlert({
+        alertType: 'error',
+        title: 'Algo deu errado.',
+      });
+    }
+  }, [onRemoveFromFavoritesResponse, showAlert]);
 
   return (
     <Container>

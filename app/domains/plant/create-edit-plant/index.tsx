@@ -267,6 +267,14 @@ const CreateEditPlant = ({ route, navigation }: Props) => {
       });
       handleBackPress();
     }
+
+    if (onCreateEditPlantResponse.status === 503) {
+      showAlert({
+        alertType: 'error',
+        title: 'Serviço indisponível, verifique sua conexão de internet.',
+      });
+    }
+
     if ([400, 500, 404].includes(onCreateEditPlantResponse.status || 0)) {
       showAlert({
         alertType: 'error',

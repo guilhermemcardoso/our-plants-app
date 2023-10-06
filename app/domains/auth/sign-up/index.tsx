@@ -116,6 +116,13 @@ const SignUp = ({ navigation }: Props) => {
       showAlert({ alertType: 'error', title: 'Email já cadastrado.' });
     }
 
+    if (onResponse.status === 503) {
+      showAlert({
+        alertType: 'error',
+        title: 'Serviço indisponível, verifique sua conexão de internet.',
+      });
+    }
+
     if (onResponse.status === 201) {
       goToConfirmation();
     }

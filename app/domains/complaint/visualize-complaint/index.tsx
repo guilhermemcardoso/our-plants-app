@@ -63,6 +63,14 @@ const VisualizeComplaint = ({ route, navigation }: Props) => {
       });
       onBackPress();
     }
+
+    if (onDeleteComplaintResponse.status === 503) {
+      showAlert({
+        alertType: 'error',
+        title: 'Serviço indisponível, verifique sua conexão de internet.',
+      });
+    }
+
     if ([400, 500, 404].includes(onDeleteComplaintResponse.status || 0)) {
       showAlert({
         alertType: 'error',

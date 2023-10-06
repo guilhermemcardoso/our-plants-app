@@ -119,6 +119,14 @@ const CreateEditSpecie = ({ route, navigation }: Props) => {
         title: 'Espécie cadastrada com sucesso.',
       });
     }
+
+    if (onResponse.status === 503) {
+      showAlert({
+        alertType: 'error',
+        title: 'Serviço indisponível, verifique sua conexão de internet.',
+      });
+    }
+
     if ([400, 500, 404].includes(onResponse.status || 0)) {
       showAlert({
         alertType: 'error',

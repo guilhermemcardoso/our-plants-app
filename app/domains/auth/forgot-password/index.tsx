@@ -89,6 +89,13 @@ const ForgotPassword = ({ navigation }: Props) => {
       });
     }
 
+    if (onResponse.status === 503) {
+      showAlert({
+        alertType: 'error',
+        title: 'Serviço indisponível, verifique sua conexão de internet.',
+      });
+    }
+
     if ([400, 500].includes(onResponse.status || 0)) {
       showAlert({
         alertType: 'error',

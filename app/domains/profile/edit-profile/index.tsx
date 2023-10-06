@@ -284,6 +284,18 @@ const EditProfile = ({ navigation }: Props) => {
     }
 
     if (
+      onUpdateUserProfileResponse.status === 503 ||
+      onRemoveProfileImageResponse.status === 503 ||
+      onUpdateProfileImageResponse.status === 503 ||
+      onChangePasswordResponse.status === 503
+    ) {
+      showAlert({
+        alertType: 'error',
+        title: 'Serviço indisponível, verifique sua conexão de internet.',
+      });
+    }
+
+    if (
       onUpdateUserProfileResponse.status === 200 ||
       onRemoveProfileImageResponse.status === 200 ||
       onUpdateProfileImageResponse.status === 200 ||

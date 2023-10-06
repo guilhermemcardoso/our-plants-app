@@ -92,7 +92,13 @@ const SignIn = ({ navigation }: Props) => {
     if ([400, 401].includes(onResponse.status || 0)) {
       showAlert({ alertType: 'error', title: 'Usuário e/ou senha incorretos' });
     }
-    //504
+
+    if (onResponse.status === 503) {
+      showAlert({
+        alertType: 'error',
+        title: 'Serviço indisponível, verifique sua conexão de internet.',
+      });
+    }
 
     if (onResponse.status === 423) {
       goToConfirmation();
