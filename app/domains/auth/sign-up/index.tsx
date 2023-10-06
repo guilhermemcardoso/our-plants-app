@@ -14,13 +14,12 @@ import { UnsignedStackParamList } from '~/navigation/stacks/signed-out';
 import { SignUpData } from '../types';
 import { useSignUp } from '~/hooks/use-sign-up';
 import { KeyboardAvoidingView, ScrollView } from 'native-base';
-import Alert from '~/shared/components/alert';
+import { useAlert } from '~/hooks/use-alert';
 
 type Props = NativeStackScreenProps<UnsignedStackParamList, 'SignUp'>;
 
 const SignUp = ({ navigation }: Props) => {
-  const [showAlert, setShowAlert] = useState(false);
-  const [alertMessage, setAlertMessage] = useState('');
+  const { showAlert } = useAlert();
   const { isLoading, onResponse, signUp } = useSignUp();
 
   const [signUpData, setSignUpData] = useState<SignUpData>({
@@ -104,29 +103,23 @@ const SignUp = ({ navigation }: Props) => {
     navigation.goBack();
   };
 
-  const onCloseAlert = () => {
-    setShowAlert(false);
-  };
-
   const goToConfirmation = useCallback(() => {
     navigation.navigate('EmailConfirmation', { email: signUpData.email });
   }, [navigation, signUpData]);
 
   useEffect(() => {
     if (onResponse.status === 400) {
-      setAlertMessage('Algo deu errado.');
-      setShowAlert(true);
+      showAlert({ alertType: 'error', title: 'Algo deu errado.' });
     }
 
     if (onResponse.status === 409) {
-      setAlertMessage('Email já cadastrado.');
-      setShowAlert(true);
+      showAlert({ alertType: 'error', title: 'Email já cadastrado.' });
     }
 
     if (onResponse.status === 201) {
       goToConfirmation();
     }
-  }, [onResponse, goToConfirmation]);
+  }, [onResponse, goToConfirmation, showAlert]);
 
   return (
     <Container>
@@ -210,12 +203,6 @@ const SignUp = ({ navigation }: Props) => {
             title="Acesse aqui"
           />
         </View>
-        <Alert
-          show={showAlert}
-          status="error"
-          title={alertMessage}
-          onClose={onCloseAlert}
-        />
       </ScrollView>
     </Container>
   );

@@ -11,15 +11,16 @@ import React from 'react';
 import Text from '../text';
 import { InterfaceAlertProps } from 'native-base/lib/typescript/components/composites/Alert/types';
 import styles from './styles';
+import { useAlert } from '~/hooks/use-alert';
 
 type Props = InterfaceAlertProps & {
   show?: boolean;
   title: string;
   description?: string;
-  onClose: () => void;
 };
-const Alert = ({ show, status, title, description, onClose }: Props) => {
+const Alert = ({ show, status, title, description }: Props) => {
   const theme = useTheme();
+  const { closeAlert } = useAlert();
 
   if (!show) {
     return null;
@@ -47,7 +48,7 @@ const Alert = ({ show, status, title, description, onClose }: Props) => {
             <Text>{title}</Text>
           </HStack>
           <IconButton
-            onPress={onClose}
+            onPress={closeAlert}
             variant="unstyled"
             _focus={{
               borderWidth: 0,
@@ -61,7 +62,7 @@ const Alert = ({ show, status, title, description, onClose }: Props) => {
             }
           />
         </HStack>
-        {description && (
+        {!!description && description.length > 0 && (
           <Box pl="3">
             <Text>{description}</Text>
           </Box>

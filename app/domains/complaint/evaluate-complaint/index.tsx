@@ -1,6 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import {
-  Alert,
   Button,
   Container,
   EvaluationModal,
@@ -19,6 +18,7 @@ import { useLoading } from '~/hooks/use-loading';
 import MapView from '~/shared/components/map-view';
 import MarkerView from '~/shared/components/marker-view';
 import { dimens } from '~/theme/dimens';
+import { useAlert } from '~/hooks/use-alert';
 
 type Props = NativeStackScreenProps<
   SignedInStackParamList,
@@ -36,15 +36,12 @@ const EvaluateComplaint = ({ route, navigation }: Props) => {
   } = useEvaluateComplaint();
 
   const [showEvaluationModal, setShowEvaluationModal] = useState(false);
-  const [showAlert, setShowAlert] = useState(false);
-  const [alertType, setAlertType] = useState('error');
-  const [alertMessage, setAlertMessage] = useState('');
+  const { showAlert } = useAlert();
 
   const onBackPress = useCallback(() => {
     navigation.goBack();
   }, [navigation]);
 
-  const onCloseAlert = () => setShowAlert(false);
   const onOpenEvaluationModal = () => setShowEvaluationModal(true);
   const onCancelPress = () => setShowEvaluationModal(false);
 
@@ -60,17 +57,19 @@ const EvaluateComplaint = ({ route, navigation }: Props) => {
 
   useEffect(() => {
     if (onEvaluateComplaintResponse.status === 200) {
-      setAlertMessage('Denúncia excluída com sucesso');
-      setAlertType('success');
-      setShowAlert(true);
+      showAlert({
+        alertType: 'success',
+        title: 'Denúncia excluída com sucesso.',
+      });
       onBackPress();
     }
     if ([400, 500, 404].includes(onEvaluateComplaintResponse.status || 0)) {
-      setAlertMessage('Algo deu errado. Tente novamente mais tarde');
-      setAlertType('error');
-      setShowAlert(true);
+      showAlert({
+        alertType: 'error',
+        title: 'Algo deu errado. Tente novamente mais tarde.',
+      });
     }
-  }, [onEvaluateComplaintResponse, onBackPress]);
+  }, [onEvaluateComplaintResponse, onBackPress, showAlert]);
 
   return (
     <Container style={styles.mainContainer}>
@@ -150,12 +149,6 @@ const EvaluateComplaint = ({ route, navigation }: Props) => {
         open={showEvaluationModal}
         onEvaluate={onEvaluatePress}
         onCancel={onCancelPress}
-      />
-      <Alert
-        show={showAlert}
-        status={alertType}
-        title={alertMessage}
-        onClose={onCloseAlert}
       />
     </Container>
   );

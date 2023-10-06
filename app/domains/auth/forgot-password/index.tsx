@@ -14,15 +14,12 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { UnsignedStackParamList } from '~/navigation/stacks/signed-out';
 import { ForgotPasswordData } from '../types';
 import { useForgotPassword } from '~/hooks/use-forgot-password';
-import Alert from '~/shared/components/alert';
 import { KeyboardAvoidingView } from 'native-base';
+import { useAlert } from '~/hooks/use-alert';
 
 type Props = NativeStackScreenProps<UnsignedStackParamList, 'ForgotPassword'>;
 
 const ForgotPassword = ({ navigation }: Props) => {
-  const [showAlert, setShowAlert] = useState(false);
-  const [alertStatus, setAlertStatus] = useState('error');
-  const [alertMessage, setAlertMessage] = useState('');
   const { isLoading, onResponse, forgotPassword } = useForgotPassword();
 
   const [forgotPasswordData, setForgotPasswordData] =
@@ -33,6 +30,7 @@ const ForgotPassword = ({ navigation }: Props) => {
     email: '',
   });
   const [enableSubmit, setEnableSubmit] = useState(true);
+  const { showAlert } = useAlert();
 
   const onSubmitPress = () => {
     const validation = validate(forgotPasswordData);
@@ -52,10 +50,6 @@ const ForgotPassword = ({ navigation }: Props) => {
       return;
     }
     forgotPassword(forgotPasswordData);
-  };
-
-  const onCloseAlert = () => {
-    setShowAlert(false);
   };
 
   const handleOnEmailChange = (text: string) => {
@@ -88,27 +82,28 @@ const ForgotPassword = ({ navigation }: Props) => {
 
   useEffect(() => {
     if (onResponse.status === 423) {
-      setAlertMessage(
-        'Não foi possível enviar um novo link. É necessário esperar 2 minutos antes de solicitar um novo link.'
-      );
-      setAlertStatus('error');
-      setShowAlert(true);
+      showAlert({
+        alertType: 'error',
+        title:
+          'Não foi possível enviar um novo link. É necessário esperar 2 minutos antes de solicitar um novo link.',
+      });
     }
 
     if ([400, 500].includes(onResponse.status || 0)) {
-      setAlertMessage('Algo deu errado.');
-      setAlertStatus('error');
-      setShowAlert(true);
+      showAlert({
+        alertType: 'error',
+        title: 'Algo deu errado.',
+      });
     }
 
     if (onResponse.status === 200) {
-      setAlertMessage(
-        'Um novo link foi enviado para seu email. Por favor, verifique sua caixa de entrada.'
-      );
-      setAlertStatus('success');
-      setShowAlert(true);
+      showAlert({
+        alertType: 'success',
+        title:
+          'Um novo link foi enviado para seu email. Por favor, verifique sua caixa de entrada.',
+      });
     }
-  }, [onResponse]);
+  }, [onResponse, showAlert]);
 
   return (
     <Container>
@@ -151,12 +146,6 @@ const ForgotPassword = ({ navigation }: Props) => {
       <View style={styles.goBackContainer}>
         <Button onPress={onGoBackPress} variant={'outline'} title="VOLTAR" />
       </View>
-      <Alert
-        show={showAlert}
-        status={alertStatus}
-        title={alertMessage}
-        onClose={onCloseAlert}
-      />
     </Container>
   );
 };

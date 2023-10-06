@@ -1,6 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import {
-  Alert,
   Button,
   Container,
   Header,
@@ -24,6 +23,7 @@ import { REASON_OPTIONS } from '~/shared/constants/constants';
 import { useLoading } from '~/hooks/use-loading';
 import { useCreateComplaint } from '~/hooks/use-create-complaint';
 import { usePlantStore } from '~/store/plant-store';
+import { useAlert } from '~/hooks/use-alert';
 
 type Props = NativeStackScreenProps<
   SignedInStackParamList,
@@ -39,9 +39,7 @@ const CreateComplaint = ({ navigation }: Props) => {
   } = useCreateComplaint();
   const selectedPlant = usePlantStore((state) => state.selectedPlant);
   const [showSelector, setShowSelector] = useState(false);
-  const [showAlert, setShowAlert] = useState(false);
-  const [alertType, setAlertType] = useState('error');
-  const [alertMessage, setAlertMessage] = useState('');
+  const { showAlert } = useAlert();
   const [selectedReason, setSelectedReason] = useState('');
   const [complaintData, setComplaintData] = useState<CreateComplaintData>({
     reason: '',
@@ -57,10 +55,6 @@ const CreateComplaint = ({ navigation }: Props) => {
   const onBackPress = useCallback(() => {
     navigation.goBack();
   }, [navigation]);
-
-  const onCloseAlert = () => {
-    setShowAlert(false);
-  };
 
   const onCloseSelector = () => {
     setShowSelector(false);
@@ -140,17 +134,19 @@ const CreateComplaint = ({ navigation }: Props) => {
 
   useEffect(() => {
     if (onCreateComplaintResponse.status === 201) {
-      setAlertMessage('Denúncia cadastrada com sucesso');
-      setAlertType('success');
-      setShowAlert(true);
+      showAlert({
+        alertType: 'success',
+        title: 'Denúncia cadastrada com sucesso.',
+      });
       onBackPress();
     }
     if ([400, 500, 404].includes(onCreateComplaintResponse.status || 0)) {
-      setAlertMessage('Algo deu errado. Tente novamente mais tarde');
-      setAlertType('error');
-      setShowAlert(true);
+      showAlert({
+        alertType: 'error',
+        title: 'Algo deu errado. Tente novamente mais tarde.',
+      });
     }
-  }, [onCreateComplaintResponse, onBackPress]);
+  }, [onCreateComplaintResponse, onBackPress, showAlert]);
 
   return (
     <Container>
@@ -196,12 +192,6 @@ const CreateComplaint = ({ navigation }: Props) => {
           title={'CADASTRAR DENÚNCIA'}
         />
       </ScrollView>
-      <Alert
-        show={showAlert}
-        status={alertType}
-        title={alertMessage}
-        onClose={onCloseAlert}
-      />
     </Container>
   );
 };

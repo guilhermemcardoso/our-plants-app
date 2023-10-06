@@ -7,12 +7,13 @@ import Router from '~/navigation';
 import { useSettingsStore } from './store/settings-store';
 import { themes } from './theme';
 import { useSettings } from './hooks/use-settings';
-import { Loading } from './shared/components';
+import { Alert, Loading } from './shared/components';
 import { useLoading } from './hooks/use-loading';
 import { useLocation } from './hooks/use-location';
 import { AskForLocation } from './domains/location';
 import useAppIsActive from './hooks/use-app-is-active';
 import useNetInfo from './hooks/use-net-info';
+import { useAlertStore } from './store/alert-store';
 
 const App = () => {
   const { loadSettings } = useSettings();
@@ -43,6 +44,10 @@ const App = () => {
 const AppWrapper = () => {
   const theme = useSettingsStore((state) => state.theme);
   const { isLoading } = useLoading();
+  const showAlert = useAlertStore((state) => state.showAlert);
+  const alertType = useAlertStore((state) => state.alertType);
+  const alertTitle = useAlertStore((state) => state.alertTitle);
+  const alertDescription = useAlertStore((state) => state.alertDescription);
   const queryClient = new QueryClient();
 
   return (
@@ -54,6 +59,12 @@ const AppWrapper = () => {
           backgroundColor="transparent"
         />
         <Loading show={isLoading} />
+        <Alert
+          show={showAlert}
+          status={alertType}
+          title={alertTitle}
+          description={alertDescription}
+        />
         <App />
       </QueryClientProvider>
     </NativeBaseProvider>

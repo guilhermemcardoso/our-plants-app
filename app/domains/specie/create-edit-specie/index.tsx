@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import {
-  Alert,
   Button,
   Container,
   Header,
@@ -19,6 +18,7 @@ import { getErrorByField } from '../validations';
 import styles from './styles';
 import { useCreateSpecie } from '~/hooks/use-create-specie';
 import { useLoading } from '~/hooks/use-loading';
+import { useAlert } from '~/hooks/use-alert';
 
 type Props = NativeStackScreenProps<
   SignedInStackParamList,
@@ -38,9 +38,7 @@ const CreateEditSpecie = ({ route, navigation }: Props) => {
     popular_name: '',
     scientific_name: '',
   });
-  const [showAlert, setShowAlert] = useState(false);
-  const [alertType, setAlertType] = useState('error');
-  const [alertMessage, setAlertMessage] = useState('');
+  const { showAlert } = useAlert();
 
   const handleBackPress = () => {
     navigation.goBack();
@@ -54,10 +52,6 @@ const CreateEditSpecie = ({ route, navigation }: Props) => {
     value: string | number;
   }) => {
     setSpecieData({ ...specieData, [field]: value });
-  };
-
-  const onCloseAlert = () => {
-    setShowAlert(false);
   };
 
   const validateField = (field: keyof CreateEditSpecieValidationErrors) => {
@@ -108,9 +102,10 @@ const CreateEditSpecie = ({ route, navigation }: Props) => {
     }
 
     if (!specie && alreadyExists()) {
-      setAlertMessage('Essa espécie de planta já existe');
-      setAlertType('error');
-      setShowAlert(true);
+      showAlert({
+        alertType: 'error',
+        title: 'Essa espécie de planta já existe.',
+      });
       return;
     }
 
@@ -119,16 +114,18 @@ const CreateEditSpecie = ({ route, navigation }: Props) => {
 
   useEffect(() => {
     if (onResponse.status === 201) {
-      setAlertMessage('Espécie cadastrada com sucesso');
-      setAlertType('success');
-      setShowAlert(true);
+      showAlert({
+        alertType: 'success',
+        title: 'Espécie cadastrada com sucesso.',
+      });
     }
     if ([400, 500, 404].includes(onResponse.status || 0)) {
-      setAlertMessage('Algo deu errado. Tente novamente mais tarde');
-      setAlertType('error');
-      setShowAlert(true);
+      showAlert({
+        alertType: 'error',
+        title: 'Algo deu errado. Tente novamente mais tarde.',
+      });
     }
-  }, [onResponse]);
+  }, [onResponse, showAlert]);
 
   useEffect(() => {
     setLoading(isLoading);
@@ -178,12 +175,6 @@ const CreateEditSpecie = ({ route, navigation }: Props) => {
           title={specie ? 'EDITAR ESPÉCIE' : 'CADASTRAR ESPÉCIE'}
         />
       </ScrollView>
-      <Alert
-        show={showAlert}
-        status={alertType}
-        title={alertMessage}
-        onClose={onCloseAlert}
-      />
     </Container>
   );
 };

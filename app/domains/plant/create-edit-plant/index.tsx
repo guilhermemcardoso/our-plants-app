@@ -1,6 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import {
-  Alert,
   Button,
   Container,
   Header,
@@ -29,6 +28,7 @@ import { useLocation } from '~/hooks/use-location';
 import { useCreateEditPlant } from '~/hooks/use-create-edit-plant';
 import { useLoading } from '~/hooks/use-loading';
 import { Image } from '~/types/image';
+import { useAlert } from '~/hooks/use-alert';
 
 type Props = NativeStackScreenProps<
   SignedInStackParamList,
@@ -65,18 +65,12 @@ const CreateEditPlant = ({ route, navigation }: Props) => {
     specie_id: '',
     images: '',
   });
-  const [showAlert, setShowAlert] = useState(false);
-  const [alertType, setAlertType] = useState('error');
-  const [alertMessage, setAlertMessage] = useState('');
   const [mapZoom, setMapZoom] = useState(14);
+  const { showAlert } = useAlert();
 
   const specieNames = useMemo(() => {
     return species.map((specie) => specie.popular_name);
   }, [species]);
-
-  const onCloseAlert = () => {
-    setShowAlert(false);
-  };
 
   const handleBackPress = useCallback(() => {
     navigation.goBack();
@@ -260,21 +254,26 @@ const CreateEditPlant = ({ route, navigation }: Props) => {
 
   useEffect(() => {
     if (onCreateEditPlantResponse.status === 201) {
-      setAlertMessage('Planta cadastrada com sucesso');
-      setAlertType('success');
-      setShowAlert(true);
+      showAlert({
+        alertType: 'success',
+        title: 'Planta cadastrada com sucesso',
+      });
+      handleBackPress();
     }
     if (onCreateEditPlantResponse.status === 200) {
-      setAlertMessage('Planta editada com sucesso');
-      setAlertType('success');
-      setShowAlert(true);
+      showAlert({
+        alertType: 'success',
+        title: 'Planta editada com sucesso',
+      });
+      handleBackPress();
     }
     if ([400, 500, 404].includes(onCreateEditPlantResponse.status || 0)) {
-      setAlertMessage('Algo deu errado. Tente novamente mais tarde');
-      setAlertType('error');
-      setShowAlert(true);
+      showAlert({
+        alertType: 'error',
+        title: 'Algo deu errado. Tente novamente mais tarde',
+      });
     }
-  }, [onCreateEditPlantResponse, handleBackPress]);
+  }, [onCreateEditPlantResponse, handleBackPress, showAlert]);
 
   return (
     <Container>
@@ -355,12 +354,6 @@ const CreateEditPlant = ({ route, navigation }: Props) => {
           title={plant ? 'EDITAR PLANTA' : 'CADASTRAR PLANTA'}
         />
       </ScrollView>
-      <Alert
-        show={showAlert}
-        status={alertType}
-        title={alertMessage}
-        onClose={onCloseAlert}
-      />
       <ImagePicker
         selectionLimit={MAX_IMAGES - selectedImages.length}
         open={showImagePicker}

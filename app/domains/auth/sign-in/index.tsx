@@ -14,13 +14,13 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { UnsignedStackParamList } from '~/navigation/stacks/signed-out';
 import { SignInData } from '../types';
 import { useSignIn } from '~/hooks/use-sign-in';
-import Alert from '~/shared/components/alert';
 import { KeyboardAvoidingView, ScrollView } from 'native-base';
+import { useAlert } from '~/hooks/use-alert';
 
 type Props = NativeStackScreenProps<UnsignedStackParamList, 'SignIn'>;
 
 const SignIn = ({ navigation }: Props) => {
-  const [showAlert, setShowAlert] = useState(false);
+  const { showAlert } = useAlert();
   const { isLoading, onResponse, signIn } = useSignIn();
 
   const [signInData, setSignInData] = useState<SignInData>({
@@ -84,24 +84,20 @@ const SignIn = ({ navigation }: Props) => {
     navigation.navigate('SignUp');
   };
 
-  const onCloseAlert = () => {
-    setShowAlert(false);
-  };
-
   const goToConfirmation = useCallback(() => {
     navigation.navigate('EmailConfirmation', { email: signInData.email });
   }, [navigation, signInData]);
 
   useEffect(() => {
     if ([400, 401].includes(onResponse.status || 0)) {
-      setShowAlert(true);
+      showAlert({ alertType: 'error', title: 'Usuário e/ou senha incorretos' });
     }
     //504
 
     if (onResponse.status === 423) {
       goToConfirmation();
     }
-  }, [onResponse, goToConfirmation]);
+  }, [onResponse, goToConfirmation, showAlert]);
 
   return (
     <Container>
@@ -162,12 +158,6 @@ const SignIn = ({ navigation }: Props) => {
             title="Cadastre-se aqui"
           />
         </View>
-        <Alert
-          show={showAlert}
-          status="error"
-          title="Usuário e/ou senha incorretos"
-          onClose={onCloseAlert}
-        />
       </ScrollView>
     </Container>
   );

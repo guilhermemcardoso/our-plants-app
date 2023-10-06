@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { View, Image } from 'react-native';
 import { styles } from './styles';
 import Button from '~/shared/components/button';
@@ -7,8 +7,8 @@ import Text from '~/shared/components/text';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { UnsignedStackParamList } from '~/navigation/stacks/signed-out';
 import { useResendEmailConfirmation } from '~/hooks/use-resend-email-confirmation';
-import Alert from '~/shared/components/alert';
 import { CommonActions } from '@react-navigation/native';
+import { useAlert } from '~/hooks/use-alert';
 
 type Props = NativeStackScreenProps<
   UnsignedStackParamList,
@@ -17,11 +17,9 @@ type Props = NativeStackScreenProps<
 
 const EmailConfirmation = ({ route, navigation }: Props) => {
   const { email } = route.params;
-  const [showAlert, setShowAlert] = useState(false);
-  const [alertStatus, setAlertStatus] = useState('error');
-  const [alertMessage, setAlertMessage] = useState('');
   const { isLoading, onResponse, resendEmailConfirmation } =
     useResendEmailConfirmation();
+  const { showAlert } = useAlert();
 
   const onSubmitPress = async () => {
     resendEmailConfirmation({ email });
@@ -37,33 +35,30 @@ const EmailConfirmation = ({ route, navigation }: Props) => {
     );
   };
 
-  const onCloseAlert = () => {
-    setShowAlert(false);
-  };
-
   useEffect(() => {
     if (onResponse.status === 423) {
-      setAlertMessage(
-        'Não foi possível enviar um novo link. É necessário esperar 2 minutos antes de solicitar um novo link.'
-      );
-      setAlertStatus('error');
-      setShowAlert(true);
+      showAlert({
+        alertType: 'error',
+        title:
+          'Não foi possível enviar um novo link. É necessário esperar 2 minutos antes de solicitar um novo link.',
+      });
     }
 
     if ([400, 500].includes(onResponse.status || 0)) {
-      setAlertMessage('Algo deu errado.');
-      setAlertStatus('error');
-      setShowAlert(true);
+      showAlert({
+        alertType: 'error',
+        title: 'Algo deu errado.',
+      });
     }
 
     if (onResponse.status === 200) {
-      setAlertMessage(
-        'Um novo link foi enviado para seu email. Por favor, verifique sua caixa de entrada.'
-      );
-      setAlertStatus('success');
-      setShowAlert(true);
+      showAlert({
+        alertType: 'error',
+        title:
+          'Um novo link foi enviado para seu email. Por favor, verifique sua caixa de entrada.',
+      });
     }
-  }, [onResponse]);
+  }, [onResponse, showAlert]);
 
   return (
     <Container>
@@ -97,12 +92,6 @@ const EmailConfirmation = ({ route, navigation }: Props) => {
           title="REENVIAR"
         />
       </View>
-      <Alert
-        show={showAlert}
-        status={alertStatus}
-        title={alertMessage}
-        onClose={onCloseAlert}
-      />
     </Container>
   );
 };

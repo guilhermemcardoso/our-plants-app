@@ -3,7 +3,6 @@ import { HStack, ScrollView, VStack, View } from 'native-base';
 import { Masks, formatWithMask } from 'react-native-mask-input';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import {
-  Alert,
   Avatar,
   Button,
   ConfirmationModal,
@@ -34,6 +33,7 @@ import styles from './styles';
 import { ChangePasswordData } from '~/shared/components/modal/change-password/types';
 import { ChangePasswordModal } from '~/shared/components/modal';
 import { useChangePassword } from '~/hooks/use-change-password';
+import { useAlert } from '~/hooks/use-alert';
 
 type Props = NativeStackScreenProps<
   SignedInStackParamList,
@@ -69,9 +69,7 @@ const EditProfile = ({ navigation }: Props) => {
     useState(false);
   const [showImagePicker, setShowImagePicker] = useState(false);
   const [showSelector, setShowSelector] = useState(false);
-  const [showAlert, setShowAlert] = useState(false);
-  const [alertType, setAlertType] = useState<'error' | 'success'>('error');
-  const [alertMessage, setAlertMessage] = useState('');
+  const { showAlert } = useAlert();
   const [errors, setErrors] = useState<EditProfileValidationErrors>({
     _id: '',
     email: '',
@@ -196,10 +194,6 @@ const EditProfile = ({ navigation }: Props) => {
     setUserData(newUserData);
   };
 
-  const onCloseAlert = () => {
-    setShowAlert(false);
-  };
-
   const handleCancelImagePicker = () => {
     setShowImagePicker(false);
   };
@@ -235,8 +229,10 @@ const EditProfile = ({ navigation }: Props) => {
 
   const handleImagePickerError = (error: string) => {
     setShowImagePicker(false);
-    setAlertMessage(error);
-    setShowAlert(true);
+    showAlert({
+      alertType: 'error',
+      title: error,
+    });
   };
 
   const onChangePasswordPress = () => {
@@ -281,9 +277,10 @@ const EditProfile = ({ navigation }: Props) => {
       onUpdateProfileImageResponse.status === 400 ||
       onChangePasswordResponse.status === 400
     ) {
-      setAlertMessage('Algo deu errado.');
-      setAlertType('error');
-      setShowAlert(true);
+      showAlert({
+        alertType: 'error',
+        title: 'Algo deu errado. Tente novamente mais tarde.',
+      });
     }
 
     if (
@@ -292,15 +289,17 @@ const EditProfile = ({ navigation }: Props) => {
       onUpdateProfileImageResponse.status === 200 ||
       onChangePasswordResponse.status === 200
     ) {
-      setAlertMessage('Perfil atualizado com sucesso.');
-      setAlertType('success');
-      setShowAlert(true);
+      showAlert({
+        alertType: 'success',
+        title: 'Perfil atualizado com sucesso.',
+      });
     }
   }, [
     onUpdateUserProfileResponse,
     onRemoveProfileImageResponse,
     onUpdateProfileImageResponse,
     onChangePasswordResponse,
+    showAlert,
   ]);
 
   return (
@@ -477,12 +476,6 @@ const EditProfile = ({ navigation }: Props) => {
         onNo={onCancelChangePassword}
         onYes={onConfirmChangePassword}
         yesButtonWarning={false}
-      />
-      <Alert
-        show={showAlert}
-        status={alertType}
-        title={alertMessage}
-        onClose={onCloseAlert}
       />
       <ImagePicker
         open={showImagePicker}
