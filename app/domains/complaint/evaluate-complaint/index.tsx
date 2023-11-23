@@ -47,6 +47,7 @@ const EvaluateComplaint = ({ route, navigation }: Props) => {
 
   const onEvaluatePress = async (evaluation: string, wasHelpful: boolean) => {
     if (complaint) {
+      setShowEvaluationModal(false);
       evaluateComplaint(complaint?._id, evaluation, wasHelpful);
     }
   };
@@ -59,7 +60,7 @@ const EvaluateComplaint = ({ route, navigation }: Props) => {
     if (onEvaluateComplaintResponse.status === 200) {
       showAlert({
         alertType: 'success',
-        title: 'Denúncia excluída com sucesso.',
+        title: 'Denúncia avaliada com sucesso.',
       });
       onBackPress();
     }
@@ -133,10 +134,6 @@ const EvaluateComplaint = ({ route, navigation }: Props) => {
                 />
               </MapView>
             </View>
-            <Slideshow
-              borderRadius={dimens.radius.md}
-              images={complaint?.plant_id?.images || []}
-            />
           </View>
         ) : (
           <View bgColor="container.dark" style={styles.infoContainer}>
@@ -144,6 +141,12 @@ const EvaluateComplaint = ({ route, navigation }: Props) => {
               A planta foi removida do sistema.
             </Text>
           </View>
+        )}
+        {!complaint?.deleted && (
+          <Slideshow
+            borderRadius={dimens.radius.md}
+            images={complaint?.plant_id?.images || []}
+          />
         )}
         {!complaint?.closed && !complaint?.deleted && (
           <Button

@@ -133,10 +133,6 @@ const VisualizeComplaint = ({ route, navigation }: Props) => {
                 />
               </MapView>
             </View>
-            <Slideshow
-              borderRadius={dimens.radius.md}
-              images={complaint?.plant_id?.images || []}
-            />
           </View>
         ) : (
           <View bgColor="container.dark" style={styles.infoContainer}>
@@ -144,6 +140,12 @@ const VisualizeComplaint = ({ route, navigation }: Props) => {
               A planta foi removida do sistema.
             </Text>
           </View>
+        )}
+        {!complaint?.plant_id.deleted && (
+          <Slideshow
+            borderRadius={dimens.radius.md}
+            images={complaint?.plant_id?.images || []}
+          />
         )}
         <Button
           warning

@@ -39,8 +39,7 @@ export function useEvaluateComplaint() {
         const { complaint } = response.data;
         if (currentUser) {
           const updatedCurrentUser = {
-            ...response.data.plant.created_by,
-            mapped_plants: (currentUser.mapped_plants || 0) + 1,
+            ...response.data.complaint.evaluated_by,
           };
           setCurrentUser(updatedCurrentUser);
           setKey(

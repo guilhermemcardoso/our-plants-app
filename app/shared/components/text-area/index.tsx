@@ -33,7 +33,7 @@ export default function TextArea({ label, error, style, ...props }: Props) {
               selectionColor: 'primary.dark',
             },
           }}
-          autoCompleteType={'sentences'}
+          autoCompleteType="off"
           color="font.primary"
           backgroundColor="container.light"
           borderColor="container.dark"
