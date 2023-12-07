@@ -92,7 +92,7 @@ const Map = ({ navigation }: Props) => {
         },
         filteredSpecies: filter,
       }),
-    1000
+    1
   );
 
   const onRecenterMap = async () => {

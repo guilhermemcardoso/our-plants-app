@@ -2,7 +2,6 @@ import { useMutation } from '@tanstack/react-query';
 import { useCallback, useEffect, useRef, useState } from 'react';
 
 import { getPlantsNearBy as getPlantsNearByMutation } from '~/services/api/resources/plant';
-import { Plant } from '~/shared/types';
 import { usePlantStore } from '~/store/plant-store';
 
 export function useGetPlants() {
@@ -33,15 +32,7 @@ export function useGetPlants() {
       done.current = true;
       if (response && response.data && response.data.items) {
         const { items: plants } = response.data;
-        const updatedList = [...plantList];
-        plants.forEach((plant: Plant) => {
-          const alreadyExists =
-            updatedList.filter((item) => item._id === plant._id).length > 0;
-          if (!alreadyExists) {
-            updatedList.push(plant);
-          }
-        });
-        setPlants(updatedList);
+        setPlants(plants);
       }
     }
   }, [getPlantsResponse, setPlants, plantList]);

@@ -34,7 +34,7 @@ export function useSettings() {
     setSoundEnabledState(
       soundEnabledValue ? JSON.parse(soundEnabledValue) : true
     );
-    setDistanceState(distanceValue ? Number(distanceValue) : 100);
+    setDistanceState(distanceValue ? Number(distanceValue) : 2000);
   };
 
   const setNotificationEnabled = async (value: boolean) => {
